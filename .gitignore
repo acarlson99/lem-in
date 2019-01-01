@@ -69,3 +69,6 @@ cmake-build-*/
 
 # VSCode
 .vscode/*
+
+# Project
+lem-in
