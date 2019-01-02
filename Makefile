@@ -6,7 +6,7 @@
 #    By: acarlson <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/15 14:08:57 by acarlson          #+#    #+#              #
-#    Updated: 2018/12/31 02:22:02 by acarlson         ###   ########.fr        #
+#    Updated: 2019/01/01 16:09:44 by acarlson         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -65,10 +65,8 @@ $(addprefix $(OBJDIR), %.o): $(addprefix $(SRCS), %.c)
 
 $(OBJDIR):
 	@echo " $(shell \
-	if [ -d $(OBJDIR) ]; \
+	if [ ! -d $(OBJDIR) ]; \
 	then \
-		: ; \
-	else \
 		mkdir $(OBJDIR); \
 		echo " + $(NAME): Created  $(CL_GREEN)$(OBJDIR)$(CL_WHITE)$(CL_WHITE)"; \
 	fi) "

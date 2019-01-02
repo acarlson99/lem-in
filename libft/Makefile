@@ -6,7 +6,7 @@
 #    By: acarlson <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/09/11 14:45:59 by acarlson          #+#    #+#              #
-#    Updated: 2018/12/30 22:08:56 by acarlson         ###   ########.fr        #
+#    Updated: 2019/01/01 16:12:45 by acarlson         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -89,10 +89,8 @@ $(addprefix $(OBJDIR), %.o): %.c
 
 $(OBJDIR):
 	@echo " $(shell \
-	if [ -d $(OBJDIR) ]; \
+	if [ ! -d $(OBJDIR) ]; \
 	then \
-		: ; \
-	else \
 		mkdir $(OBJDIR); \
 		echo " + libft : Created  $(CL_GREEN)$(OBJDIR)$(CL_WHITE)$(CL_WHITE)"; \
 	fi) "
