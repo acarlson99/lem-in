@@ -20,6 +20,7 @@
 
 /*
 ** Handy macros
+** MIN_I is growing a tumor
 */
 
 # define FT_FD_MAX 256

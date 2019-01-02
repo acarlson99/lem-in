@@ -42,9 +42,18 @@ struct	s_room
 struct	s_lem
 {
 	unsigned	num_rooms;
+	unsigned	num_ants;
 	t_lst		*rooms;
 	t_room		*start;
 	t_room		*end;
 };
+
+int		ft_strccount(const char *s, int c);
+void	free_str_tab(char ***t);
+t_lst	*lstnew(t_room *r);
+void	free_lst(t_lst *l);
+t_room	*init_room(char *name, char *x, char *y);
+void	lstpush(t_lst **h, t_lst *n);
+int		readmap(t_lem *info);
 
 #endif

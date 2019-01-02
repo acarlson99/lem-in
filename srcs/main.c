@@ -11,8 +11,48 @@
 /* ************************************************************************** */
 
 #include "lem_in.h"
+//TODO: move functions into separate files as necessary
+int			ft_strccount(const char *s, int c)
+{
+	int total;
 
-void	free_lst(t_lst *lst)
+	total = 0;
+	if (!s)
+		return (-1);
+	while (*s)
+	{
+		if (*s == c)
+			total++;
+		s++;
+	}
+	return (total);
+}
+
+void		free_str_tab(char ***tab)
+{
+	int i;
+
+	i = 0;
+	while ((*tab)[i] != NULL)
+	{
+		free((*tab)[i]);
+		i++;
+	}
+	free((*tab));
+}
+
+t_lst		*lstnew(t_room *r)
+{
+	t_lst *new;
+
+	if (!(new = (t_lst*)malloc(sizeof(t_lst))))
+		return (0);
+	new->r = r;
+	new->next = 0;
+	return (new);
+}
+
+void		free_lst(t_lst *lst)
 {
 	t_lst *tmp;
 
@@ -29,28 +69,15 @@ void	free_lst(t_lst *lst)
 	tmp = 0;
 }
 
-void	free_struct(t_lem **info)
+static void	init_lem(t_lem *l)
 {
-	free_lst((*info)->rooms);
-	free((*info)->start);
-	(*info)->start = 0;
-	free((*info)->end);
-	(*info)->end = 0;
-	free((*info));
-	*info = 0;
-	info = 0;
+	l->num_rooms = 0;
+	l->rooms = 0;
+	l->start = 0;
+	l->end = 0;
 }
 
-void	init_lem(t_lem *l)
-{
-	new->num_rooms = 0;
-	new->rooms = 0;
-	new->start = 0;
-	new->end = 0;
-	return (new);
-}
-
-t_room	*init_room(char *name, int x, int y)
+t_room		*init_room(char *name, char *x, char *y)
 {
 	t_room *new;
 
@@ -59,34 +86,73 @@ t_room	*init_room(char *name, int x, int y)
 	new->full = 0;
 	new->visited = 0;
 	new->start_end = 0;
-	new->coord_x = x;
-	new->coord_y = y;
+	new->coord_x = ft_atoi(x);
+	new->coord_y = ft_atoi(y);
 	new->name = ft_strdup(name);
 	new->connections = 0;
 	return (new);
 }
 
-t_lst	*lstnew(t_room *r)
+void		lstpush(t_lst **h, t_lst *n)
 {
-	t_lst *new;
-
-	if (!(new = (t_lst*)malloc(sizeof(t_lst))))
-		return (0);
-	new->r = r;
-	new->next = 0;
-	return (new);
+	if (n && h)
+	{
+		n->next = *h;
+		*h = n;
+	}
 }
 
-int		main(void)
+static int	is_connection(char *s)
 {
+	int res;
+
+	res = 0;
+	if (!s)
+		return (res);
+	while (*s && ISDIGIT(*s))
+		s++;
+	*s == '-' ? res = 1 : res = 0;
+	while (*s && ISDIGIT(*s))
+		s++;
+	!*s ? res = 1 : res = 0;
+	return (res);
+}
+
+int			readmap(t_lem *info)
+{//TODO: test that this actually works, and figure out parsing map connections
+	char	*line;
+	char	**t;
+	int		i[3] = {0};
+
+	while (get_next_line(0, &line) > 0)
+	{
+		!i[0] ? info->num_ants = ft_atoi(line) : 0;
+		if (is_connection(line))
+			//TODO: this is some Bowsers Dog Dicks
+		else if (i[0] && ft_strccount(line, ' ') == 2)
+		{
+			t = ft_strsplit(line, ' ');
+			lstpush(info->rooms, lstnew(init_room(t[0], t[1], t[2])));
+			free_str_tab(&t);
+		}
+		i[1] ? info->start = info->rooms->r : 0;
+		i[2] ? info->end = info->rooms->r : 0;
+		!ft_strcmp("##end", line) && !i[2] ? i[2] = 1 : return (1);
+		!ft_strcmp("##start", line) && !i[1] ? i[1] = 1 : return (1);
+		i[0]++;
+		free(line);
+	}
+}
+
+int			main(void)
+{// perhaps use array of t_room* for faster access
 	t_lem	info;
 	t_room	*tmp;
 
 	init_lem(&info);
-	tmp = init_room("puscetti", 2, 5);
-	info.rooms = lstnew(tmp);
+	readmap(&info);
 	ft_printf("info->rooms->r->name = %s\n", info.rooms->r->name);
 	ft_printf("info->rooms->r = %p\n", info.rooms->r);
-	free_struct(&info);
+	free_lst(info.rooms);
 	ft_printf("info = %p\n", info);
 }
