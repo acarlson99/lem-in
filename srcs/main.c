@@ -20,7 +20,7 @@ void	free_lst(t_lst *lst)
 	{
 		tmp = lst;
 		lst->r->name ? free(lst->r->name) : 0;
-		lst->r->connections ? free_lst(lst->r->connections) : 0;
+		lst->r->connections = 0;
 		lst->r ? free(lst->r) : 0;
 		lst = lst->next;
 		tmp ? free(tmp) : 0;
@@ -41,11 +41,8 @@ void	free_struct(t_lem **info)
 	info = 0;
 }
 
-t_lem	*init_lem()
+void	init_lem(t_lem *l)
 {
-	t_lem	*new;
-
-	new = (t_lem*)malloc(sizeof(t_lem));
 	new->num_rooms = 0;
 	new->rooms = 0;
 	new->start = 0;
@@ -82,14 +79,14 @@ t_lst	*lstnew(t_room *r)
 
 int		main(void)
 {
-	t_lem	*info;
+	t_lem	info;
 	t_room	*tmp;
 
-	info = init_lem();
+	init_lem(&info);
 	tmp = init_room("puscetti", 2, 5);
-	info->rooms = lstnew(tmp);
-	ft_printf("info->rooms->r->name = %s\n", info->rooms->r->name);
-	ft_printf("info->rooms->r = %p\n", info->rooms->r);
+	info.rooms = lstnew(tmp);
+	ft_printf("info->rooms->r->name = %s\n", info.rooms->r->name);
+	ft_printf("info->rooms->r = %p\n", info.rooms->r);
 	free_struct(&info);
 	ft_printf("info = %p\n", info);
 }
