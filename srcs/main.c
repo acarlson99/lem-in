@@ -12,9 +12,9 @@
 
 #include "lem_in.h"
 
-void		del_room(void *ptr, size_t n)
+void	del_room(void *ptr, size_t n)
 {
-	t_room		*room;
+	t_room	*room;
 
 	RET_NONE(!ptr);
 	(void)n;
@@ -27,7 +27,7 @@ void		del_room(void *ptr, size_t n)
 	ft_memdel((void **)&(room->name));
 }
 
-void		free_struct(t_lem **info)
+void	free_struct(t_lem **info)
 {
 	ft_lstdel(&((*info)->rooms), del_room);
 	ft_memdel((void *)&((*info)->start));
@@ -35,9 +35,9 @@ void		free_struct(t_lem **info)
 	ft_memdel((void **)info);
 }
 
-t_lem		*init_lem()
+t_lem	*init_lem()
 {
-	t_lem		*new;
+	t_lem	*new;
 
 	new = (t_lem *)malloc(sizeof(t_lem));
 	new->num_rooms = 0;
@@ -47,7 +47,7 @@ t_lem		*init_lem()
 	return (new);
 }
 
-int main()
+int		main(void)
 {
 	t_lem	*info;
 
