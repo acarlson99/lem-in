@@ -30,8 +30,8 @@ void		del_room(void *ptr, size_t n)
 void		free_struct(t_lem **info)
 {
 	ft_lstdel(&((*info)->rooms), del_room);
-	ft_memdel((void *)&(info->start));
-	ft_memdel((void *)&(info->end));
+	ft_memdel((void *)&((*info)->start));
+	ft_memdel((void *)&((*info)->end));
 	ft_memdel((void **)info);
 }
 
