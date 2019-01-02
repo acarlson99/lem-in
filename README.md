@@ -1,4 +1,4 @@
-# lem_in
+# lem-in
 
 Each ant may move one room per turn
 
