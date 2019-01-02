@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/31 14:03:45 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/01 17:07:29 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/01 18:12:31 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ typedef struct		s_lem
 {
 	unsigned	num_rooms;
 	t_list		*rooms;
-	t_list		*start;
-	t_list		*end;
+	t_room		*start;
+	t_room		*end;
 }					t_lem;
 
 #endif
