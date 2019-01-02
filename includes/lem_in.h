@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/31 14:03:45 by acarlson          #+#    #+#             */
-/*   Updated: 2018/12/31 14:03:52 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/01 17:07:29 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,14 @@
 
 # include "libft.h"
 
+# define START -1
+# define END 1
+
 typedef struct		s_room
 {
 	unsigned char	full;
 	unsigned char	visited;
-	unsigned char	is_end;
+	char			start_end;
 	int				coord_x;
 	int				coord_y;
 	char			*name;
