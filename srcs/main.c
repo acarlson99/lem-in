@@ -102,20 +102,33 @@ void		lstpush(t_lst **h, t_lst *n)
 	}
 }
 
-static int	is_connection(char *s)
+void		read_connections(t_lem *info, char **line)
 {
-	int res;
+	t_lst	*tmp1;
+	t_lst	*tmp2;
 
-	res = 0;
-	if (!s)
-		return (res);
-	while (*s && ISDIGIT(*s))
-		s++;
-	*s == '-' ? res = 1 : res = 0;
-	while (*s && ISDIGIT(*s))
-		s++;
-	!*s ? res = 1 : res = 0;
-	return (res);
+	if (!line)
+		return ;
+	tmp1 = info->rooms;
+	while (tmp1)
+	{
+		if (!ft_strcmp(tmp1->r->name, line[0]))
+		{
+			tmp2 = info->rooms;
+			while (tmp2)
+			{
+				if (!ft_strcmp(tmp2->r->name, line[1]))
+				{
+					lstpush(&tmp1->r->connections, tmp2->r);
+					lstpush(&tmp2->r->connections, tmp1->r);
+					break ;
+				}
+				tmp2 = tmp2->next;
+			}
+		}
+		tmp1 = tmp1->next;
+	}
+	free_str_tab(&line);
 }
 
 int			readmap(t_lem *info)
@@ -127,8 +140,8 @@ int			readmap(t_lem *info)
 	while (get_next_line(0, &line) > 0)
 	{
 		!i[0] ? info->num_ants = ft_atoi(line) : 0;
-		if (is_connection(line))
-			//TODO: this is some Bowsers Dog Dicks
+		if (line[0] != '#' && ft_strccount(line, '-') == 1)
+			read_connections(info, ft_strsplit(line, '-'));//TODO: this is some Bowsers Dog Dick
 		else if (i[0] && ft_strccount(line, ' ') == 2)
 		{
 			t = ft_strsplit(line, ' ');
@@ -137,8 +150,8 @@ int			readmap(t_lem *info)
 		}
 		i[1] ? info->start = info->rooms->r : 0;
 		i[2] ? info->end = info->rooms->r : 0;
-		!ft_strcmp("##end", line) && !i[2] ? i[2] = 1 : return (1);
-		!ft_strcmp("##start", line) && !i[1] ? i[1] = 1 : return (1);
+		(!ft_strcmp("##end", line) && !i[2]) ? i[2] = 1 : 0;
+		(!ft_strcmp("##start", line) && !i[1]) ? i[1] = 1 : 0;
 		i[0]++;
 		free(line);
 	}
