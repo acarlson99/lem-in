@@ -37,8 +37,8 @@ BGCOLOR = ( 32,  40,  55)
 ANTCOLOR = BLACK
 ROOMCOLOR = PURPLE
 
-WINDOWWIDTH = 1200
-WINDOWHEIGHT = 1200
+WINDOWWIDTH = 1000
+WINDOWHEIGHT = 1000
 
 ANT_LIST = [
     "/assets/ant_00.png",
@@ -65,6 +65,9 @@ class Room:
         self.x, self.y = coords
         self.start_end = start_end
         self.conns = {}
+        self.disp_x = self.x * 3
+        self.disp_y = self.y * 3
+        self.disp_size = 10
 
     def __str__(self):
         return ("Room %s start_end %d pos (%d, %d)" % (self.name, self.start_end, self.x, self.y))
@@ -104,6 +107,9 @@ class Game:
         pygame.draw.circle(self.surf, ANTCOLOR, (ant.x, ant.y), 10, 0)
 
     def add_conn(self, line):
+        n = line.split('-')
+        self.roommap[n[0]].conns[n[1]] = self.roommap[n[1]]
+        self.roommap[n[1]].conns[n[0]] = self.roommap[n[0]]
         pass
 
     def add_room(self, line, start_end):
@@ -119,12 +125,26 @@ class Game:
             self.room_min_x = new.x
         self.roommap[new.name] = new
 
+    def draw_rooms(self):
+        for rname in self.roommap:
+            pygame.draw.rect(self.surf, ORANGE, (self.roommap[rname].disp_x, self.roommap[rname].disp_y, self.roommap[rname].disp_size, self.roommap[rname].disp_size))
+
+    def draw_connections(self):
+        for rname in self.roommap:
+            for cname in self.roommap[rname].conns:
+                pygame.draw.line(self.surf, BLUE, (self.roommap[rname].disp_x, self.roommap[rname].disp_y), (self.roommap[cname].disp_x, self.roommap[cname].disp_y))
+
+    def update_rooms(self): # TODO: update display variables
+        pass
+
     def quit(self):
         pygame.quit()
         sys.exit()
 
     def draw(self):
         self.surf.fill(WHITE)
+        self.draw_connections()
+        self.draw_rooms()
         pygame.display.update()
 
     def run(self):
@@ -158,8 +178,6 @@ def main():
             g.add_room(lines[n], start_end)
         start_end = 0
         n += 1
-    for j in g.roommap:
-        print(g.roommap[j])
     room_conn_p = re.compile("(?:(?:^[a-zA-Z0-9_]+-[a-zA-Z0-9_]+$)|(?:^#))")
     while n < linum and room_conn_p.match(lines[n]):
         if lines[n][0] == '#':
@@ -167,6 +185,11 @@ def main():
         else:
             g.add_conn(lines[n])
         n += 1
+    g.update_rooms()
+    for j in g.roommap:
+        print(g.roommap[j])
+        for k in g.roommap[j].conns:
+            print('Connedted to ' + str(g.roommap[j].conns[k]))
     g.run()
 
 if __name__ == "__main__":
