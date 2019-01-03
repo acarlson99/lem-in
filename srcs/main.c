@@ -101,6 +101,14 @@ t_room		*init_room(char *name, char *x, char *y)
 	return (new);
 }
 
+void		free_room(t_room *r)
+{
+	if (r && r->name)
+		free(r->name);
+	if (r)
+		free(r);
+}
+
 void		lstpush(t_lst **h, t_lst *n)
 {
 	if (n && h)
@@ -112,65 +120,112 @@ void		lstpush(t_lst **h, t_lst *n)
 
 void		read_connections(t_lem *info, char **line)
 {
-	t_lst	*tmp1;
-	t_lst	*tmp2;
+	t_lst	*tmp[2];
 
 	if (!line)
 		return ;
-	tmp1 = info->rooms;
-	while (tmp1)
+	tmp[0] = info->rooms;
+	while (tmp[0])
 	{
-		if (!ft_strcmp(tmp1->r->name, line[0]))
+		if (!ft_strcmp(tmp[0]->r->name, line[0]))
 		{
-			tmp2 = info->rooms;
-			while (tmp2)
+			tmp[1] = info->rooms;
+			while (tmp[1])
 			{
-				if (!ft_strcmp(tmp2->r->name, line[1]))
+				if (!ft_strcmp(tmp[1]->r->name, line[1]))
 				{
-					lstpush(&tmp1->r->connections, tmp2);
-					lstpush(&tmp2->r->connections, tmp1);
+					lstpush(&tmp[0]->r->connections, tmp[1]);
+					lstpush(&tmp[1]->r->connections, tmp[0]);
 					break ;
 				}
-				tmp2 = tmp2->next;
+				tmp[1] = tmp[1]->next;
 			}
 		}
-		tmp1 = tmp1->next;
+		tmp[0] = tmp[0]->next;
 	}
 	free_str_tab(&line);
 }
 
-int			readmap(t_lem *info)
-{//TODO: test that this actually works, and figure out parsing map connections
-	char	*line;
+void		read_node(t_lem *info, char *line)
+{
 	char	**t;
+	t_lst	*tl;
+	t_room	*tr;
+
+	t = ft_strsplit(line, ' ');
+	tr = init_room(t[0], t[1], t[2]);
+	tl = lstnew(tr);
+	lstpush(&(info->rooms), tl);
+	free_str_tab(&t);
+	info->num_rooms++;
+}
+
+void		readmap(t_lem **info)
+{
+	char	*line;
 	int		i[3] = {0};
 
 	while (get_next_line(0, &line) > 0)
 	{
-		!i[0] ? info->num_ants = ft_atoi(line) : 0;
+		!i[0] ? (*info)->num_ants = ft_atoi(line) : 0;
 		if (line[0] != '#' && ft_strccount(line, '-') == 1)
-			read_connections(info, ft_strsplit(line, '-'));//TODO: this is some Bowsers Dog Dick
-		else if (i[0] && ft_strccount(line, ' ') == 2)
 		{
-			t = ft_strsplit(line, ' ');
-			lstpush(&info->rooms, lstnew(init_room(t[0], t[1], t[2])));
-			DO_ALL(1, free_str_tab(&t), info->num_rooms++);
+			read_connections((*info), ft_strsplit(line, '-'));
+			free(line);
+			continue ;
 		}
-		i[1] ? info->start = info->rooms->r : 0;
-		info->start ? i[1] = 0 : 0;
-		i[2] ? info->end = info->rooms->r : 0;
-		info->end ? i[2] = 0 : 0;
+		else if (i[0] && ft_strccount(line, ' ') == 2)
+			read_node((*info), line);
+		i[1] ? (*info)->start = (*info)->rooms->r : 0;
+		(*info)->start ? i[1] = 0 : 0;
+		i[2] ? (*info)->end = (*info)->rooms->r : 0;
+		(*info)->end ? i[2] = 0 : 0;
 		(!ft_strcmp("##end", line) && !i[2]) ? i[2] = 1 : 0;
 		(!ft_strcmp("##start", line) && !i[1]) ? i[1] = 1 : 0;
 		i[0]++;
+		ft_printf("readmap.lstlen((*info)->rooms) = %d\n", lstlen((*info)->rooms)); //correct number of rooms here
 		free(line);
 	}
-	return (0);
 }
 
 void		ft_debug()
 {
 	return ;
+}
+
+void		print_lem(t_lem *info)
+{
+	if (!info)
+		return ;
+	ft_printf("info = %p\n", info);
+	ft_printf("info->num_rooms = %u\n", info->num_rooms);
+	ft_printf("info->num_ants = %u\n", info->num_ants);
+	ft_printf("info->rooms = %p\n", info->rooms);
+	ft_printf("info->start = %p\n", info->start);
+	ft_printf("info->end = %p\n", info->end);
+	if (!info->rooms)
+		return ;
+	ft_printf("info->rooms->r = %p\n", info->rooms->r);
+	if (!info->rooms->r)
+		return ;
+	ft_printf("info->rooms->r->name = %s\n", info->rooms->r->name);
+	ft_printf("info->rooms->r->coord_x = %d\n", info->rooms->r->coord_x);
+	ft_printf("info->rooms->r->coord_y = %d\n", info->rooms->r->coord_y);
+}
+
+unsigned	lstlen(t_lst *l)
+{
+	unsigned	i;
+	t_lst		*tmp;
+
+	i = 0;
+	tmp = l;
+	while (tmp)
+	{
+		i++;
+		tmp = tmp->next;
+	}
+	return (i);
 }
 
 void	begone_ants(t_lem **info)
@@ -180,7 +235,7 @@ void	begone_ants(t_lem **info)
 }
 
 /*
-** take care when using info.rooms->r->connections as it's infinitely recursive
+** read file lines into linked list, then put info into properly sized array?
 ** -1 if start
 ** 1 if end
 */
@@ -190,20 +245,13 @@ int			main(void)
 	t_lem	*info;
 
 	init_lem(&info);
-	readmap(info);
-	info->start->start_end = (char)420;
+	readmap(&info);
+	ft_printf("main.lstlen(info->rooms) = %d\n", lstlen(info->rooms));//Where in the world is info->rooms
+	info->end->start_end = (char)420;
 	info->start->start_end = 69;
+	ft_printf("main.lstlen(info->rooms) = %d\n", lstlen(info->rooms));
 	ft_debug();
-	ft_printf("info = %p\n", info);
-	ft_printf("info->num_rooms = %u\n", info->num_rooms);
-	ft_printf("info->num_ants = %u\n", info->num_ants);
-	ft_printf("info->rooms = %p\n", info->rooms);
-	ft_printf("info->start = %p\n", info->start);
-	ft_printf("info->end = %p\n", info->end);
-	ft_printf("info->rooms->r = %p\n", info->rooms->r);
-	ft_printf("info->rooms->r->name = %s\n", info->rooms->r->name);
-	ft_printf("info->rooms->r->coord_x = %d\n", info->rooms->r->coord_x);
-	ft_printf("info->rooms->r->coord_y = %d\n", info->rooms->r->coord_y);
+	print_lem(info);
 	free_lst(info->rooms);
 	begone_ants(&info);
 	ft_printf("info = %p\n", info);
