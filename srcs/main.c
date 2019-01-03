@@ -119,8 +119,8 @@ void		read_connections(t_lem *info, char **line)
 			{
 				if (!ft_strcmp(tmp2->r->name, line[1]))
 				{
-					lstpush(&tmp1->r->connections, tmp2->r);
-					lstpush(&tmp2->r->connections, tmp1->r);
+					lstpush(&tmp1->r->connections, tmp2);
+					lstpush(&tmp2->r->connections, tmp1);
 					break ;
 				}
 				tmp2 = tmp2->next;
@@ -145,27 +145,47 @@ int			readmap(t_lem *info)
 		else if (i[0] && ft_strccount(line, ' ') == 2)
 		{
 			t = ft_strsplit(line, ' ');
-			lstpush(info->rooms, lstnew(init_room(t[0], t[1], t[2])));
+			lstpush(&info->rooms, lstnew(init_room(t[0], t[1], t[2])));
 			free_str_tab(&t);
 		}
 		i[1] ? info->start = info->rooms->r : 0;
+		info->start ? i[1] = 0 : 0;
 		i[2] ? info->end = info->rooms->r : 0;
+		info->end ? i[2] = 0 : 0;
 		(!ft_strcmp("##end", line) && !i[2]) ? i[2] = 1 : 0;
 		(!ft_strcmp("##start", line) && !i[1]) ? i[1] = 1 : 0;
 		i[0]++;
 		free(line);
 	}
+	return (0);
 }
+
+void		ft_debug()
+{
+	return ;
+}
+
+/*
+** take care when using info.rooms->r->connections as it's infinitely recursive
+** -1 if start
+** 1 if end
+*/
 
 int			main(void)
 {// perhaps use array of t_room* for faster access
 	t_lem	info;
-	t_room	*tmp;
 
 	init_lem(&info);
 	readmap(&info);
-	ft_printf("info->rooms->r->name = %s\n", info.rooms->r->name);
+	info.start->start_end = (char)420;
+	info.start->start_end = 69;
+	ft_debug();
+	ft_printf("info = %p\n", info);
 	ft_printf("info->rooms->r = %p\n", info.rooms->r);
+	ft_printf("info->rooms->r->name = %s\n", info.rooms->r->name);
+	ft_printf("info->rooms->r->coord_x = %d\n", info.rooms->r->coord_x);
+	ft_printf("info->rooms->r->coord_y = %d\n", info.rooms->r->coord_y);
 	free_lst(info.rooms);
 	ft_printf("info = %p\n", info);
+	return (0);
 }
