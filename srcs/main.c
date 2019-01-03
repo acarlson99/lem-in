@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/01 17:48:41 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/01 18:13:42 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/02 22:40:22 by callen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,12 +69,20 @@ void		free_lst(t_lst *lst)
 	tmp = 0;
 }
 
-static void	init_lem(t_lem *l)
+void	lemin_hcf()
 {
-	l->num_rooms = 0;
-	l->rooms = 0;
-	l->start = 0;
-	l->end = 0;
+	ft_dprintf(STDERR_FILENO, "ERROR\n");
+	exit(EXIT_FAILURE);
+}
+
+void	init_lem(t_lem **l)
+{
+	if (!(*l = (t_lem*)malloc(sizeof(t_lem))))
+		lemin_hcf();
+	(*l)->num_rooms = 0;
+	(*l)->rooms = 0;
+	(*l)->start = 0;
+	(*l)->end = 0;
 }
 
 t_room		*init_room(char *name, char *x, char *y)
@@ -146,7 +154,7 @@ int			readmap(t_lem *info)
 		{
 			t = ft_strsplit(line, ' ');
 			lstpush(&info->rooms, lstnew(init_room(t[0], t[1], t[2])));
-			free_str_tab(&t);
+			DO_ALL(1, free_str_tab(&t), info->num_rooms++);
 		}
 		i[1] ? info->start = info->rooms->r : 0;
 		info->start ? i[1] = 0 : 0;
@@ -165,6 +173,12 @@ void		ft_debug()
 	return ;
 }
 
+void	begone_ants(t_lem **info)
+{//TODO: ack
+	free(*info);
+	*info = NULL;
+}
+
 /*
 ** take care when using info.rooms->r->connections as it's infinitely recursive
 ** -1 if start
@@ -173,19 +187,25 @@ void		ft_debug()
 
 int			main(void)
 {// perhaps use array of t_room* for faster access
-	t_lem	info;
+	t_lem	*info;
 
 	init_lem(&info);
-	readmap(&info);
-	info.start->start_end = (char)420;
-	info.start->start_end = 69;
+	readmap(info);
+	info->start->start_end = (char)420;
+	info->start->start_end = 69;
 	ft_debug();
 	ft_printf("info = %p\n", info);
-	ft_printf("info->rooms->r = %p\n", info.rooms->r);
-	ft_printf("info->rooms->r->name = %s\n", info.rooms->r->name);
-	ft_printf("info->rooms->r->coord_x = %d\n", info.rooms->r->coord_x);
-	ft_printf("info->rooms->r->coord_y = %d\n", info.rooms->r->coord_y);
-	free_lst(info.rooms);
+	ft_printf("info->num_rooms = %u\n", info->num_rooms);
+	ft_printf("info->num_ants = %u\n", info->num_ants);
+	ft_printf("info->rooms = %p\n", info->rooms);
+	ft_printf("info->start = %p\n", info->start);
+	ft_printf("info->end = %p\n", info->end);
+	ft_printf("info->rooms->r = %p\n", info->rooms->r);
+	ft_printf("info->rooms->r->name = %s\n", info->rooms->r->name);
+	ft_printf("info->rooms->r->coord_x = %d\n", info->rooms->r->coord_x);
+	ft_printf("info->rooms->r->coord_y = %d\n", info->rooms->r->coord_y);
+	free_lst(info->rooms);
+	begone_ants(&info);
 	ft_printf("info = %p\n", info);
 	return (0);
 }
