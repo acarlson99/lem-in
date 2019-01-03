@@ -163,14 +163,15 @@ void		read_node(t_lem *info, char *line)
 void		readmap(t_lem **info)
 {
 	char	*line;
-	int		i[3] = {0};
+	int		i[4] = {0};
 
 	while (get_next_line(0, &line) > 0)
 	{
 		!i[0] ? (*info)->num_ants = ft_atoi(line) : 0;
-		if (line[0] != '#' && ft_strccount(line, '-') == 1)
+		if (!ft_strccount(line, '#') && ft_strccount(line, '-') == 1)
 		{
 			read_connections((*info), ft_strsplit(line, '-'));
+			ft_printf("readmap[%d].conn.lstlen((*info)->rooms) = %d\n", i[0], (i[3] = lstlen((*info)->rooms)));
 			free(line);
 			continue ;
 		}
@@ -183,9 +184,10 @@ void		readmap(t_lem **info)
 		(!ft_strcmp("##end", line) && !i[2]) ? i[2] = 1 : 0;
 		(!ft_strcmp("##start", line) && !i[1]) ? i[1] = 1 : 0;
 		i[0]++;
-		ft_printf("readmap.lstlen((*info)->rooms) = %d\n", lstlen((*info)->rooms)); //correct number of rooms here
 		free(line);
+		ft_printf("readmap[%d].while.lstlen((*info)->rooms) = %d\n", i[0], (i[3] = lstlen((*info)->rooms)));
 	}
+	ft_printf("readmap.end.lstlen((*info)->rooms) = %d\n", lstlen((*info)->rooms)); //correct number of rooms here
 }
 
 void		ft_debug()
@@ -203,14 +205,14 @@ void		print_lem(t_lem *info)
 	ft_printf("info->rooms = %p\n", info->rooms);
 	ft_printf("info->start = %p\n", info->start);
 	ft_printf("info->end = %p\n", info->end);
-	if (!info->rooms)
-		return ;
-	ft_printf("info->rooms->r = %p\n", info->rooms->r);
-	if (!info->rooms->r)
-		return ;
-	ft_printf("info->rooms->r->name = %s\n", info->rooms->r->name);
-	ft_printf("info->rooms->r->coord_x = %d\n", info->rooms->r->coord_x);
-	ft_printf("info->rooms->r->coord_y = %d\n", info->rooms->r->coord_y);
+	// if (!info->rooms)
+	// 	return ;
+	// ft_printf("info->rooms->r = %p\n", info->rooms->r);
+	// if (!info->rooms->r)
+	// 	return ;
+	// ft_printf("info->rooms->r->name = %s\n", info->rooms->r->name);
+	// ft_printf("info->rooms->r->coord_x = %d\n", info->rooms->r->coord_x);
+	// ft_printf("info->rooms->r->coord_y = %d\n", info->rooms->r->coord_y);
 }
 
 unsigned	lstlen(t_lst *l)
