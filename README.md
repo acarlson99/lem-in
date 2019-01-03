@@ -34,5 +34,6 @@ Built with python3
 
 Dependencies:
 * [pygame](https://www.pygame.org/news)
+* [PyTweening](https://pypi.org/project/PyTweening/)
 
 TODO: add screenshots
