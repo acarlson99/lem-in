@@ -69,17 +69,17 @@ class Ant:
 
     def start_move(self, end_coords):
         self.move_list = pytweening.getLine(self.x, self.y, end_coords[0], end_coords[1])
+        self.move_list.append(end_coords)
 
     def move(self, step=1):
-        self.n += step
         if self.move_list == None:
             self.n = 0
             return 0
-        elif self.n >= len(self.move_list):
+        self.n = self.n + self.step
+        if self.n >= len(self.move_list) - 1:
+            print('a')
+            self.x, self.y = self.move_list[-1]
             self.move_list = None
-            self.n = 0
-            return 0
-        elif self.n <= 0:
             self.n = 0
             return 0
         else:
@@ -126,6 +126,7 @@ class Game:
         self.ant_moves = []
         self.start = None
         self.end = None
+        self.ants_moving = 0
 
     def __str__(self):
         try:
@@ -140,21 +141,18 @@ class Game:
             if self.event.type == KEYDOWN:
                 if self.event.key == 113 or self.event.key == 27:
                     self.quit()
-                if self.event.key == K_RIGHT:
+                if self.event.key == K_RIGHT and not self.ants_moving:
                     self.move_num = min(self.move_num + self.inc, len(self.ant_moves) - 1)
-                if self.event.key == K_LEFT:
-                    self.move_num = max(self.move_num - self.inc, 0)
                 if self.event.key == K_UP:
-                    self.inc += 1
+                    for n in self.antmap:
+                        self.antmap[n].step += 1
                 if self.event.key == K_DOWN:
-                    self.inc = max(self.inc - 1, 1)
-                if self.event.key == K_HOME:
+                    for n in self.antmap:
+                        self.antmap[n].step = max(self.antmap[n].step - 1, 1)
+                if self.event.key == K_HOME and not self.ants_moving:
                     for n in self.antmap:
                         self.antmap[n].x, self.antmap[n].y = self.start.center
                     self.move_num = 0
-                    self.inc = 1
-                if self.event.key == K_END:
-                    self.move_num = len(self.ant_moves) - 1
 
     def add_conn(self, line):
         n = line.split('-')
@@ -241,6 +239,7 @@ class Game:
             n += 1
         if n != linum:
             print_err(ANTS_ERR)
+        self.ant_moves = [[]] + self.ant_moves
         for n in range(self.num_ants):
             name = 'L' + str(n + 1)
             print(self.start)
@@ -259,18 +258,24 @@ class Game:
 
     def move_ants(self):
         for n in self.antmap:
-            self.antmap[n].move(self.antmap[n].step)
+            self.ants_moving += self.antmap[n].move(self.antmap[n].step)
 
     def update_ants(self):
-        split_line = [n.split('-') for n in self.ant_moves[self.move_num].split(' ')]
+        line = self.ant_moves[self.move_num]
+        if line == []:
+            return
+        split_line = [n.split('-') for n in line.split(' ')]
         for n in split_line:
-            pass
+            if len(n) != 2:
+                print_err(ANT_ERR)
+            self.antmap[n[0]].start_move(self.roommap[n[1]].center)
 
     def quit(self):
         pygame.quit()
         sys.exit()
 
     def draw(self):
+        self.ants_moving = 0
         self.surf.fill(WHITE)
         self.draw_connections()
         self.draw_rooms()
@@ -295,7 +300,7 @@ def print_err(code):
     elif code == MOVE_ERR:
         print("Move error")
     pygame.quit()
-    sys.exit()
+    sys.exit(1)
 
 def main():
     g = Game()
