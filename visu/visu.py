@@ -43,6 +43,7 @@ ENDCOLOR = BLUE
 ANTS_ERR = 1
 ROOM_ERR = 2
 CONN_ERR = 4
+MOVE_ERR = 8
 
 WINDOWWIDTH = 1000
 WINDOWHEIGHT = 1000
@@ -78,11 +79,11 @@ class Ant:
             self.move_list = None
             self.n = 0
             return 0
-        elif self.n <= len(self.move_list):
+        elif self.n <= 0:
             self.n = 0
             return 0
         else:
-            self.x, self.y = move_list[n]
+            self.x, self.y = self.move_list[self.n]
             return 1
 
 class Room:
@@ -120,6 +121,9 @@ class Game:
         self.room_min_y = None
         self.roommap = {}
         self.antmap = {}
+        self.move_num = 0
+        self.inc = 1
+        self.ant_moves = []
         self.start = None
         self.end = None
 
@@ -136,6 +140,21 @@ class Game:
             if self.event.type == KEYDOWN:
                 if self.event.key == 113 or self.event.key == 27:
                     self.quit()
+                if self.event.key == K_RIGHT:
+                    self.move_num = min(self.move_num + self.inc, len(self.ant_moves) - 1)
+                if self.event.key == K_LEFT:
+                    self.move_num = max(self.move_num - self.inc, 0)
+                if self.event.key == K_UP:
+                    self.inc += 1
+                if self.event.key == K_DOWN:
+                    self.inc = max(self.inc - 1, 1)
+                if self.event.key == K_HOME:
+                    for n in self.antmap:
+                        self.antmap[n].x, self.antmap[n].y = self.start.center
+                    self.move_num = 0
+                    self.inc = 1
+                if self.event.key == K_END:
+                    self.move_num = len(self.ant_moves) - 1
 
     def add_conn(self, line):
         n = line.split('-')
@@ -213,6 +232,15 @@ class Game:
                 self.add_conn(lines[n])
             n += 1
         self.update_rooms()
+        move_p = re.compile("^(?:L\d+-\d+ ?)+$")
+        if n == linum or lines[n] != '':
+            print_err(ANT_ERR)
+        n += 1
+        while n < linum and move_p.match(lines[n]):
+            self.ant_moves.append(lines[n])
+            n += 1
+        if n != linum:
+            print_err(ANTS_ERR)
         for n in range(self.num_ants):
             name = 'L' + str(n + 1)
             print(self.start)
@@ -232,7 +260,11 @@ class Game:
     def move_ants(self):
         for n in self.antmap:
             self.antmap[n].move(self.antmap[n].step)
-        pass
+
+    def update_ants(self):
+        split_line = [n.split('-') for n in self.ant_moves[self.move_num].split(' ')]
+        for n in split_line:
+            pass
 
     def quit(self):
         pygame.quit()
@@ -242,6 +274,7 @@ class Game:
         self.surf.fill(WHITE)
         self.draw_connections()
         self.draw_rooms()
+        self.update_ants()
         self.move_ants()
         self.draw_ants()
         pygame.display.update()
@@ -253,10 +286,16 @@ class Game:
             self.draw()
 
 def print_err(code):
-    if code == CONN_ERR:
+    if code == ANTS_ERR:
+        print("Ant error")
+    elif code == ROOM_ERR:
+        print("Room error")
+    elif code == CONN_ERR:
         print("Connection error")
-        pygame.quit()
-        sys.exit()
+    elif code == MOVE_ERR:
+        print("Move error")
+    pygame.quit()
+    sys.exit()
 
 def main():
     g = Game()
