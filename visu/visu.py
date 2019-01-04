@@ -67,15 +67,24 @@ class Ant:
         # self.image = pygame.transform.scale(self.image, (int(self.size[0]*0.25), int(self.size[1]*0.25)))
         # TODO: Maybe use these to scale images n stuff idk bro it's up to you :shrug:
 
-    def move_to(self, end_coords):  # TODO: implement
+    def start_move(self, end_coords):
+        self.move_list = pytweening.getLine(self.x, self.y, end_coords[0], end_coords[1])
+
+    def step(self, end_coords, step=1):  # TODO: implement
+        self.n += step
         if self.move_list == None:
-            self.move_list = pytweening.getLine(self.x, self.y, move_list[n][0], move_list[n][1])
-        elif self.move_list[n] == self.move_list[-1]:
+            self.n = 0
+            return 0
+        elif self.n >= len(self.move_list):
             self.move_list = None
             self.n = 0
+            return 0
+        elif self.n <= len(self.move_list):
+            self.n = 0
+            return 0
         else:
-            self.n += 1
             self.x, self.y = move_list[n]
+            return 1
 
 class Room:
 
@@ -145,6 +154,10 @@ class Game:
     def add_room(self, line, start_end):
         n = line.split(' ')
         new = Room(n[0], (int(n[1]), int(n[2])), start_end)
+        if start_end == -1:
+            self.start = new
+        elif start_end == 1:
+            self.end = new
         if self.room_max_y == None or self.room_max_y < new.y:
             self.room_max_y = new.y
         if self.room_max_x == None or self.room_max_x < new.x:
@@ -206,6 +219,10 @@ class Game:
                 self.add_conn(lines[n])
             n += 1
         self.update_rooms()
+        for n in range(self.num_ants):
+            name = 'L' + str(n + 1)
+            print(self.start)
+            self.antmap[name] = Ant(name, self.start.center)
 
     def quit(self):
         pygame.quit()
