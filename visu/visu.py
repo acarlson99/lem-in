@@ -57,20 +57,19 @@ class Ant:
     def __init__(self, name, start):
         self.name = name
         self.seed = random.randint(0, 100)
-        self.x, self.y = int(start[0]), int(start[0])
+        self.x, self.y = start
         self.image = pygame.image.load(sys.path[0] + ANT_LIST[self.seed % len(ANT_LIST)]).convert()
         self.n = 0
         self.move_list = None
+        self.step = 1
 
-        # self.image.set_colorkey((255, 255, 255))
-        # self.size = self.image.get_size()
-        # self.image = pygame.transform.scale(self.image, (int(self.size[0]*0.25), int(self.size[1]*0.25)))
-        # TODO: Maybe use these to scale images n stuff idk bro it's up to you :shrug:
+    def __str__(self):
+        return ("Ant name %s x %f y %d" % (self.name, self.x, self.y))
 
     def start_move(self, end_coords):
         self.move_list = pytweening.getLine(self.x, self.y, end_coords[0], end_coords[1])
 
-    def step(self, end_coords, step=1):  # TODO: implement
+    def move(self, step=1):
         self.n += step
         if self.move_list == None:
             self.n = 0
@@ -88,14 +87,14 @@ class Ant:
 
 class Room:
 
-    def __init__(self, name, coords, start_end=0):
+    def __init__(self, name, coords, roomsize, start_end=0):
         self.name = name
         self.x, self.y = coords
         self.start_end = start_end  # start = -1; end = 1; other = 0
         self.conns = {}
         self.disp_x = self.x * 3
         self.disp_y = self.y * 3
-        self.disp_size = 10
+        self.disp_size = roomsize
         self.center = (self.disp_x + self.disp_size / 2, self.disp_y + self.disp_size / 2)
 
     def __str__(self):
@@ -113,6 +112,7 @@ class Game:
         self.surf = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT), 0, 32)
         pygame.display.set_caption("lem-in visualizer\n")
         self.fps = FPS
+        self.roomsize = 15
         self.num_ants = None
         self.room_max_x = None
         self.room_max_y = None
@@ -147,7 +147,7 @@ class Game:
 
     def add_room(self, line, start_end):
         n = line.split(' ')
-        new = Room(n[0], (int(n[1]), int(n[2])), start_end)
+        new = Room(n[0], (int(n[1]), int(n[2])), self.roomsize, start_end)
         if start_end == -1:
             self.start = new
         elif start_end == 1:
@@ -217,16 +217,22 @@ class Game:
             name = 'L' + str(n + 1)
             print(self.start)
             self.antmap[name] = Ant(name, self.start.center)
+            print(self.antmap[name])
 
     def display_ant(self, ant):
         # img_rect = ant.image.get_rect()
         # img_rect.center = (ant.x, ant.y)
         # self.surf.blit(ant.image, img_rect)
-        pygame.draw.circle(self.surf, ANTCOLOR, (ant.x, ant.y), 10, 0)
+        pygame.draw.circle(self.surf, ANTCOLOR, (int(ant.x), int(ant.y)), int(self.roomsize / 2), 0)
 
     def draw_ants(self):
         for n in self.antmap:
             self.display_ant(self.antmap[n])
+
+    def move_ants(self):
+        for n in self.antmap:
+            self.antmap[n].move(self.antmap[n].step)
+        pass
 
     def quit(self):
         pygame.quit()
@@ -236,6 +242,7 @@ class Game:
         self.surf.fill(WHITE)
         self.draw_connections()
         self.draw_rooms()
+        self.move_ants()
         self.draw_ants()
         pygame.display.update()
 
