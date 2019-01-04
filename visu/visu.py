@@ -57,7 +57,7 @@ class Ant:
     def __init__(self, name, start):
         self.name = name
         self.seed = random.randint(0, 100)
-        self.x, self.y = start
+        self.x, self.y = int(start[0]), int(start[0])
         self.image = pygame.image.load(sys.path[0] + ANT_LIST[self.seed % len(ANT_LIST)]).convert()
         self.n = 0
         self.move_list = None
@@ -136,12 +136,6 @@ class Game:
             if self.event.type == KEYDOWN:
                 if self.event.key == 113 or self.event.key == 27:
                     self.quit()
-
-    def display_ant(self, ant):
-        # img_rect = ant.image.get_rect()
-        # img_rect.center = (ant.x, ant.y)
-        # self.surf.blit(ant.image, img_rect)
-        pygame.draw.circle(self.surf, ANTCOLOR, (ant.x, ant.y), 10, 0)
 
     def add_conn(self, line):
         n = line.split('-')
@@ -224,6 +218,16 @@ class Game:
             print(self.start)
             self.antmap[name] = Ant(name, self.start.center)
 
+    def display_ant(self, ant):
+        # img_rect = ant.image.get_rect()
+        # img_rect.center = (ant.x, ant.y)
+        # self.surf.blit(ant.image, img_rect)
+        pygame.draw.circle(self.surf, ANTCOLOR, (ant.x, ant.y), 10, 0)
+
+    def draw_ants(self):
+        for n in self.antmap:
+            self.display_ant(self.antmap[n])
+
     def quit(self):
         pygame.quit()
         sys.exit()
@@ -232,6 +236,7 @@ class Game:
         self.surf.fill(WHITE)
         self.draw_connections()
         self.draw_rooms()
+        self.draw_ants()
         pygame.display.update()
 
     def run(self):
