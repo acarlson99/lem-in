@@ -77,7 +77,6 @@ class Ant:
             return 0
         self.n = self.n + self.step
         if self.n >= len(self.move_list) - 1:
-            print('a')
             self.x, self.y = self.move_list[-1]
             self.move_list = None
             self.n = 0
@@ -93,10 +92,10 @@ class Room:
         self.x, self.y = coords
         self.start_end = start_end  # start = -1; end = 1; other = 0
         self.conns = {}
-        self.disp_x = self.x * 3
-        self.disp_y = self.y * 3
-        self.disp_size = roomsize
-        self.center = (self.disp_x + self.disp_size / 2, self.disp_y + self.disp_size / 2)
+        self.disp_x = self.x * 5
+        self.disp_y = self.y * 5
+        self.roomsize = roomsize
+        self.center = (self.disp_x + self.roomsize/ 2, self.disp_y + self.roomsize / 2)
 
     def __str__(self):
         return ("Room %s start_end %d pos (%d, %d)" % (self.name, self.start_end, self.x, self.y))
@@ -187,7 +186,7 @@ class Game:
                 room_color = ENDCOLOR
             else:
                 room_color = ROOMCOLOR
-            pygame.draw.rect(self.surf, room_color, (self.roommap[rname].disp_x, self.roommap[rname].disp_y, self.roommap[rname].disp_size, self.roommap[rname].disp_size))
+            pygame.draw.rect(self.surf, room_color, (self.roommap[rname].disp_x, self.roommap[rname].disp_y, self.roommap[rname].roomsize, self.roommap[rname].roomsize))
 
     def draw_connections(self):
         for rname in self.roommap:
@@ -195,9 +194,6 @@ class Game:
             for cname in room_a.conns:
                 room_b = self.roommap[cname]
                 pygame.draw.line(self.surf, BLUE, room_a.center, room_b.center)
-
-    def update_rooms(self): # TODO: update display variables
-        pass
 
     def read_input(self):
         lines = [n.rstrip() for n in fileinput.input()]
@@ -229,7 +225,6 @@ class Game:
             else:
                 self.add_conn(lines[n])
             n += 1
-        self.update_rooms()
         move_p = re.compile("^(?:L\d+-\d+ ?)+$")
         if n == linum or lines[n] != '':
             print_err(ANT_ERR)
