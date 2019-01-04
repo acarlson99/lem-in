@@ -45,7 +45,7 @@ t_lst		*lstnew(t_room *r)
 {
 	t_lst *new;
 
-	if (!(new = (t_lst*)malloc(sizeof(t_lst))))
+	if (!(new = (t_lst*)malloc(sizeof(t_lst))))//leaky prick
 		return (0);
 	new->r = r;
 	new->next = 0;
@@ -60,13 +60,10 @@ void		free_lst(t_lst *lst)
 	{
 		tmp = lst;
 		lst->r->name ? free(lst->r->name) : 0;
-		lst->r->connections = 0;
 		lst->r ? free(lst->r) : 0;
 		lst = lst->next;
 		tmp ? free(tmp) : 0;
 	}
-	lst = 0;
-	tmp = 0;
 }
 
 void	lemin_hcf()
@@ -119,11 +116,9 @@ void		lstpush(t_lst **h, t_room *r)
 {
 	t_lst *new;
 
-	if (!(new = (t_lst*)malloc(sizeof(t_lst))))
+	if (!(new = lstnew(r))) //Leaky lil shitter
 		return ;
-	new->r = r;
-	new->next = *h;
-	*h = new;
+	lstadd(h, new);
 }
 
 void		read_connections(t_lem *info, char **line)
@@ -142,8 +137,8 @@ void		read_connections(t_lem *info, char **line)
 			{
 				if (!ft_strcmp(tmp[1]->r->name, line[1]))
 				{
-					lstpush(&tmp[0]->r->connections, tmp[1]->r);
-					lstpush(&tmp[1]->r->connections, tmp[0]->r);
+					lstpush(&tmp[0]->r->connections, tmp[1]->r);//WHATS UP YA DRIPPY SEMEN
+					lstpush(&tmp[1]->r->connections, tmp[0]->r);//WELCOME TO RAPTOR PROTIPS
 					break ;
 				}
 				tmp[1] = tmp[1]->next;
@@ -200,6 +195,9 @@ void		ft_debug()
 
 void		print_lem(t_lem *info)
 {
+	t_lst *ctmp, *tmp = info->rooms;
+	int i, j;
+
 	if (!info)
 		return ;
 	ft_printf("info = %p\n", info);
@@ -211,6 +209,25 @@ void		print_lem(t_lem *info)
 	if (!info->rooms)
 		return ;
 	ft_printf("lstlen(info->rooms) = %d\n", lstlen(info->rooms));
+	for (i = 0; tmp; i++)
+	{
+		ft_printf("  info->rooms[%d]->r = %p\n", i, tmp->r);
+		ft_printf("  info->rooms[%d]->next = %p\n", i, tmp->next);
+		ft_printf("  info->rooms[%d]->r->full = %hhd\n", i, tmp->r->full);
+		ft_printf("  info->rooms[%d]->r->visited = %hhd\n", i, tmp->r->visited);
+		ft_printf("  info->rooms[%d]->r->start_end = %hhd\n", i, tmp->r->start_end);
+		ft_printf("  info->rooms[%d]->r->coord_x = %d\n", i, tmp->r->coord_x);
+		ft_printf("  info->rooms[%d]->r->coord_y = %d\n", i, tmp->r->coord_y);
+		ft_printf("  info->rooms[%d]->r->name = %s\n", i, tmp->r->name);
+		ft_printf("  info->rooms[%d]->r->connections = %p\n", i, tmp->r->connections);
+		for (j = 0, ctmp = tmp->r->connections; ctmp; j++)
+		{
+			ft_printf("    info->rooms[%d]->r->connections[%d]->r = %p\n", i, j, ctmp->r);
+			ft_printf("    info->rooms[%d]->r->connections[%d]->next = %p\n", i, j, ctmp->next);
+			ctmp = ctmp->next;
+		}
+		tmp = tmp->next;
+	}
 }
 
 unsigned	lstlen(t_lst *l)
@@ -246,12 +263,12 @@ int			main(void)
 
 	init_lem(&info);
 	readmap(&info);
-	info->end->start_end = (char)420;
-	info->start->start_end = 69;
+	info->start->start_end = START;
+	info->end->start_end = END;
 	ft_debug();
 	print_lem(info);
 	free_lst(info->rooms);
-	begone_ants(&info);
+	free(info);
 	ft_printf("info = %p\n", info);
 	exit(0);
 }
