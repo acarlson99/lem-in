@@ -4,6 +4,7 @@ import sys
 import fileinput
 import random
 import re
+import pytweening
 import contextlib
 with contextlib.redirect_stdout(None):
     import pygame
@@ -58,12 +59,23 @@ class Ant:
         self.seed = random.randint(0, 100)
         self.x, self.y = start
         self.image = pygame.image.load(sys.path[0] + ANT_LIST[self.seed % len(ANT_LIST)]).convert()
+        self.n = 0
         self.move_list = None
 
         # self.image.set_colorkey((255, 255, 255))
         # self.size = self.image.get_size()
         # self.image = pygame.transform.scale(self.image, (int(self.size[0]*0.25), int(self.size[1]*0.25)))
         # TODO: Maybe use these to scale images n stuff idk bro it's up to you :shrug:
+
+    def move_to(self, end_coords):  # TODO: implement
+        if self.move_list == None:
+            self.move_list = pytweening.getLine(self.x, self.y, move_list[n][0], move_list[n][1])
+        elif self.move_list[n] == self.move_list[-1]:
+            self.move_list = None
+            self.n = 0
+        else:
+            self.n += 1
+            self.x, self.y = move_list[n]
 
 class Room:
 
