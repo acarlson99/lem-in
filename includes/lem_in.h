@@ -15,8 +15,8 @@
 
 # include "libft.h"
 
-# define START -1
-# define END 1
+# define START ((char)69)
+# define END ((char)420)
 
 typedef struct s_room	t_room;
 typedef struct s_lem	t_lem;
