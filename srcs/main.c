@@ -109,13 +109,21 @@ void		free_room(t_room *r)
 		free(r);
 }
 
-void		lstpush(t_lst **h, t_lst *n)
+void		lstadd(t_lst **h, t_lst *n)
 {
-	if (n && h)
-	{
-		n->next = *h;
-		*h = n;
-	}
+	n->next = *h;
+	*h = n;
+}
+
+void		lstpush(t_lst **h, t_room *r)
+{
+	t_lst *new;
+
+	if (!(new = (t_lst*)malloc(sizeof(t_lst))))
+		return ;
+	new->r = r;
+	new->next = *h;
+	*h = new;
 }
 
 void		read_connections(t_lem *info, char **line)
@@ -127,15 +135,19 @@ void		read_connections(t_lem *info, char **line)
 	tmp[0] = info->rooms;
 	while (tmp[0])
 	{
+		ft_printf("rc.tmp0.lstlen(info->rooms) = %u\n", lstlen(info->rooms));
 		if (!ft_strcmp(tmp[0]->r->name, line[0]))
 		{
 			tmp[1] = info->rooms;
 			while (tmp[1])
 			{
+				ft_printf("rc.tmp1.lstlen(info->rooms) = %u\n", lstlen(info->rooms));
 				if (!ft_strcmp(tmp[1]->r->name, line[1]))
 				{
-					lstpush(&tmp[0]->r->connections, tmp[1]);
-					lstpush(&tmp[1]->r->connections, tmp[0]);
+					ft_printf("rc.lstpush.lstlen(info->rooms) = %u\n", lstlen(info->rooms));
+					lstpush(&tmp[0]->r->connections, tmp[1]->r);
+					lstpush(&tmp[1]->r->connections, tmp[0]->r);
+					ft_printf("rc.break.lstlen(info->rooms) = %u\n", lstlen(info->rooms));
 					break ;
 				}
 				tmp[1] = tmp[1]->next;
@@ -185,9 +197,8 @@ void		readmap(t_lem **info)
 		(!ft_strcmp("##start", line) && !i[1]) ? i[1] = 1 : 0;
 		i[0]++;
 		free(line);
-		ft_printf("readmap[%d].while.lstlen((*info)->rooms) = %d\n", i[0], (i[3] = lstlen((*info)->rooms)));
 	}
-	ft_printf("readmap.end.lstlen((*info)->rooms) = %d\n", lstlen((*info)->rooms)); //correct number of rooms here
+	ft_printf("readmap.end.lstlen((*info)->rooms) = %d\n", lstlen((*info)->rooms));
 }
 
 void		ft_debug()
@@ -257,5 +268,5 @@ int			main(void)
 	free_lst(info->rooms);
 	begone_ants(&info);
 	ft_printf("info = %p\n", info);
-	return (0);
+	exit(0);
 }
