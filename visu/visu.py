@@ -57,8 +57,8 @@ class Ant:
 
     def __init__(self, name, start):
         self.name = name
-        self.seed = random.randint(0, 100)
         self.x, self.y = start
+        self.img = pygame.image.load(sys.path[0] + "/assets/durant_comma_kevin.png")
         self.n = 0
         self.move_list = None
         self.step = 1
@@ -204,7 +204,6 @@ class Game:
                 pygame.draw.line(self.surf, CONNCOLOR, room_a.center, room_b.center, 2)
 
     def read_input(self):
-        # lines = [n.rstrip() for n in fileinput.input()]
         lines = [n.rstrip() for n in sys.stdin]
         for n in lines:
             print(n)
@@ -251,10 +250,9 @@ class Game:
             self.antmap[name] = Ant(name, self.start.center)
 
     def display_ant(self, ant):
-        # img_rect = ant.image.get_rect()
-        # img_rect.center = (ant.x, ant.y)
-        # self.surf.blit(ant.image, img_rect)
-        pygame.draw.circle(self.surf, ANTCOLOR, (int(ant.x), int(ant.y)), int(self.roomsize / 2), 0)
+        img_rect = ant.img.get_rect()
+        img_rect.center = (ant.x, ant.y)
+        self.surf.blit(ant.img, img_rect)
 
     def draw_ants(self):
         for n in self.antmap:
