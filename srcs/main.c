@@ -82,7 +82,7 @@ t_lst		*lstnew(t_room *r)
 {
 	t_lst *new;
 
-	if (!(new = (t_lst*)malloc(sizeof(t_lst))))//leaky prick
+	if (!(new = (t_lst*)malloc(sizeof(t_lst))))//TODO: give cork
 		return (0);
 	new->r = r;
 	new->next = 0;
@@ -153,7 +153,7 @@ void		lstpush(t_lst **h, t_room *r)
 {
 	t_lst *new;
 
-	if (!(new = lstnew(r))) //Leaky lil shitter
+	if (!(new = lstnew(r)))//TODO: acquire plug
 		return ;
 	lstadd(h, new);
 }
@@ -174,8 +174,8 @@ void		read_connections(t_lem *info, char **line)
 			{
 				if (!ft_strcmp(tmp[1]->r->name, line[1]))
 				{
-					lstpush(&tmp[0]->r->connections, tmp[1]->r);//WHATS UP YA DRIPPY SEMEN
-					lstpush(&tmp[1]->r->connections, tmp[0]->r);//WELCOME TO RAPTOR PROTIPS)
+					lstpush(&tmp[0]->r->connections, tmp[1]->r);//TODO: call plumber
+					lstpush(&tmp[1]->r->connections, tmp[0]->r);//TODO: call another plumber
 					print_lem(info);
 					break ;
 				}
@@ -248,12 +248,6 @@ unsigned	lstlen(t_lst *l)
 	return (i);
 }
 
-void	begone_ants(t_lem **info)
-{//TODO: ack
-	free(*info);
-	*info = NULL;
-}
-
 /*
 ** read file lines into linked list, then put info into properly sized array?
 ** -1 if start
@@ -272,6 +266,6 @@ int			main(void)
 	print_lem(info);
 	free_lst(info->rooms);
 	free(info);
-	ft_printf("info = %p\n", info);
+	ft_printf("info = %p\n", info);pause();
 	exit(0);
 }

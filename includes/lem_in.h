@@ -15,6 +15,11 @@
 
 # include "libft.h"
 
+/*
+** START == 69 == 'E'
+** END == -92
+*/
+
 # define START ((char)69)
 # define END ((char)420)
 
