@@ -38,7 +38,8 @@ BGCOLOR = ( 32,  40,  55)
 ANTCOLOR = BLACK
 ROOMCOLOR = PURPLE
 STARTCOLOR = RED
-ENDCOLOR = BLUE
+ENDCOLOR = GREEN
+CONNCOLOR = BLUE
 
 ANTS_ERR = 1
 ROOM_ERR = 2
@@ -193,7 +194,7 @@ class Game:
             room_a = self.roommap[rname]
             for cname in room_a.conns:
                 room_b = self.roommap[cname]
-                pygame.draw.line(self.surf, BLUE, room_a.center, room_b.center)
+                pygame.draw.line(self.surf, CONNCOLOR, room_a.center, room_b.center, 2)
 
     def read_input(self):
         lines = [n.rstrip() for n in fileinput.input()]
@@ -225,9 +226,9 @@ class Game:
             else:
                 self.add_conn(lines[n])
             n += 1
-        move_p = re.compile("^(?:L\d+-\d+ ?)+$")
+        move_p = re.compile("^(?:L[0-9]+-[a-zA-Z0-9_]+ ?)+$")
         if n == linum or lines[n] != '':
-            print_err(ANT_ERR)
+            print_err(ANTS_ERR)
         n += 1
         while n < linum and move_p.match(lines[n]):
             self.ant_moves.append(lines[n])
@@ -237,9 +238,7 @@ class Game:
         self.ant_moves = [[]] + self.ant_moves
         for n in range(self.num_ants):
             name = 'L' + str(n + 1)
-            print(self.start)
             self.antmap[name] = Ant(name, self.start.center)
-            print(self.antmap[name])
 
     def display_ant(self, ant):
         # img_rect = ant.image.get_rect()
@@ -262,7 +261,7 @@ class Game:
         split_line = [n.split('-') for n in line.split(' ')]
         for n in split_line:
             if len(n) != 2:
-                print_err(ANT_ERR)
+                print_err(ANTS_ERR)
             self.antmap[n[0]].start_move(self.roommap[n[1]].center)
 
     def quit(self):
@@ -271,7 +270,7 @@ class Game:
 
     def draw(self):
         self.ants_moving = 0
-        self.surf.fill(WHITE)
+        self.surf.fill(BGCOLOR)
         self.draw_connections()
         self.draw_rooms()
         self.update_ants()
@@ -300,7 +299,6 @@ def print_err(code):
 def main():
     g = Game()
     g.read_input()
-    print(g)
     g.run()
 
 if __name__ == "__main__":
