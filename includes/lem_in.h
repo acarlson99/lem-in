@@ -18,10 +18,12 @@
 /*
 ** START == 69 == 'E'
 ** END == -92
+** R(a): macro for typecasting t_list->content from void* to t_room*
 */
 
-# define START ((char)69)
-# define END ((char)420)
+# define START	((char)69)
+# define END	((char)420)
+# define R(a)	((!a) ? (0) : ((t_room*)a->content))
 
 typedef struct s_room	t_room;
 typedef struct s_lem	t_lem;
