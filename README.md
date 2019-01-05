@@ -26,12 +26,32 @@ TODO: Add description of algorithm or something
 ./lem-in < test_map
 ```
 
-## visualizer
+## Visualizer
 
 Built with python3
 
-Dependencies:
+### Dependencies:
+
 * [pygame](https://www.pygame.org/news)
+
 * [PyTweening](https://pypi.org/project/PyTweening/)
+
+### Usage:
+
+```bash
+./lem-in < test_map | ./visu.py
+```
+
+### Navigation:
+
+* Esc, Q: quit visualizer
+
+* Up: increase ant speed
+
+* Down: decrease ant speed
+
+* 0: reset ant speed
+
+* Home, R: reset
 
 ![visualizer screenshot 00](screenshots/visu00.png)

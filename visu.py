@@ -314,7 +314,7 @@ def print_err(code):
 def main():
     if len(sys.argv) > 1:
         if sys.argv[1] == "--help":
-            print("""\
+            print("""Navigation:
 Esc, Q : quit visualizer
 Up     : increase ant speed
 Down   : decrease ant speed
