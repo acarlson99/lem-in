@@ -34,25 +34,24 @@ DGREEN   = ( 15,  91,  82)
 PINK     = (220,  40,  90)
 DPINK    = (111,  29,  74)
 
-BGCOLOR = ( 32,  40,  55)
+BGCOLOR = (245,222,179)
 ANTCOLOR = BLACK
-ROOMCOLOR = PURPLE
-STARTCOLOR = RED
-ENDCOLOR = GREEN
+# ROOMCOLOR = PURPLE
+ROOMCOLOR = (165, 27, 27)
+# STARTCOLOR = (250, 30, 30)
+STARTCOLOR = ROOMCOLOR
+# ENDCOLOR = (255, 150, 79)
+ENDCOLOR = MUSTARD
 CONNCOLOR = BLUE
 
 ANTS_ERR = 1
 ROOM_ERR = 2
 CONN_ERR = 4
 MOVE_ERR = 8
+READ_ERR = 16
 
 WINDOWWIDTH = 1000
 WINDOWHEIGHT = 1000
-
-ANT_LIST = [
-    "/assets/ant_00.png",
-    "/assets/durant_comma_kevin.png"
-]
 
 class Ant:
 
@@ -60,7 +59,6 @@ class Ant:
         self.name = name
         self.seed = random.randint(0, 100)
         self.x, self.y = start
-        self.image = pygame.image.load(sys.path[0] + ANT_LIST[self.seed % len(ANT_LIST)]).convert()
         self.n = 0
         self.move_list = None
         self.step = 1
@@ -113,7 +111,7 @@ class Game:
         self.surf = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT), 0, 32)
         pygame.display.set_caption("lem-in visualizer\n")
         self.fps = FPS
-        self.roomsize = 15
+        self.roomsize = 16
         self.num_ants = None
         self.room_max_x = None
         self.room_max_y = None
@@ -149,9 +147,11 @@ class Game:
                 if self.event.key == K_DOWN:
                     for n in self.antmap:
                         self.antmap[n].step = max(self.antmap[n].step - 1, 1)
-                if self.event.key == K_HOME and not self.ants_moving:
+                if (self.event.key == K_HOME or self.event.key == K_r) and not self.ants_moving:
                     for n in self.antmap:
                         self.antmap[n].x, self.antmap[n].y = self.start.center
+                        self.antmap[n].n = 0
+                        self.antmap[n].step = 1
                     self.move_num = 0
 
     def add_conn(self, line):
@@ -177,7 +177,11 @@ class Game:
             self.room_min_y = new.y
         if self.room_min_x == None or new.x < self.room_max_x:
             self.room_min_x = new.x
-        self.roommap[new.name] = new
+        try:
+            if self.roommap[new.name]:
+                print_err(ROOM_ERR)
+        except:
+            self.roommap[new.name] = new
 
     def draw_rooms(self):
         for rname in self.roommap:
@@ -188,6 +192,9 @@ class Game:
             else:
                 room_color = ROOMCOLOR
             pygame.draw.rect(self.surf, room_color, (self.roommap[rname].disp_x, self.roommap[rname].disp_y, self.roommap[rname].roomsize, self.roommap[rname].roomsize))
+            if self.roommap[rname].start_end == -1:
+                rm = self.roommap[rname]
+                pygame.draw.lines(self.surf, MUSTARD, True, ((rm.disp_x, rm.disp_y), (rm.disp_x + rm.roomsize, rm.disp_y), (rm.disp_x + rm.roomsize, rm.disp_y + rm.roomsize), (rm.disp_x, rm.disp_y + rm.roomsize)), 3)
 
     def draw_connections(self):
         for rname in self.roommap:
@@ -197,7 +204,10 @@ class Game:
                 pygame.draw.line(self.surf, CONNCOLOR, room_a.center, room_b.center, 2)
 
     def read_input(self):
-        lines = [n.rstrip() for n in fileinput.input()]
+        # lines = [n.rstrip() for n in fileinput.input()]
+        lines = [n.rstrip() for n in sys.stdin]
+        for n in lines:
+            print(n)
         linum = len(lines)
         n = 0
         start_end = 0
@@ -293,12 +303,18 @@ def print_err(code):
         print("Connection error")
     elif code == MOVE_ERR:
         print("Move error")
+    elif code == READ_ERR:
+        print("Read error")
+    print("usage: ./lem-in < test_file | ./visu")
     pygame.quit()
     sys.exit(1)
 
 def main():
     g = Game()
-    g.read_input()
+    try:
+        g.read_input()
+    except FileNotFoundError:
+        print_err(READ_ERR)
     g.run()
 
 if __name__ == "__main__":
