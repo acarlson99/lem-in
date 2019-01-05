@@ -57,7 +57,7 @@ class Ant:
     def __init__(self, name, start):
         self.name = name
         self.x, self.y = start
-        if random.randint(0, 100) == 0:
+        if random.randint(0, 1000) == 0:
             self.img = pygame.image.load(sys.path[0] + "/assets/durantunderscorecommaunderscorekevin.png")
         else:
             self.img = pygame.image.load(sys.path[0] + "/assets/ant.png")
