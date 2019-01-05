@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import sys
-import fileinput
 import random
 import re
 import pytweening
@@ -58,7 +57,10 @@ class Ant:
     def __init__(self, name, start):
         self.name = name
         self.x, self.y = start
-        self.img = pygame.image.load(sys.path[0] + "/assets/durant_comma_kevin.png")
+        if random.randint(0, 100) == 0:
+            self.img = pygame.image.load(sys.path[0] + "/assets/durantunderscorecommaunderscorekevin.png")
+        else:
+            self.img = pygame.image.load(sys.path[0] + "/assets/ant.png")
         self.n = 0
         self.move_list = None
         self.step = 1
@@ -106,7 +108,7 @@ class Game:
 
     def __init__(self):
         pygame.init()
-        pygame.key.set_repeat(105, 5)
+        pygame.key.set_repeat(150, 5)
         self.clock = pygame.time.Clock()
         self.surf = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT), 0, 32)
         pygame.display.set_caption("lem-in visualizer\n")
@@ -137,7 +139,7 @@ class Game:
             if self.event.type == QUIT:
                 self.quit()
             if self.event.type == KEYDOWN:
-                if self.event.key == 113 or self.event.key == 27:
+                if self.event.key == K_ESCAPE or self.event.key == K_q:
                     self.quit()
                 if self.event.key == K_RIGHT and not self.ants_moving:
                     self.move_num = min(self.move_num + self.inc, len(self.ant_moves) - 1)
@@ -153,6 +155,9 @@ class Game:
                         self.antmap[n].n = 0
                         self.antmap[n].step = 1
                     self.move_num = 0
+                if self.event.key == K_0 or self.event.key == K_KP0:
+                    for n in self.antmap:
+                        self.antmap[n].step = 1
 
     def add_conn(self, line):
         n = line.split('-')
@@ -303,11 +308,23 @@ def print_err(code):
         print("Move error")
     elif code == READ_ERR:
         print("Read error")
-    print("usage: ./lem-in < test_file | ./visu")
     pygame.quit()
     sys.exit(1)
 
 def main():
+    if len(sys.argv) > 1:
+        if sys.argv[1] == "--help":
+            print("""\
+Esc, Q : quit visualizer
+Up     : increase ant speed
+Down   : decrease ant speed
+0      : reset ant speed
+Home, R: reset""")
+            sys.exit()
+        else:
+            print("illegal option: %s" % (sys.argv[1]))
+            print("usage: ./lem-in < test_file | ./visu [--help]")
+            sys.exit(1)
     g = Game()
     try:
         g.read_input()
