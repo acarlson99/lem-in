@@ -28,12 +28,10 @@ TODO: Add description of algorithm or something
 
 ## visualizer
 
-TODO: this
-
 Built with python3
 
 Dependencies:
 * [pygame](https://www.pygame.org/news)
 * [PyTweening](https://pypi.org/project/PyTweening/)
 
-TODO: add screenshots
+![visualizer screenshot 00](screenshots/visu00.png)
