@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/31 14:03:45 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/01 18:12:31 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/05 19:52:45 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,14 @@
 # define START	((char)69)
 # define END	((char)420)
 # define R(a)	((!a) ? (0) : ((t_room*)a->content))
+
+# define MALLOC_ERR 1
+# define ROOM_ERR 2
+# define START_ERR 4
+# define END_ERR 8
+# define CONN_ERR 16
+# define PARS_ERR 32
+# define READ_ERR 64
 
 typedef struct s_room	t_room;
 typedef struct s_lem	t_lem;
@@ -72,19 +80,8 @@ struct		s_lem
 	t_room		*end;
 };
 
-int			ft_strccount(const char *s, int c);
-void		free_str_tab(char ***t);
-t_lst		*lstnew(t_room *r);
-void		free_lst(t_lst *l);
-t_room		*init_room(char *name, char *x, char *y);
-void		lstpush(t_lst **h, t_room *r);
-void		ft_lstpush(t_list **h, t_room *r);
-void		lstadd(t_lst **h, t_lst *r);
-void		readmap(t_lem **info);
-unsigned	lstlen(t_lst *l);
-unsigned	ft_lstlen(t_list *l);
-void		print_lem(t_lem *info);
-void		begone_ants(t_lem **info);
-void		read_connections(t_lem *info, char **line);
+void		parse_input(t_lem *info);
+void		panic(int code);
+void		init_lem(t_lem **info);
 
 #endif

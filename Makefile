@@ -6,7 +6,7 @@
 #    By: acarlson <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/15 14:08:57 by acarlson          #+#    #+#              #
-#    Updated: 2019/01/01 16:09:44 by acarlson         ###   ########.fr        #
+#    Updated: 2019/01/05 19:52:16 by acarlson         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -16,7 +16,7 @@ DFLAGS = -Wall -Wextra -g
 SRCS = srcs/
 OBJDIR = .obj/
 INCLUDES = -I includes/ -I libft/includes/
-FILES = main
+FILES = main struct parse
 CFILES = $(addsuffix .c, $(FILES))
 OFILES = $(addprefix $(OBJDIR), $(addsuffix .o, $(FILES)))
 LIBS = -L libft/ -lft
