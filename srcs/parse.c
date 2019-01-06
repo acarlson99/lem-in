@@ -17,9 +17,9 @@ void		read_first_line(t_lem *info)
 	char		*line;
 	char		*ptr;
 	
-	RET_IF(get_next_line(FT_STDIN_FILENO, &line) < 1, panic(PARS_ERR));
+	RET_IF(get_next_line(STDIN_FILENO, &line) < 1, panic(PARS_ERR));
 	ptr = line;
-	while (*ptr >= '0' && *ptr <= '9')
+	while (ISDIGIT(*ptr))
 		ptr++;
 	if (*ptr)
 		panic(READ_ERR);
@@ -29,7 +29,21 @@ void		read_first_line(t_lem *info)
 
 void		read_rooms_conns(t_lem *info)
 {
-	(void)info;
+	char *line;
+	char **t;
+
+	while (get_next_line(STDIN_FILENO, &line) == 1)
+	{
+		if (line[0] == '#')
+		{//TODO: put these lads in if statements/ternaries
+			ft_strcmp("##start", line);
+			ft_strcmp("##end", line);
+		}
+		else
+		{//TODO: strsplit line containing room info
+			t = ft_strsplit(line, ' ');
+		}
+	}
 }
 
 void		parse_input(t_lem *info)

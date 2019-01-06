@@ -22,25 +22,24 @@
 ** adjacency list struct as array of linked lists
 */
 
-# define START	((char)69)
-# define END	((char)420)
-# define R(a)	((!a) ? (0) : ((t_room*)a->content))
+# define START		((char)69)
+# define END		((char)420)
+# define R(a)		((!a) ? (0) : ((t_room*)a->content))
 
-# define MALLOC_ERR 1
-# define ROOM_ERR 2
-# define START_ERR 4
-# define END_ERR 8
-# define CONN_ERR 16
-# define PARS_ERR 32
-# define READ_ERR 64
+# define MALLOC_ERR	(1)
+# define ROOM_ERR	(2)
+# define START_ERR	(4)
+# define END_ERR	(8)
+# define CONN_ERR	(16)
+# define PARS_ERR	(32)
+# define READ_ERR	(64)
 
 typedef struct s_room	t_room;
 typedef struct s_lem	t_lem;
 typedef struct s_lst	t_lst;
-typedef struct s_lsts	t_lsts;
 
 /*
-** sizeof(t_lst) = 16 bytes
+** sizeof(t_list) = 40 bytes
 */
 
 struct		s_lst
@@ -63,7 +62,6 @@ struct		s_room
 	int			coord_y;
 	char		*name;
 	t_list		*conns;
-	t_lst		*connections;
 };
 
 /*
@@ -74,8 +72,7 @@ struct		s_lem
 {
 	unsigned	num_rooms;
 	unsigned	num_ants;
-	t_lst		*rooms;
-	t_list		*conns;
+	t_list		*rooms;
 	t_room		*start;
 	t_room		*end;
 };

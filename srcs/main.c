@@ -13,7 +13,7 @@
 #include "lem_in.h"
 
 void		panic(int code)
-{
+{//TODO: print to STDERR_FILENO and only print out "ERROR\n"
 	if (code == MALLOC_ERR)
 		ft_printf("Malloc error\n");
 	else if (code == ROOM_ERR)
@@ -28,7 +28,7 @@ void		panic(int code)
 		ft_printf("File read error\n");
 	else if (code == READ_ERR)
 		ft_printf("Read error\n");
-	exit(1);
+	exit(EXIT_FAILURE);
 }
 
 int			main(void)
@@ -38,5 +38,5 @@ int			main(void)
 	init_lem(&info);
 	parse_input(info);
 	ft_printf("%d\n", info->num_ants);
-	exit(0);
+	exit(EXIT_SUCCESS);
 }

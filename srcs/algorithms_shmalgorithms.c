@@ -35,33 +35,33 @@ static unsigned	ft_lstln(t_list *l)
 
 static void		prnt_lem(t_lem *info)
 {//Definitely will not norme
-	t_lst *ctmp, *tmp;
+	t_list *ctmp, *tmp;
 	int i, j;
 
 	RET_NONE(!info);
 	ft_printf("info = %p\n", info);
 	ft_printf("info->num_rooms = %u\n", info->num_rooms);
 	ft_printf("info->num_ants = %u\n", info->num_ants);
-	ft_printf("info->rooms = %p\n", *info->rooms);
+	ft_printf("info->rooms = %p\n", info->rooms);
 	ft_printf("info->start = %p\n", info->start);
 	ft_printf("info->end = %p\n", info->end);
 	RET_NONE(!info->rooms);
 	ft_printf("lstlen(info->rooms) = %d\n", ft_lstln(info->rooms));
 	for (i = 0, tmp = info->rooms; tmp; i++)
 	{
-		ft_printf("  info->rooms[%d]->r = %p\n", i, tmp->r);
+		ft_printf("  info->rooms[%d]) = %p\n", i, R(tmp));
 		ft_printf("    info->rooms[%d]->next = %p\n", i, tmp->next);
-		ft_printf("    info->rooms[%d]->r->full = %hhd\n", i, tmp->r->full);
-		ft_printf("    info->rooms[%d]->r->visited = %hhd\n", i, tmp->r->visited);
-		ft_printf("    info->rooms[%d]->r->start_end = %hhd\n", i, tmp->r->start_end);
-		ft_printf("    info->rooms[%d]->r->coord_x = %d\n", i, tmp->r->coord_x);
-		ft_printf("    info->rooms[%d]->r->coord_y = %d\n", i, tmp->r->coord_y);
-		ft_printf("    info->rooms[%d]->r->name = %s\n", i, tmp->r->name);
-		ft_printf("    info->rooms[%d]->r->connections = %p\n", i, tmp->r->connections);
-		for (j = 0, ctmp = tmp->r->connections; ctmp; j++)
+		ft_printf("    info->rooms[%d])->full = %hhd\n", i, R(tmp)->full);
+		ft_printf("    info->rooms[%d])->visited = %hhd\n", i, R(tmp)->visited);
+		ft_printf("    info->rooms[%d])->start_end = %hhd\n", i, R(tmp)->start_end);
+		ft_printf("    info->rooms[%d])->coord_x = %d\n", i, R(tmp)->coord_x);
+		ft_printf("    info->rooms[%d])->coord_y = %d\n", i, R(tmp)->coord_y);
+		ft_printf("    info->rooms[%d])->name = %s\n", i, R(tmp)->name);
+		ft_printf("    info->rooms[%d])->conns = %p\n", i, R(tmp)->conns);
+		for (j = 0, ctmp = R(tmp)->conns; ctmp; j++)
 		{
-			ft_printf("      info->rooms[%d]->r->connections[%d]->r = %p\n", i, j, ctmp->r);
-			ft_printf("      info->rooms[%d]->r->connections[%d]->next = %p\n", i, j, ctmp->next);
+			ctmp ? ft_printf("      R(R(info->rooms[%d])->conns[%d]) = %p\n", i, j, R(ctmp)) : 0;
+			ctmp->next ? ft_printf("      R(R(info->rooms[%d])->conns[%d]->next) = %p\n", i, j, R(ctmp->next)) : 0;
 			ctmp = ctmp->next;
 		}
 		tmp = tmp->next;
@@ -75,28 +75,41 @@ static void		prnt_lem_addr(t_lem *info)
 
 	RET_NONE(!info);
 	ft_printf("info = %p\n", info);
-	ft_printf("info->conns = %p\n", info->conns);
+	ft_printf("info->rooms = %p\n", info->rooms);
 	ft_printf("info->start = %p\n", info->start);
 	ft_printf("info->end = %p\n", info->end);
-	for (i = 0, ttmp = info->conns; ttmp; i++, ttmp = ttmp->next)
+	for (i = 0, ttmp = info->rooms; ttmp; i++, ttmp = ttmp->next)
 	{
-		ft_printf("info->conns[%d]->r = %p\n", i, R(ttmp));
-		ft_printf("  info->conns[%d]->next = %p\n", i, ttmp->next);
-		ttmp->next ? ft_printf("    info->conns[%d]->next->r = %p\n", i, R(ttmp->next)) : 0;
-		ttmp->next ? ft_printf("    info->conns[%d]->next->next = %p\n", i, ttmp->next->next) : 0;
-		ft_printf("  info->conns[%d]->r->name = %p\n", i, R(ttmp)->name);
-		ft_printf("  info->conns[%d]->r->conns = %p\n", i, R(ttmp)->conns);
+		ft_printf("R(info->rooms[%d]) = %p\n", i, R(ttmp));
+		ttmp->next ? ft_printf("  R(info->rooms[%d]->next) = %p\n", i, R(ttmp->next)) : 0;
+		ttmp->next ? ft_printf("    R(info->rooms[%d]->next) = %p\n", i, R(ttmp->next)) : 0;
+		ttmp->next && ttmp->next->next ? ft_printf("    R(info->rooms[%d]->next->next) = %p\n", i, R(ttmp->next->next)) : 0;
+		ft_printf("  R(info->rooms[%d])->name = %p\n", i, R(ttmp)->name);
+		ft_printf("  R(info->rooms[%d])->conns = %p\n", i, R(ttmp)->conns);
 		for (j = 0, cctmp = R(ttmp)->conns; cctmp; j++, cctmp = cctmp->next)
 		{
-			ft_printf("    info->conns[%d]->r->connections[%d]->r = %p\n", i, j, R(cctmp));
-			ft_printf("    info->conns[%d]->r->connections[%d]->next = %p\n", i, j, cctmp->next);
+			ft_printf("    R(R(info->rooms[%d])->conns[%d]) = %p\n", i, j, R(cctmp));
+			ft_printf("    R(R(info->rooms[%d])->conns[%d]->next) = %p\n", i, j, R(cctmp->next));
 		}
 	}
 }
 
 void	check_graph(t_lem *l)
-{
+{//TODO: check rooms for loops and such
+	int		i;
+	t_room	*tmp[2];
+
 	if (!l->start || !l->end)
-		lemon_hcf();
-	
+		panic(ROOM_ERR);
+	i = 0;
+	tmp[0] = R(l->rooms);
+	while (tmp[0]->start_end != END && i <= l->num_rooms)
+	{
+		if (tmp[0] && !tmp[0]->visited)
+		{
+			tmp[0]->visited = 1;
+			tmp[1] = tmp[0];
+			tmp[0] = R(tmp[0]->conns);
+		}
+	}
 }

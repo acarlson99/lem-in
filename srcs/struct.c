@@ -19,7 +19,6 @@ void		init_lem(t_lem **info)
 	(*info)->num_rooms = 0;
 	(*info)->num_ants = 0;
 	(*info)->rooms = 0;
-	(*info)->conns = 0;
 	(*info)->start = 0;
 	(*info)->end = 0;
 }

@@ -67,6 +67,8 @@
 
 /*
 ** limits stuff because we can't use limits.h for whatever reason
+** [CALLEN: whats with the inconsistent typecasting? It'll cause issues with]
+** [comparing FT_UCHAR_MAX with an unsigned char since the macro is signed.]
 */
 
 # define FT_CHAR_BIT 8
