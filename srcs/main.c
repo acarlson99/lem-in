@@ -50,26 +50,26 @@ void		print_lem(t_lem *info)
 
 void		print_lem_addr(t_lem *info)
 {
-	t_lst *ctmp, *tmp;
+	t_list *cctmp, *ttmp;
 	int i, j;
 
 	RET_NONE(!info);
 	ft_printf("info = %p\n", info);
-	ft_printf("info->rooms = %p\n", *info->rooms);
+	ft_printf("info->conns = %p\n", info->conns);
 	ft_printf("info->start = %p\n", info->start);
 	ft_printf("info->end = %p\n", info->end);
-	for (i = 0, tmp = info->rooms; tmp; i++, tmp = tmp->next)
+	for (i = 0, ttmp = info->conns; ttmp; i++, ttmp = ttmp->next)
 	{
-		ft_printf("info->rooms[%d]->r = %p\n", i, tmp->r);
-		ft_printf("  info->rooms[%d]->next = %p\n", i, tmp->next);
-		tmp->next ? ft_printf("    info->rooms[%d]->next->r = %p\n", i, tmp->next->r) : 0;
-		tmp->next ? ft_printf("    info->rooms[%d]->next->next = %p\n", i, tmp->next->next) : 0;
-		ft_printf("  info->rooms[%d]->r->name = %p\n", i, tmp->r->name);
-		ft_printf("  info->rooms[%d]->r->connections = %p\n", i, tmp->r->connections);
-		for (j = 0, ctmp = tmp->r->connections; ctmp; j++, ctmp = ctmp->next)
+		ft_printf("info->conns[%d]->r = %p\n", i, R(ttmp));
+		ft_printf("  info->conns[%d]->next = %p\n", i, ttmp->next);
+		ttmp->next ? ft_printf("    info->conns[%d]->next->r = %p\n", i, R(ttmp->next)) : 0;
+		ttmp->next ? ft_printf("    info->conns[%d]->next->next = %p\n", i, ttmp->next->next) : 0;
+		ft_printf("  info->conns[%d]->r->name = %p\n", i, R(ttmp)->name);
+		ft_printf("  info->conns[%d]->r->conns = %p\n", i, R(ttmp)->conns);
+		for (j = 0, cctmp = R(ttmp)->conns; cctmp; j++, cctmp = cctmp->next)
 		{
-			ft_printf("    info->rooms[%d]->r->connections[%d]->r = %p\n", i, j, ctmp->r);
-			ft_printf("    info->rooms[%d]->r->connections[%d]->next = %p\n", i, j, ctmp->next);
+			ft_printf("    info->conns[%d]->r->connections[%d]->r = %p\n", i, j, R(cctmp));
+			ft_printf("    info->conns[%d]->r->connections[%d]->next = %p\n", i, j, cctmp->next);
 		}
 	}
 }
@@ -139,24 +139,29 @@ void	init_lem(t_lem **l)
 	if (!(*l = (t_lem*)malloc(sizeof(t_lem))))
 		lemin_hcf();
 	(*l)->num_rooms = 0;
+	(*l)->num_ants = 0;
 	(*l)->rooms = 0;
+	(*l)->conns = 0;
 	(*l)->start = 0;
 	(*l)->end = 0;
 }
 
 t_room		*init_room(char *name, char *x, char *y)
 {
-	t_room *new;
+	t_room	*new;
+	char	*tmp;
 
 	if (!(new = (t_room*)malloc(sizeof(t_room))))
-		return (0);
+		lemin_hcf();
 	new->full = 0;
 	new->visited = 0;
 	new->start_end = 0;
 	new->coord_x = ft_atoi(x);
 	new->coord_y = ft_atoi(y);
-	new->name = ft_strdup(name);
+	tmp = ft_strdup(name);
+	new->name = tmp;
 	new->connections = 0;
+	new->conns = 0;
 	return (new);
 }
 
@@ -186,26 +191,33 @@ void		lstpush(t_lst **h, t_room *r)
 	ft_printf("lstlen(*h) = %d\n", lstlen(*h));
 }
 
+void		ft_lstpush(t_list **h, t_room *r)
+{
+	t_list *new;
+
+	new = ft_lstnew(r, sizeof(*r));
+	ft_lstadd(h, new);
+}
+
 void		read_connections(t_lem *info, char **line)
 {
-	static t_lst	*tmp[2];
+	t_list	*tmp[2];
 
 	if (!line)
 		return ;
-	tmp[0] = info->rooms;
+	tmp[0] = info->conns;
 	while (tmp[0])
 	{
-		if (tmp[0]->r && tmp[0]->r->name && !ft_strcmp(tmp[0]->r->name, line[0]))
+		if (R(tmp[0]) && R(tmp[0])->name && !ft_strcmp(R(tmp[0])->name, line[0]))
 		{
-			tmp[1] = info->rooms;
+			tmp[1] = info->conns;
 			while (tmp[1])
 			{
-				if (!ft_strcmp(tmp[1]->r->name, line[1]))
+				if (!ft_strcmp(R(tmp[1])->name, line[1]))
 				{
-					lstpush(&tmp[0]->r->connections, tmp[1]->r);//TODO: get the mario brothers
-					lstpush(&tmp[1]->r->connections, tmp[0]->r);//TODO: call another plumber
-					ft_printf("lstlen(info->rooms->r->connections) = %d\n", lstlen(info->rooms->r->connections));
-					// print_lem(info);
+					ft_lstpush(&(R(tmp[0])->conns), R(tmp[1]));//TODO: get the mario brothers
+					ft_lstpush(&(R(tmp[1])->conns), R(tmp[0]));//TODO: call another plumber
+					ft_printf("ft_lstlen(R(info->conns)->conns) = %d\n", ft_lstlen(R(info->conns)->conns));
 					break ;
 				}
 				tmp[1] = tmp[1]->next;
@@ -223,7 +235,7 @@ void		read_node(t_lem *info, char *line)
 
 	t = ft_strsplit(line, ' ');
 	tr = init_room(t[0], t[1], t[2]);
-	lstpush(&(info->rooms), tr);
+	ft_lstpush(&(info->conns), tr);
 	free_str_tab(&t);
 	info->num_rooms++;
 }
@@ -231,7 +243,7 @@ void		read_node(t_lem *info, char *line)
 void		readmap(t_lem **info)
 {
 	char	*line;
-	int		i[4] = {0};
+	int		i[3] = {0};
 
 	while (get_next_line(0, &line) > 0)
 	{
@@ -246,9 +258,9 @@ void		readmap(t_lem **info)
 		}
 		else if (i[0] && ft_strccount(line, ' ') == 2)
 			read_node((*info), line);
-		i[1] ? (*info)->start = (*info)->rooms->r : 0;
+		i[1] ? (*info)->start = R((*info)->conns) : 0;
 		(*info)->start ? i[1] = 0 : 0;
-		i[2] ? (*info)->end = (*info)->rooms->r : 0;
+		i[2] ? (*info)->end = R((*info)->conns) : 0;
 		(*info)->end ? i[2] = 0 : 0;
 		(!ft_strcmp("##end", line) && !i[2]) ? i[2] = 1 : 0;
 		(!ft_strcmp("##start", line) && !i[1]) ? i[1] = 1 : 0;
@@ -260,6 +272,21 @@ void		readmap(t_lem **info)
 void		ft_debug()
 {
 	return ;
+}
+
+unsigned	ft_lstlen(t_list *l)
+{
+	unsigned	i;
+	t_list		*tmp;
+
+	i = 0;
+	tmp = l;
+	while (tmp)
+	{
+		i++;
+		tmp = tmp->next;
+	}
+	return (i);
 }
 
 unsigned	lstlen(t_lst *l)
@@ -289,12 +316,13 @@ int			main(void)
 
 	init_lem(&info);
 	readmap(&info);
-	info->start->start_end = START;
-	info->end->start_end = END;
-	ft_debug();
-	print_lem_addr(info);
-	free_lst(info->rooms);
-	free(info);
-	ft_printf("info = %p\n", info);
+	if (info->conns)
+	{
+		info->start->start_end = START;
+		info->end->start_end = END;
+		ft_debug();
+		print_lem_addr(info);
+	}
+	ft_printf("info = %p\n", info);pause();
 	exit(0);
 }

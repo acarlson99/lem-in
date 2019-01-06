@@ -19,6 +19,7 @@
 ** START == 69 == 'E'
 ** END == -92
 ** R(a): macro for typecasting t_list->content from void* to t_room*
+** adjacency list struct as array of linked lists
 */
 
 # define START	((char)69)
@@ -40,11 +41,6 @@ struct		s_lst
 	t_lst		*next;
 };
 
-struct		s_lsts
-{
-	char	*l;
-	t_lsts	*next;
-};
 
 /*
 ** sizeof(t_room) = 32 bytes
@@ -58,6 +54,7 @@ struct		s_room
 	int			coord_x;
 	int			coord_y;
 	char		*name;
+	t_list		*conns;
 	t_lst		*connections;
 };
 
@@ -70,7 +67,7 @@ struct		s_lem
 	unsigned	num_rooms;
 	unsigned	num_ants;
 	t_lst		*rooms;
-	t_lsts		*conns;
+	t_list		*conns;
 	t_room		*start;
 	t_room		*end;
 };
@@ -81,9 +78,11 @@ t_lst		*lstnew(t_room *r);
 void		free_lst(t_lst *l);
 t_room		*init_room(char *name, char *x, char *y);
 void		lstpush(t_lst **h, t_room *r);
+void		ft_lstpush(t_list **h, t_room *r);
 void		lstadd(t_lst **h, t_lst *r);
 void		readmap(t_lem **info);
 unsigned	lstlen(t_lst *l);
+unsigned	ft_lstlen(t_list *l);
 void		print_lem(t_lem *info);
 void		begone_ants(t_lem **info);
 void		read_connections(t_lem *info, char **line);
