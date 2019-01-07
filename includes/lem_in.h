@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/31 14:03:45 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/05 19:52:45 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/06 16:25:36 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ struct		s_lem
 {
 	unsigned	num_rooms;
 	unsigned	num_ants;
+	t_list		*lines;
 	t_list		*rooms;
 	t_room		*start;
 	t_room		*end;
@@ -80,5 +81,7 @@ struct		s_lem
 void		parse_input(t_lem *info);
 void		panic(int code);
 void		init_lem(t_lem **info);
+void		free_str_tab(char ***tab);
+void		print_input(t_lem *info);
 
 #endif

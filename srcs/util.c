@@ -1,31 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd_tail.c                                   :+:      :+:    :+:   */
+/*   util.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/04 17:53:17 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/06 16:03:32 by acarlson         ###   ########.fr       */
+/*   Created: 2019/01/06 16:24:32 by acarlson          #+#    #+#             */
+/*   Updated: 2019/01/06 16:25:47 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "lem_in.h"
 
-void	ft_lstadd_tail(t_list **alst, t_list *new)
+void		free_str_tab(char ***tab)
 {
-	t_list		*head;
-	t_list		*tmp;
+	int i;
 
-	tmp = *alst;
-	head = tmp;
-	if (!tmp)
+	i = 0;
+	while ((*tab)[i] != NULL)
 	{
-		*alst = new;
-		return ;
+		free((*tab)[i]);
+		i++;
 	}
-	while (tmp->next)
-		tmp = tmp->next;
-	tmp->next = new;
-	*alst = head;
+	free((*tab));
+}
+
+void		print_input(t_lem *info)
+{
+	t_list		*ptr;
+
+	ptr = info->lines;
+	ft_printf("%d\n", info->num_ants);
+	while (ptr)
+	{
+		ft_printf("%s\n", (char *)ptr->content);
+		ptr = ptr->next;
+	}
 }
