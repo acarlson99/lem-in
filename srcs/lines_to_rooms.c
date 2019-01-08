@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 18:59:54 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/07 21:14:05 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/07 21:21:59 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,15 +88,18 @@ void		add_to_struct(t_lem *info)
 		n = is_start_end(ptr->content);
 		if (n && n != 1)
 			start_end = n;
-		else if (n)
+		if (n)
+		{
+			ptr = ptr->next;
 			continue ;
+		}
 		if (!conn && validate_room(ptr->content))
 			conn = 1;
 		if (conn)
 			validate_conn(ptr->content);
 		if (!conn)
 		{
-			add_room(info, ptr->content, n);
+			add_room(info, ptr->content, start_end);
 			start_end = 0;
 		}
 		else if (conn)
