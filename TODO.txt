@@ -1,5 +1,5 @@
 unit_tests/lem-in_maps/error/error_bad_line/bad_line_room_2		//prints map instead of ERROR (will be fixed by input analysis)
-// unit_tests/lem-in_maps/error/error_bad_line/bad_line_start_1	//prints map instead of ERROR
+FIXED // unit_tests/lem-in_maps/error/error_bad_line/bad_line_start_1	//prints map instead of ERROR
 unit_tests/lem-in_maps/error/error_rooms/no_pipe				//prints map instead of ERROR (will be fixed by input analysis)
 unit_tests/lem-in_maps/error/error_rooms/same_coo				//prints map instead of ERROR (will be fixed by input analysis)
 unit_tests/lem-in_maps/error/error_rooms/same_room				//prints map instead of ERROR (will be fixed by input analysis)
