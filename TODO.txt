@@ -1,0 +1,13 @@
+unit_tests/lem-in_maps/error/error_bad_line/bad_line_room_1
+unit_tests/lem-in_maps/error/error_bad_line/bad_line_room_2
+unit_tests/lem-in_maps/error/error_bad_line/bad_line_room_5
+unit_tests/lem-in_maps/error/error_bad_line/bad_line_start_1
+unit_tests/lem-in_maps/error/error_rooms/no_pipe
+unit_tests/lem-in_maps/error/error_rooms/no_room //exit(1) without printing ERROR
+unit_tests/lem-in_maps/error/error_rooms/same_coo
+unit_tests/lem-in_maps/error/error_rooms/same_room
+unit_tests/lem-in_maps/error/error_rooms/same_room2
+unit_tests/lem-in_maps/error/error_start_end/multi_end //exit(1) without printing ERROR
+unit_tests/lem-in_maps/error/error_start_end/multi_start //exit(1) without printing ERROR
+unit_tests/lem-in_maps/error/error_start_end/no_access_end
+unit_tests/lem-in_maps/error/error_start_end/no_end //exit(1) without printing ERROR
