@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/31 14:03:45 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/07 22:21:13 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/08 13:30:47 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,5 +88,6 @@ int			validate_room(char *line);
 void		panic(int code);
 void		free_str_tab(char ***tab);
 void		print_input(t_lem *info);
+void		check_struct(t_lem *info);
 
 #endif

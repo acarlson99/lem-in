@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 18:46:20 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/07 20:23:42 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/08 13:30:39 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,10 @@ void		validate_conn(char *line)		// TODO: make sure this works
 	else if (split[2])
 		panic(CONN_ERR);
 	free_str_tab(&split);
+}
+
+void		check_struct(t_lem *info)
+{
+	if (info)
+		return ;
 }

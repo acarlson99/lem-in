@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/05 19:51:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/07 19:14:59 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/08 13:16:15 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,5 +60,6 @@ void		parse_input(t_lem *info)
 	read_first_line(info);
 	read_rooms_conns(info);
 	add_to_struct(info);
+	check_struct(info);
 	print_input(info);
 }

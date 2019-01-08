@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 18:59:54 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/07 22:38:33 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/08 13:50:05 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void		add_room(t_lem *info, char *line, char start_end)	// TODO: impl
 	split = ft_strsplit(line, ' ');
 	room = make_room(split[0], ft_atoi(split[1]), ft_atoi(split[2]), start_end);
 	free_str_tab(&split);
-	new = ft_lstnew(room, sizeof(t_room *));	// TODO: this may also be the cause of the issue mentioned on line 69 (heh nice)
+	new = ft_lstnew(room, sizeof(t_room));	// TODO: this may also be the cause of the issue mentioned on line 69 (heh nice)
 	ft_lstadd(&info->rooms, new);
 	if (start_end == START)
 		info->start = info->rooms->content;
