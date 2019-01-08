@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 18:59:54 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/08 13:50:05 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/08 14:12:00 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,13 @@ void		add_room(t_lem *info, char *line, char start_end)	// TODO: impl
 	split = ft_strsplit(line, ' ');
 	room = make_room(split[0], ft_atoi(split[1]), ft_atoi(split[2]), start_end);
 	free_str_tab(&split);
-	new = ft_lstnew(room, sizeof(t_room));	// TODO: this may also be the cause of the issue mentioned on line 69 (heh nice)
+	new = ft_lstnew(room, sizeof(t_room));
 	ft_lstadd(&info->rooms, new);
 	if (start_end == START)
 		info->start = info->rooms->content;
 	else if (start_end == END)
 		info->end = info->rooms->content;
-	free_room(&room);
+	free(room);
 }
 
 void		add_conn(t_lem *info, char *line)	// TODO: implement
@@ -66,8 +66,7 @@ void		print_rooms(t_lem *info)	// TODO: remove
 	ptr = info->rooms;
 	while (ptr)
 	{
-		ft_printf("Room %s x %d y %d start_end %d\n", R(ptr)->name, R(ptr)->x, R(ptr)->y, R(ptr)->start_end);	// TODO: HOLY FUCK WHAAAAAT??? okay so this output is not even close to correct.  I think shifting back to t_lsts (the lists made for holding rooms) from t_lists may fix this
-		// Weird thing: the only thing stored properly is room->full.  This is also the first element of the struct.  Weird
+		ft_printf("Room %s x %d y %d start_end %d\n", R(ptr)->name, R(ptr)->x, R(ptr)->y, R(ptr)->start_end);
 		ptr = ptr->next;
 	}
 }
