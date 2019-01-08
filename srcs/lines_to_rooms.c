@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 18:59:54 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/07 21:30:12 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/07 22:11:30 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void		add_room(t_lem *info, char *line, char start_end)	// TODO: impl
 {
 	(void)info;
 	(void)line;
-	ft_printf("room: %s%s\n", line, (start_end == START ? " is the source"\
+	ft_printf("room: %s%s\n", line, (start_end == START ? " is the source" \
 							: (start_end == END ? " is the sink" : "")));
 }
 
@@ -59,6 +59,7 @@ void		add_to_struct(t_lem *info)
 
 	ptr = info->lines;
 	conn = 0;
+	start_end = 0;
 	while (ptr)
 	{
 		n = is_start_end(ptr->content);
