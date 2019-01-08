@@ -6,13 +6,14 @@
 #    By: acarlson <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/15 14:08:57 by acarlson          #+#    #+#              #
-#    Updated: 2019/01/06 16:24:58 by acarlson         ###   ########.fr        #
+#    Updated: 2019/01/07 17:17:13 by acarlson         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
 CC = clang
 CFLAGS = -Wall -Wextra -Werror
 DFLAGS = -Wall -Wextra -g
+LLDBFLAGS = $(DFLAGS) -DLLDB
 SRCS = srcs/
 OBJDIR = .obj/
 INCLUDES = -I includes/ -I libft/includes/
@@ -87,3 +88,7 @@ fsan:
 
 k: dclean fclean
 	rm -rf *.dSYM
+
+lldb:
+	make -C libft/
+	$(CC) $(LLDBFLAGS) $(INCLUDES) $(FRAMEWORKS) $(LIBS) $(addprefix $(SRCS), $(CFILES)) -o $(DNAME)

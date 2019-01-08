@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/05 19:55:50 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/07 16:08:06 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/07 17:16:15 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,10 @@ int			main(void)
 {
 	t_lem		*info;
 
+#ifdef LLDB	// TODO: remove this
+	int i = 1;
+	while (i);
+#endif
 	init_lem(&info);
 	parse_input(info);
 	exit(EXIT_SUCCESS);

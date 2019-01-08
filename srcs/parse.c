@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/05 19:51:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/07 17:06:46 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/07 17:39:46 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int			validate_room(char *line)		// TODO: make sure this works
 	line++;
 	while (ISDIGIT(*line))
 		line++;
-	RET_IF(!*line, 1);
+	RET_IF(!*line || *line != ' ', 1);
 	line++;
 	while (ISDIGIT(*line))
 		line++;
