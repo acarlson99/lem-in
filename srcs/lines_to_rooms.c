@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 18:59:54 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/07 21:21:59 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/07 21:30:12 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,12 @@
 ** returns 0 otherwise
 */
 
-void		add_room(t_lem *info, char *line, char start_end)	// TODO: implement
+void		add_room(t_lem *info, char *line, char start_end)	// TODO: impl
 {
 	(void)info;
 	(void)line;
-	ft_printf("room: %s%s\n", line, (start_end == START ? " is the source" : (start_end == END ? " is the sink" : "")));
+	ft_printf("room: %s%s\n", line, (start_end == START ? " is the source"\
+							: (start_end == END ? " is the sink" : "")));
 }
 
 void		add_conn(t_lem *info, char *line)	// TODO: implement
@@ -49,31 +50,6 @@ int			is_start_end(char *line)
 	return (0);
 }
 
-/* void		add_to_struct(t_lem *info) */
-/* { */
-/* 	t_list		*ptr; */
-/* 	char		room_or_conn; */
-/* 	char		n; */
-/* 	char		start_end; */
-
-/* 	ptr = info->lines; */
-/* 	room_or_conn = 0; */
-/* 	while (ptr) */
-/* 	{ */
-/* 		n = is_start_end(ptr->content); */
-/* 		start_end = (n == START || n == END ? n : 0); */
-/* 		if (n == 1) */
-/* 			continue ; */
-/* 		if (!room_or_conn && validate_room(ptr->content)) */
-/* 			room_or_conn = 1; */
-/* 		if (room_or_conn) */
-/* 			validate_conn(ptr->content); */
-/* 		(room_or_conn ? add_conn(info, ptr->content)	\ */
-/* 			: add_room(info, ptr->content, start_end)); */
-/* 		ptr = ptr->next; */
-/* 	} */
-/* } */
-
 void		add_to_struct(t_lem *info)
 {
 	t_list		*ptr;
@@ -86,27 +62,15 @@ void		add_to_struct(t_lem *info)
 	while (ptr)
 	{
 		n = is_start_end(ptr->content);
-		if (n && n != 1)
-			start_end = n;
+		(n && n != 1 ? start_end = n : 0);
+		DO_IF(n, ptr = ptr->next);
 		if (n)
-		{
-			ptr = ptr->next;
 			continue ;
-		}
-		if (!conn && validate_room(ptr->content))
-			conn = 1;
-		if (conn)
-			validate_conn(ptr->content);
-		if (!conn)
-		{
-			add_room(info, ptr->content, start_end);
-			start_end = 0;
-		}
-		else if (conn)
-		{
-			add_conn(info, ptr->content);
-			start_end = 0;
-		}
+		(!conn && validate_room(ptr->content) ? conn = 1 : 0);
+		(conn ? validate_conn(ptr->content) : 0);
+		(!conn ? add_room(info, ptr->content, start_end) : 0);
+		(conn ? add_conn(info, ptr->content) : 0);
+		start_end = 0;
 		ptr = ptr->next;
 	}
 }
