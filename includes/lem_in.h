@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/31 14:03:45 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/07 21:40:20 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/07 22:21:13 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ struct		s_lem
 	t_room		*end;
 };
 
-t_room		*make_room(char *name, int x, int y);
+t_room		*make_room(char *name, int x, int y, char start_end);
 void		free_room(t_room **room);
 void		init_lem(t_lem **info);
 void		add_to_struct(t_lem *info);
