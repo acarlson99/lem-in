@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/05 19:51:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/06 17:09:38 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/07 16:35:36 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void		validate_conn(char *line)		// TODO: make sure this works
 		panic(2);
 	else if (split[2])
 		panic(4);
+	free_str_tab(&split);
 }
 
 int			validate_room(char *line)		// TODO: make sure this works
@@ -47,9 +48,9 @@ int			validate_room(char *line)		// TODO: make sure this works
 		return (0);;
 	if (*line == 'L')
 		panic(1);
-	while (*line && *line != ' ')
+	while (*line && *line != ' ' && *line != '-')
 		line++;
-	RET_IF(!*line, 1);
+	RET_IF(!*line || *line == '-', 1);
 	line++;
 	while (ISDIGIT(*line))
 		line++;
@@ -79,11 +80,12 @@ void		read_rooms_conns(t_lem *info)
 			room_or_conn = 1;
 		if (room_or_conn)
 			validate_conn(line);
+		ft_printf("%s\n", line);
 		(!strcmp(line, "##start") ? start++ : 0);
 		(!strcmp(line, "##end") ? end++ : 0);
 		if (start > 1 || end > 1)
 			panic(0);
-		ft_lstadd_tail(ptr, ft_lstnew(line, ft_strlen(line)));
+		ft_lstadd_tail(ptr, ft_lstnew(line, ft_strlen(line) + 1));
 		free(line);
 	}
 	DO_IF(start != 1 || end != 1, panic(0));

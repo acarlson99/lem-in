@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/05 19:55:50 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/06 16:23:37 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/07 16:08:06 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ void		panic(int code)
 		ft_dprintf(FT_STDERR_FILENO, "File read error\n");
 	else if (code == READ_ERR)
 		ft_dprintf(FT_STDERR_FILENO, "Read error\n");
+	else
+		ft_dprintf(FT_STDERR_FILENO, "ERROR\n");
 	exit(EXIT_FAILURE);
 }
 
