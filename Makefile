@@ -6,7 +6,7 @@
 #    By: acarlson <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/15 14:08:57 by acarlson          #+#    #+#              #
-#    Updated: 2019/01/08 14:21:03 by callen           ###   ########.fr        #
+#    Updated: 2019/01/08 14:39:01 by acarlson         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -77,6 +77,9 @@ $(OBJDIR):
 
 tags:
 	$(CTAGS) -t includes/*.h srcs/*.c
+
+etags:
+	find . -type f -iname "*.[ch]" | etags -
 
 debug:
 	make -C libft/
