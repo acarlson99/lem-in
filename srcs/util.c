@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/06 16:24:32 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/07 16:38:47 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/07 19:51:50 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,16 @@ void		print_input(t_lem *info)
 		ft_printf("%s\n", (char *)ptr->content);
 		ptr = ptr->next;
 	}
+}
+
+int			is_room(char *line)	// TODO: implement
+{
+	(void)line;
+	return (1);
+}
+
+int			is_conn(char *line)	// TODO: implement
+{
+	(void)line;
+	return (0);
 }

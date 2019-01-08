@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 18:46:20 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/07 19:05:51 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/07 19:35:46 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void		validate_conn(char *line)		// TODO: make sure this works
 int			validate_room(char *line)		// TODO: make sure this works
 {
 	if (*line == '#')
-		return (0);;
+		return (0);
 	if (*line == 'L')
 		panic(ROOM_ERR);
 	while (*line && *line != ' ' && *line != '-')

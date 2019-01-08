@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/31 14:03:45 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/07 18:57:32 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/07 19:48:29 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,5 +88,8 @@ void		validate_conn(char *line);
 int			validate_room(char *line);
 
 void		add_to_struct(t_lem *info);
+
+int			is_room(char *line);
+int			is_conn(char *line);
 
 #endif
