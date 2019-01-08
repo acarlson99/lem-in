@@ -6,11 +6,30 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/05 19:21:52 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/06 16:00:44 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/07 20:47:22 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
+
+void		free_room(t_room **room)
+{
+	ft_memdel((void **)&((*room)->name));
+	(*room)->x = 0;
+	(*room)->y = 0;
+	ft_memdel((void **)room);
+}
+
+t_room		*make_room(char *name, int x, int y)
+{
+	t_room		*new;
+
+	new = (t_room *)malloc(sizeof(t_room));
+	new->name = ft_strdup(name);
+	new->x = x;
+	new->y = y;
+	return (new);
+}
 
 void		init_lem(t_lem **info)
 {

@@ -6,11 +6,31 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 18:46:20 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/07 19:35:46 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/07 20:23:42 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
+
+int			validate_room(char *line)		// TODO: make sure this works
+{
+	if (*line == '#')
+		return (0);
+	if (*line == 'L')
+		panic(ROOM_ERR);
+	while (*line && *line != ' ' && *line != '-')
+		line++;
+	RET_IF(!*line || *line == '-', 1);
+	line++;
+	while (ISDIGIT(*line))
+		line++;
+	RET_IF(!*line || *line != ' ', 1);
+	line++;
+	while (ISDIGIT(*line))
+		line++;
+	RET_IF(*line, 1);
+	return (0);
+}
 
 void		validate_conn(char *line)		// TODO: make sure this works
 {
@@ -36,24 +56,4 @@ void		validate_conn(char *line)		// TODO: make sure this works
 	else if (split[2])
 		panic(CONN_ERR);
 	free_str_tab(&split);
-}
-
-int			validate_room(char *line)		// TODO: make sure this works
-{
-	if (*line == '#')
-		return (0);
-	if (*line == 'L')
-		panic(ROOM_ERR);
-	while (*line && *line != ' ' && *line != '-')
-		line++;
-	RET_IF(!*line || *line == '-', 1);
-	line++;
-	while (ISDIGIT(*line))
-		line++;
-	RET_IF(!*line || *line != ' ', 1);
-	line++;
-	while (ISDIGIT(*line))
-		line++;
-	RET_IF(*line, 1);
-	return (0);
 }

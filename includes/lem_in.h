@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/31 14:03:45 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/07 19:48:29 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/07 20:47:07 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,8 @@ struct		s_room
 	char		full;
 	char		visited;
 	char		start_end;
-	int			coord_x;
-	int			coord_y;
+	int			x;
+	int			y;
 	char		*name;
 	t_list		*conns;
 };
@@ -78,18 +78,15 @@ struct		s_lem
 	t_room		*end;
 };
 
-void		parse_input(t_lem *info);
-void		panic(int code);
+t_room		*make_room(char *name, int x, int y);
+void		free_room(t_room **room);
 void		init_lem(t_lem **info);
-void		free_str_tab(char ***tab);
-void		print_input(t_lem *info);
-
+void		add_to_struct(t_lem *info);
+void		parse_input(t_lem *info);
 void		validate_conn(char *line);
 int			validate_room(char *line);
-
-void		add_to_struct(t_lem *info);
-
-int			is_room(char *line);
-int			is_conn(char *line);
+void		panic(int code);
+void		free_str_tab(char ***tab);
+void		print_input(t_lem *info);
 
 #endif
