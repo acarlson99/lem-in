@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/05 19:51:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/07 16:35:36 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/07 16:50:11 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ void		read_rooms_conns(t_lem *info)
 			room_or_conn = 1;
 		if (room_or_conn)
 			validate_conn(line);
-		ft_printf("%s\n", line);
 		(!strcmp(line, "##start") ? start++ : 0);
 		(!strcmp(line, "##end") ? end++ : 0);
 		if (start > 1 || end > 1)
