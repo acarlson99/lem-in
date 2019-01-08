@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/05 19:51:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/07 17:39:46 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/07 19:14:59 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,52 +25,6 @@ void		read_first_line(t_lem *info)
 		panic(READ_ERR);
 	info->num_ants = ft_atoi(line);
 	free(line);
-}
-
-void		validate_conn(char *line)		// TODO: make sure this works
-{
-	char		**split;
-	char		*ptr;
-
-	RET_NONE(*line == '#');
-	split = ft_strsplit(line, '-');
-	if (!split[0] || split[0][0] == 'L')
-		panic(1);
-	ptr = split[0];
-	while (*ptr && !ISWHITE2(*ptr))
-		ptr++;
-	if (ISWHITE2(*ptr))
-		panic(CONN_ERR);
-	if (!split[1] || split[1][0] == 'L')
-		panic(2);
-	ptr = split[1];
-	while (*ptr && !ISWHITE2(*ptr))
-		ptr++;
-	if (ISWHITE2(*ptr))
-		panic(CONN_ERR);
-	else if (split[2])
-		panic(4);
-	free_str_tab(&split);
-}
-
-int			validate_room(char *line)		// TODO: make sure this works
-{
-	if (*line == '#')
-		return (0);;
-	if (*line == 'L')
-		panic(1);
-	while (*line && *line != ' ' && *line != '-')
-		line++;
-	RET_IF(!*line || *line == '-', 1);
-	line++;
-	while (ISDIGIT(*line))
-		line++;
-	RET_IF(!*line || *line != ' ', 1);
-	line++;
-	while (ISDIGIT(*line))
-		line++;
-	RET_IF(*line, 1);
-	return (0);
 }
 
 void		read_rooms_conns(t_lem *info)
@@ -94,21 +48,17 @@ void		read_rooms_conns(t_lem *info)
 		(!strcmp(line, "##start") ? start++ : 0);
 		(!strcmp(line, "##end") ? end++ : 0);
 		if (start > 1 || end > 1)
-			panic(0);
+			panic(ROOM_ERR);
 		ft_lstadd_tail(ptr, ft_lstnew(line, ft_strlen(line) + 1));
 		free(line);
 	}
-	DO_IF(start != 1 || end != 1, panic(0));
-}
-
-void		read_and_validate(t_lem *info)
-{
-	read_first_line(info);
-	read_rooms_conns(info);
+	DO_IF(start != 1 || end != 1, panic(ROOM_ERR));
 }
 
 void		parse_input(t_lem *info)
 {
-	read_and_validate(info);
+	read_first_line(info);
+	read_rooms_conns(info);
+	add_to_struct(info);
 	print_input(info);
 }
