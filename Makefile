@@ -6,7 +6,7 @@
 #    By: acarlson <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/15 14:08:57 by acarlson          #+#    #+#              #
-#    Updated: 2019/01/08 14:04:01 by callen           ###   ########.fr        #
+#    Updated: 2019/01/08 14:21:03 by callen           ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -76,7 +76,7 @@ $(OBJDIR):
 	fi) "
 
 tags:
-	$(CTAGS) -t includes/*.h $(addprefix $(SRCS), %.c)
+	$(CTAGS) -t includes/*.h srcs/*.c
 
 debug:
 	make -C libft/
