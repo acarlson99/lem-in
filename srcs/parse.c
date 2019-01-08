@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/05 19:51:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/07 16:50:11 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/07 17:06:46 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,24 @@ void		read_first_line(t_lem *info)
 void		validate_conn(char *line)		// TODO: make sure this works
 {
 	char		**split;
+	char		*ptr;
 
 	RET_NONE(*line == '#');
 	split = ft_strsplit(line, '-');
 	if (!split[0] || split[0][0] == 'L')
 		panic(1);
+	ptr = split[0];
+	while (*ptr && !ISWHITE2(*ptr))
+		ptr++;
+	if (ISWHITE2(*ptr))
+		panic(CONN_ERR);
 	if (!split[1] || split[1][0] == 'L')
 		panic(2);
+	ptr = split[1];
+	while (*ptr && !ISWHITE2(*ptr))
+		ptr++;
+	if (ISWHITE2(*ptr))
+		panic(CONN_ERR);
 	else if (split[2])
 		panic(4);
 	free_str_tab(&split);
