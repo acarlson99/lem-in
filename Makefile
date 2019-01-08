@@ -6,11 +6,12 @@
 #    By: acarlson <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/15 14:08:57 by acarlson          #+#    #+#              #
-#    Updated: 2019/01/07 19:07:56 by acarlson         ###   ########.fr        #
+#    Updated: 2019/01/08 14:04:01 by callen           ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
 CC = clang
+CTAGS = /usr/bin/env ctags
 CFLAGS = -Wall -Wextra -Werror
 DFLAGS = -Wall -Wextra -g
 LLDBFLAGS = $(DFLAGS) -DLLDB
@@ -28,6 +29,8 @@ CL_CYAN = \033[0;36m
 CL_GREEN = \033[0;32m
 CL_RED = \033[0;31m
 CL_WHITE = \033[0m
+
+.PHONY: tags clean debug dclean fsan lldb
 
 all: $(NAME)
 
@@ -71,6 +74,9 @@ $(OBJDIR):
 		mkdir $(OBJDIR); \
 		echo " + $(NAME): Created  $(CL_GREEN)$(OBJDIR)$(CL_WHITE)$(CL_WHITE)"; \
 	fi) "
+
+tags:
+	$(CTAGS) -t includes/*.h $(addprefix $(SRCS), %.c)
 
 debug:
 	make -C libft/
