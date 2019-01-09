@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 18:59:54 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/08 16:57:14 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/08 19:32:22 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ void		print_conns(t_lem *info)	// TODO: remove
 	ptr = info->rooms;
 	while (ptr)
 	{
-		p2 = R(info->rooms)->conns;
+		p2 = R(ptr)->conns;
 		while (p2)
 		{
 			ft_printf("%s-%s\n", R(ptr)->name, R(p2)->name);
