@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 18:59:54 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/08 19:32:22 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/08 19:46:04 by callen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void		add_room(t_lem *info, char *line, char start_end)
 }
 
 void		add_conn(t_lem *info, char *line)
-{
+{//TODO: Check if split[0] and split[1] and if same FUCKING PANIC
 	char		**split;
 	t_list		*ptr;
 	t_list		*p1;
