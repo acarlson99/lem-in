@@ -6,7 +6,7 @@
 #    By: acarlson <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/15 14:08:57 by acarlson          #+#    #+#              #
-#    Updated: 2019/01/08 20:55:17 by callen           ###   ########.fr        #
+#    Updated: 2019/01/09 14:13:30 by callen           ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -105,3 +105,4 @@ k: dclean fclean
 lldb:
 	make -C libft/
 	$(CC) $(LLDBFLAGS) $(INCLUDES) $(FRAMEWORKS) $(LIBS) $(addprefix $(SRCS), $(CFILES)) -o $(DNAME)
+	/usr/bin/env lldb -s other_tests/test_lldb
