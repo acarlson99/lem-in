@@ -6,14 +6,18 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/05 19:55:50 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/07 19:37:05 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/08 20:52:22 by callen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
+/*
+** TODO: only print out "ERROR\n"
+*/
+
 void		panic(int code)
-{//TODO: print to STDERR_FILENO and only print out "ERROR\n"
+{
 	if (code == MALLOC_ERR)
 		ft_dprintf(FT_STDERR_FILENO, "Malloc error\n");
 	else if (code == ROOM_ERR)
@@ -33,14 +37,22 @@ void		panic(int code)
 	exit(EXIT_FAILURE);
 }
 
+/*
+** TODO: remove ifdef
+** current format minimizes norm errors
+*/
+
 int			main(void)
 {
 	t_lem		*info;
+	int			i;
 
-#ifdef LLDB	// TODO: remove this
-	int i = 1;
-	while (i);
+	i = 0;
+#ifdef LLDB
+	i = 1;
 #endif
+	while (i)
+		;
 	init_lem(&info);
 	parse_input(info);
 	exit(EXIT_SUCCESS);
