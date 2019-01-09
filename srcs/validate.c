@@ -6,15 +6,11 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 18:46:20 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/08 20:39:03 by callen           ###   ########.fr       */
+/*   Updated: 2019/01/09 13:04:46 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
-
-/*
-** TODO: make sure validate_room and validate_conn work
-*/
 
 int			validate_room(char *line)
 {
@@ -77,11 +73,7 @@ unsigned	ft_lstlen(t_list *l)
 	return (i);
 }
 
-/*
-** TODO: check room connections and coordinates and info->num_rooms is borked
-*/
-
-void		check_struct(t_lem *info)
+void		check_struct(t_lem *info)	// TODO: check room connections and coordinates
 {
 	if (!info)
 		panic(PARS_ERR);

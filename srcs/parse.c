@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/05 19:51:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/08 20:42:48 by callen           ###   ########.fr       */
+/*   Updated: 2019/01/09 13:37:20 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ void		parse_input(t_lem *info)
 	read_first_line(info);
 	read_rooms_conns(info);
 	add_to_struct(info);
-	info->num_rooms = ft_lstlen(info->rooms);
 	ft_printf("info->num_rooms = %d\n", info->num_rooms);
 	ft_printf("info->num_ants = %d\n", info->num_ants);
 	check_struct(info);

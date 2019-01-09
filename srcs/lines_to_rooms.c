@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 18:59:54 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/08 20:30:28 by callen           ###   ########.fr       */
+/*   Updated: 2019/01/09 13:36:03 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,9 @@ void		add_room(t_lem *info, char *line, char start_end)
 		info->start = info->rooms->content;
 	else if (start_end == END)
 		info->end = info->rooms->content;
+	info->num_rooms++;
 	free(room);
 }
-
-/*
-** DONE: Check if sp[0] and sp[1] and if same FUCKING PANIC
-** TODO: make sure 72 makes another reference rather than copy the data
-** TODO: also make sure 73 works properly
-*/
 
 void		add_conn(t_lem *info, char *line)
 {
