@@ -6,7 +6,7 @@
 #    By: acarlson <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/15 14:08:57 by acarlson          #+#    #+#              #
-#    Updated: 2019/01/09 14:17:42 by acarlson         ###   ########.fr        #
+#    Updated: 2019/01/09 14:24:11 by acarlson         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -31,7 +31,7 @@ CL_GREEN = \033[0;32m
 CL_RED = \033[0;31m
 CL_WHITE = \033[0m
 
-.PHONY: tags clean debug dclean fsan lldb norme
+.PHONY: tags etags clean debug dclean fsan lldb norme
 
 all: $(NAME)
 
