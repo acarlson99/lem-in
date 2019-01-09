@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/06 16:24:32 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/07 20:29:23 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/09 15:49:51 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,20 @@ void		print_input(t_lem *info)
 		ft_printf("%s\n", (char *)ptr->content);
 		ptr = ptr->next;
 	}
+}
+
+void		reset_visited(t_room *room)
+{
+	t_list		*ptr;
+
+	if (!room)
+		return ;
+	ptr = room->conns;
+	room->visited = 1;
+	while (ptr)
+	{
+		reset_visited(R(ptr));
+		ptr = ptr->next;
+	}
+	room->visited = 0;
 }

@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/31 14:03:45 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/08 20:38:55 by callen           ###   ########.fr       */
+/*   Updated: 2019/01/09 15:48:25 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 # define CONN_ERR	(16)
 # define PARS_ERR	(32)
 # define READ_ERR	(64)
+# define NOPATH_ERR	(128)
 
 typedef struct s_room	t_room;
 typedef struct s_lem	t_lem;
@@ -92,5 +93,6 @@ t_list		*ft_lstnew_nocpy(void *content, size_t content_size);
 void		print_rooms(t_lem *info);
 void		print_conns(t_lem *info);
 unsigned	ft_lstlen(t_list *l);
+void		reset_visited(t_room *room);
 
 #endif

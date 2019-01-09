@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 18:46:20 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/09 15:02:34 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/09 15:50:59 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,25 @@ unsigned	ft_lstlen(t_list *l)
 	return (i);
 }
 
-void		check_struct(t_lem *info)	// TODO: check room connections and coordinates
+int			path_to_end(t_room *start)
+{
+	t_list	*ptr;
+
+	if (!start || start->visited)
+		return (0);
+	start->visited = 1;
+	if (start->start_end == END)
+		return (1);
+	ptr = start->conns;
+	while (ptr)
+	{
+		if (path_to_end(R(ptr)))
+			return (1);
+	}
+	return (0);
+}
+
+void		check_struct(t_lem *info)
 {
 	t_list	*p1;
 	t_list	*p2;
@@ -96,4 +114,7 @@ void		check_struct(t_lem *info)	// TODO: check room connections and coordinates
 		}
 		p1 = p1->next;
 	}
+	if (!path_to_end(info->start))
+		panic(NOPATH_ERR);
+//	reset_visited(info->start);	// TODO: This seg faults :/
 }
