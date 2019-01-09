@@ -6,7 +6,7 @@
 #    By: acarlson <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/15 14:08:57 by acarlson          #+#    #+#              #
-#    Updated: 2019/01/09 14:13:30 by callen           ###   ########.fr        #
+#    Updated: 2019/01/09 14:17:42 by acarlson         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -37,7 +37,7 @@ all: $(NAME)
 
 $(NAME): $(OBJDIR) $(OFILES)
 	@make -C libft/
-	@$(CC) $(CFLAGS) $(INCLUDES) $(FRAMEWORKS) $(LIBS) $(OFILES) -o $(NAME)
+	@$(CC) $(CFLAGS) $(INCLUDES) $(LIBS) $(OFILES) -o $(NAME)
 	@echo "  $(CL_WHITE)+ $(NAME): Compiled $(CL_GREEN)$@$(CL_WHITE)"
 
 clean:
@@ -87,7 +87,7 @@ etags:
 
 debug:
 	make -C libft/
-	$(CC) $(DFLAGS) $(INCLUDES) $(FRAMEWORKS) $(LIBS) $(addprefix $(SRCS), $(CFILES)) -o $(DNAME)
+	$(CC) $(DFLAGS) $(INCLUDES) $(LIBS) $(addprefix $(SRCS), $(CFILES)) -o $(DNAME)
 
 j: debug
 
@@ -97,12 +97,12 @@ dclean:
 
 fsan:
 	make -C libft/
-	$(CC) $(DFLAGS) $(INCLUDES) $(FRAMEWORKS) $(LIBS) $(addprefix $(SRCS), $(CFILES)) -o $(DNAME) -fsanitize=address
+	$(CC) $(DFLAGS) $(INCLUDES) $(LIBS) $(addprefix $(SRCS), $(CFILES)) -o $(DNAME) -fsanitize=address
 
 k: dclean fclean
 	rm -rf *.dSYM
 
 lldb:
 	make -C libft/
-	$(CC) $(LLDBFLAGS) $(INCLUDES) $(FRAMEWORKS) $(LIBS) $(addprefix $(SRCS), $(CFILES)) -o $(DNAME)
+	$(CC) $(LLDBFLAGS) $(INCLUDES) $(LIBS) $(addprefix $(SRCS), $(CFILES)) -o $(DNAME)
 	/usr/bin/env lldb -s other_tests/test_lldb
