@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 18:46:20 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/09 13:04:46 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/09 15:02:34 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,25 @@ unsigned	ft_lstlen(t_list *l)
 
 void		check_struct(t_lem *info)	// TODO: check room connections and coordinates
 {
+	t_list	*p1;
+	t_list	*p2;
+
 	if (!info)
 		panic(PARS_ERR);
 	if (!info->num_rooms || !info->num_ants)
 		panic(PARS_ERR);
 	if (!info->lines || !info->rooms || !info->start || !info->end)
 		panic(PARS_ERR);
+	p1 = info->rooms;
+	while (p1)
+	{
+		p2 = p1->next;
+		while (p2)
+		{
+			if (!ft_strcmp(R(p1)->name, R(p2)->name))
+				panic(ROOM_ERR);
+			p2 = p2->next;
+		}
+		p1 = p1->next;
+	}
 }
