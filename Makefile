@@ -6,12 +6,13 @@
 #    By: acarlson <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/15 14:08:57 by acarlson          #+#    #+#              #
-#    Updated: 2019/01/08 20:31:31 by callen           ###   ########.fr        #
+#    Updated: 2019/01/08 20:55:17 by callen           ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
 CC = clang
 CTAGS = /usr/bin/env ctags
+NORM = /usr/bin/env norminette
 CFLAGS = -Wall -Wextra -Werror
 DFLAGS = -Wall -Wextra -g
 LLDBFLAGS = $(DFLAGS) -DLLDB
@@ -30,7 +31,7 @@ CL_GREEN = \033[0;32m
 CL_RED = \033[0;31m
 CL_WHITE = \033[0m
 
-.PHONY: tags clean debug dclean fsan lldb
+.PHONY: tags clean debug dclean fsan lldb norme
 
 all: $(NAME)
 
@@ -77,6 +78,9 @@ $(OBJDIR):
 
 tags:
 	$(CTAGS) -t includes/*.h srcs/*.c
+
+norme:
+	$(NORM) includes/*.h srcs/*.c
 
 etags:
 	find . -type f -iname "*.[ch]" | etags -
