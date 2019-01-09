@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/31 14:03:45 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/08 14:05:10 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/08 16:50:12 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 
 # define START		((char)69)
 # define END		((char)420)
-# define R(a)		((!a) ? (0) : ((t_room*)a->content))
+# define R(a)		((t_room*)a->content)
 
 # define MALLOC_ERR	(1)
 # define ROOM_ERR	(2)
@@ -88,5 +88,6 @@ void		panic(int code);
 void		free_str_tab(char ***tab);
 void		print_input(t_lem *info);
 void		check_struct(t_lem *info);
+t_list		*ft_lstnew_nocpy(void *content, size_t content_size);
 
 #endif

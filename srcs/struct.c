@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/05 19:21:52 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/08 13:31:43 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/08 16:50:09 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,23 @@ void		init_lem(t_lem **info)
 	(*info)->rooms = NULL;
 	(*info)->start = NULL;
 	(*info)->end = NULL;
+}
+
+t_list		*ft_lstnew_nocpy(void *content, size_t content_size)
+{
+	t_list			*new;
+
+	NULL_CHECK(!(new = (t_list *)malloc(sizeof(t_list))));
+	if (content == NULL)
+	{
+		new->content = NULL;
+		new->content_size = 0;
+	}
+	else
+	{
+		new->content = content;
+		new->content_size = content_size;
+	}
+	new->next = NULL;
+	return (new);
 }
