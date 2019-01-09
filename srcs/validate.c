@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 18:46:20 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/09 15:50:59 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/09 15:55:42 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,5 +116,5 @@ void		check_struct(t_lem *info)
 	}
 	if (!path_to_end(info->start))
 		panic(NOPATH_ERR);
-//	reset_visited(info->start);	// TODO: This seg faults :/
+	reset_visited(info->start);
 }

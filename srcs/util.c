@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/06 16:24:32 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/09 15:49:51 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/09 15:55:16 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void		reset_visited(t_room *room)
 {
 	t_list		*ptr;
 
-	if (!room)
+	if (!room || room->visited)
 		return ;
 	ptr = room->conns;
 	room->visited = 1;
