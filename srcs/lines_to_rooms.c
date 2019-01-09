@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 18:59:54 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/08 19:46:04 by callen           ###   ########.fr       */
+/*   Updated: 2019/01/08 20:30:28 by callen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ void		add_room(t_lem *info, char *line, char start_end)
 {
 	t_room		*room;
 	t_list		*new;
-	char		**split;
+	char		**sp;
 
-	split = ft_strsplit(line, ' ');
-	room = make_room(split[0], ft_atoi(split[1]), ft_atoi(split[2]), start_end);
-	free_str_tab(&split);
+	sp = ft_strsplit(line, ' ');
+	room = make_room(sp[0], ft_atoi(sp[1]), ft_atoi(sp[2]), start_end);
+	free_str_tab(&sp);
 	new = ft_lstnew(room, sizeof(t_room));
 	ft_lstadd(&info->rooms, new);
 	if (start_end == START)
@@ -39,8 +39,14 @@ void		add_room(t_lem *info, char *line, char start_end)
 	free(room);
 }
 
+/*
+** DONE: Check if sp[0] and sp[1] and if same FUCKING PANIC
+** TODO: make sure 72 makes another reference rather than copy the data
+** TODO: also make sure 73 works properly
+*/
+
 void		add_conn(t_lem *info, char *line)
-{//TODO: Check if split[0] and split[1] and if same FUCKING PANIC
+{
 	char		**split;
 	t_list		*ptr;
 	t_list		*p1;
@@ -48,32 +54,23 @@ void		add_conn(t_lem *info, char *line)
 
 	split = ft_strsplit(line, '-');
 	RET_IF(!split[0] || !split[1] || split[2], panic(CONN_ERR));
+	!ft_strcmp(split[0], split[1]) ? panic(CONN_ERR) : 0;
 	ptr = info->rooms;
 	p1 = NULL;
 	p2 = NULL;
 	while (ptr)
 	{
 		if (!ft_strcmp(R(ptr)->name, split[0]))
-		{
-			if (!p1)
-				p1 = ptr;
-			else
-				panic(CONN_ERR);
-		}
+			!p1 ? p1 = ptr : panic(CONN_ERR);
 		if (!ft_strcmp(R(ptr)->name, split[1]))
-		{
-			if (!p2)
-				p2 = ptr;
-			else
-				panic(ROOM_ERR);
-		}
+			!p2 ? p2 = ptr : panic(ROOM_ERR);
 		ptr = ptr->next;
 	}
 	if (!p1 || !p2)
 		panic(END_ERR);
 	free_str_tab(&split);
-	ft_lstadd(&R(p1)->conns, ft_lstnew_nocpy(R(p2), sizeof(R(p2))));	// TODO: make sure this actually makes another reference to the same address rather than copy the data
-	ft_lstadd(&R(p2)->conns, ft_lstnew_nocpy(R(p1), sizeof(R(p1))));	// TODO: also make sure it works properly
+	ft_lstadd(&R(p1)->conns, ft_lstnew_nocpy(R(p2), sizeof(R(p2))));
+	ft_lstadd(&R(p2)->conns, ft_lstnew_nocpy(R(p1), sizeof(R(p1))));
 }
 
 int			is_start_end(char *line)
@@ -88,36 +85,6 @@ int			is_start_end(char *line)
 			return (COMMENT);
 	}
 	return (0);
-}
-
-void		print_rooms(t_lem *info)	// TODO: remove
-{
-	t_list	*ptr;
-
-	ptr = info->rooms;
-	while (ptr)
-	{
-		ft_printf("Room %s x %2d y %2d start_end %3d\n", R(ptr)->name, R(ptr)->x, R(ptr)->y, R(ptr)->start_end);
-		ptr = ptr->next;
-	}
-}
-
-void		print_conns(t_lem *info)	// TODO: remove
-{
-	t_list	*ptr;
-	t_list	*p2;
-
-	ptr = info->rooms;
-	while (ptr)
-	{
-		p2 = R(ptr)->conns;
-		while (p2)
-		{
-			ft_printf("%s-%s\n", R(ptr)->name, R(p2)->name);
-			p2 = p2->next;
-		}
-		ptr = ptr->next;
-	}
 }
 
 void		add_to_struct(t_lem *info)

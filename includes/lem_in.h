@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/31 14:03:45 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/08 16:50:12 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/08 20:38:55 by callen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,5 +89,8 @@ void		free_str_tab(char ***tab);
 void		print_input(t_lem *info);
 void		check_struct(t_lem *info);
 t_list		*ft_lstnew_nocpy(void *content, size_t content_size);
+void		print_rooms(t_lem *info);
+void		print_conns(t_lem *info);
+unsigned	ft_lstlen(t_list *l);
 
 #endif
