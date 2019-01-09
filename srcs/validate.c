@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 18:46:20 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/08 13:30:39 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/08 19:44:00 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void		validate_conn(char *line)		// TODO: make sure this works
 	free_str_tab(&split);
 }
 
-void		check_struct(t_lem *info)
+void		check_struct(t_lem *info)	// TODO: implement
 {
 	if (info)
 		return ;
