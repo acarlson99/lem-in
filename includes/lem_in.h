@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/31 14:03:45 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/09 16:35:24 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/09 16:43:16 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,5 +95,6 @@ void		print_rooms(t_lem *info);	// TODO: remove
 void		print_conns(t_lem *info);	// TODO: remove
 unsigned	ft_lstlen(t_list *l);
 void		reset_visited(t_room *room);
+void		solve(t_lem *info);
 
 #endif
