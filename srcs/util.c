@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/06 16:24:32 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/09 16:14:28 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/10 14:57:56 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,4 +67,23 @@ unsigned	ft_lstlen(t_list *l)
 		tmp = tmp->next;
 	}
 	return (i);
+}
+
+t_list		*ft_lstnew_nocpy(void *content, size_t content_size)
+{
+	t_list			*new;
+
+	NULL_CHECK(!(new = (t_list *)malloc(sizeof(t_list))));
+	if (content == NULL)
+	{
+		new->content = NULL;
+		new->content_size = 0;
+	}
+	else
+	{
+		new->content = content;
+		new->content_size = content_size;
+	}
+	new->next = NULL;
+	return (new);
 }

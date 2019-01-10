@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/31 14:03:45 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/09 19:45:52 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/10 15:23:18 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,21 +38,13 @@
 
 typedef struct s_room	t_room;
 typedef struct s_lem	t_lem;
-typedef struct s_lst	t_lst;
+typedef struct s_ant	t_ant;
 
-/*
-** sizeof(t_list) = 40 bytes
-*/
-
-struct		s_lst
+struct		s_ant
 {
-	t_room		*r;
-	t_lst		*next;
+	int				num;
+	t_room			*room;
 };
-
-/*
-** sizeof(t_room) = 32 bytes
-*/
 
 struct		s_room
 {
@@ -64,10 +56,6 @@ struct		s_room
 	char		*name;
 	t_list		*conns;
 };
-
-/*
-** sizeof(t_lem) = 32 bytes
-*/
 
 struct		s_lem
 {
@@ -91,10 +79,11 @@ void		free_str_tab(char ***tab);
 void		print_input(t_lem *info);
 void		check_struct(t_lem *info);
 t_list		*ft_lstnew_nocpy(void *content, size_t content_size);
-void		print_rooms(t_lem *info);	// TODO: remove
-void		print_conns(t_lem *info);	// TODO: remove
 unsigned	ft_lstlen(t_list *l);
 void		reset_visited(t_room *room);
 void		solve(t_lem *info);
+
+void		print_rooms(t_lem *info);	// TODO: remove
+void		print_conns(t_lem *info);	// TODO: remove
 
 #endif
