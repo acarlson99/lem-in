@@ -54,3 +54,34 @@ int fordFulkerson(int graph[V][V], int s, int t)
 	// Return the overall flow
 	return max_flow;
 }
+
+https://github.com/vbrovenk/lem-in.git
+
+def print_ants(t_list_ants *lst, t_lemin *lemin):
+        ant = lst.head
+        flag_print = 0
+        while ant:
+                if ant.index_room < lemin.pathlen:
+                        if flag_print:
+                                putchar(' ')
+                        printf("L%d-%d\n" % (ant.name, lemin.final_path[ant.index_room]))
+                        ant->index_room += 1
+                        flag_print = 1
+                ant = ant.next
+        return flag_print
+
+def main():
+        ant_list
+        ant_list.head = NULL
+        ant_list.tail = NULL
+        current_ant = 1
+        while 1:
+                if current_ant <= lemin.antnum:
+                        ant_list.add_ant(current_ant)
+                        current_ant += 1
+                n = print_ants(ant_list, lemin)
+                if n == 0:
+                        break
+                else:
+                        print("")
+        free_ants(ant_list)
