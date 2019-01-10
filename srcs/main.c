@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/05 19:55:50 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/09 16:43:25 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/10 14:41:00 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ int			main(void)
 
 	init_lem(&info);
 	parse_input(info);
+	print_input(info);
+	ft_putchar('\n');
 	solve(info);
 	exit(EXIT_SUCCESS);
 }
