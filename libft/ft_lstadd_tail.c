@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/04 17:53:17 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/06 16:03:32 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/07 22:01:19 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,9 @@
 
 void	ft_lstadd_tail(t_list **alst, t_list *new)
 {
-	t_list		*head;
 	t_list		*tmp;
 
 	tmp = *alst;
-	head = tmp;
 	if (!tmp)
 	{
 		*alst = new;
@@ -27,5 +25,4 @@ void	ft_lstadd_tail(t_list **alst, t_list *new)
 	while (tmp->next)
 		tmp = tmp->next;
 	tmp->next = new;
-	*alst = head;
 }
