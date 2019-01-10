@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/31 14:03:45 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/09 15:48:25 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/09 16:35:24 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 # define PARS_ERR	(32)
 # define READ_ERR	(64)
 # define NOPATH_ERR	(128)
+# define ANTNUM_ERR	(256)
 
 typedef struct s_room	t_room;
 typedef struct s_lem	t_lem;
@@ -90,8 +91,8 @@ void		free_str_tab(char ***tab);
 void		print_input(t_lem *info);
 void		check_struct(t_lem *info);
 t_list		*ft_lstnew_nocpy(void *content, size_t content_size);
-void		print_rooms(t_lem *info);
-void		print_conns(t_lem *info);
+void		print_rooms(t_lem *info);	// TODO: remove
+void		print_conns(t_lem *info);	// TODO: remove
 unsigned	ft_lstlen(t_list *l);
 void		reset_visited(t_room *room);
 

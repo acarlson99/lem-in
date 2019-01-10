@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/05 19:51:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/09 16:16:10 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/09 16:28:56 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void		read_first_line(t_lem *info)
 	if (*ptr)
 		panic(READ_ERR);
 	info->num_ants = ft_atoi(line);
+	if (info->num_ants < 1)
+		panic(ANTNUM_ERR);
 	free(line);
 }
 
@@ -60,8 +62,8 @@ void		parse_input(t_lem *info)
 	read_first_line(info);
 	read_rooms_conns(info);
 	add_to_struct(info);
-	ft_printf("info->num_rooms = %d\n", info->num_rooms);
-	ft_printf("info->num_ants = %d\n", info->num_ants);
+//	ft_printf("info->num_rooms = %d\n", info->num_rooms);
+//	ft_printf("info->num_ants = %d\n", info->num_ants);
 	check_struct(info);
 	print_input(info);
 }

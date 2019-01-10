@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 18:59:54 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/09 13:36:03 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/09 16:35:54 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,4 @@ void		add_to_struct(t_lem *info)
 		start_end = 0;
 		ptr = ptr->next;
 	}
-	print_rooms(info);
-	print_conns(info);
 }

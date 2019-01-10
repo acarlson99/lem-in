@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/05 19:55:50 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/09 15:14:13 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/09 16:29:51 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ void		panic(int code)	// TODO" only print "ERROR\n" to stderr
 		ft_dprintf(FT_STDERR_FILENO, "Read error\n");
 	else if (code == NOPATH_ERR)
 		ft_dprintf(FT_STDERR_FILENO, "No path from start to end\n");
+	else if (code == ANTNUM_ERR)
+		ft_dprintf(FT_STDERR_FILENO, "Illegal number of ants\n");
 	else
 		ft_dprintf(FT_STDERR_FILENO, "ERROR\n");
 	exit(EXIT_FAILURE);

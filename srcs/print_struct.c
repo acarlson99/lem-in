@@ -6,11 +6,13 @@
 /*   By: callen <callen@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/08 20:28:23 by callen            #+#    #+#             */
-/*   Updated: 2019/01/08 20:43:19 by callen           ###   ########.fr       */
+/*   Updated: 2019/01/09 16:36:25 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
+
+// TODO: remove this file eventually.  These are not needed anywhere
 
 void		print_rooms(t_lem *info)
 {
