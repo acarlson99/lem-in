@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 18:46:20 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/09 15:55:42 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/09 16:07:16 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ int			path_to_end(t_room *start)
 	{
 		if (path_to_end(R(ptr)))
 			return (1);
+		ptr = ptr->next;
 	}
 	return (0);
 }
