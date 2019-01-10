@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 18:46:20 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/09 16:07:16 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/09 16:14:34 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,21 +56,6 @@ void		validate_conn(char *line)
 	else if (split[2])
 		panic(CONN_ERR);
 	free_str_tab(&split);
-}
-
-unsigned	ft_lstlen(t_list *l)
-{
-	unsigned	i;
-	t_list		*tmp;
-
-	i = 0;
-	tmp = l;
-	while (tmp)
-	{
-		i++;
-		tmp = tmp->next;
-	}
-	return (i);
 }
 
 int			path_to_end(t_room *start)
