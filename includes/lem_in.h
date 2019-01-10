@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/31 14:03:45 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/09 16:43:16 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/09 19:45:52 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,8 @@ struct		s_lst
 struct		s_room
 {
 	char		full;
-	char		visited;
 	char		start_end;
+	unsigned	visited;
 	int			x;
 	int			y;
 	char		*name;
