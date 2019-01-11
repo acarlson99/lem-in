@@ -6,11 +6,34 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/06 16:24:32 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/10 14:57:56 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/11 03:11:40 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
+
+#define COMMENT 1
+
+/*
+** returns START if start
+** returns END if end
+** returns 1 if comment
+** returns 0 otherwise
+*/
+
+int			is_start_end(char *line)
+{
+	if (*line == '#')
+	{
+		if (!strcmp("##start", line))
+			return (START);
+		else if (!strcmp("##end", line))
+			return (END);
+		else
+			return (COMMENT);
+	}
+	return (0);
+}
 
 void		free_str_tab(char ***tab)
 {
@@ -38,52 +61,23 @@ void		print_input(t_lem *info)
 	}
 }
 
-void		reset_visited(t_room *room)
+void		enqueue_num(t_queue *q, size_t n)
 {
-	t_list		*ptr;
+	size_t	*n_;
 
-	if (!room || room->visited)
-		return ;
-	ptr = room->conns;
-	room->visited = 1;
-	while (ptr)
-	{
-		reset_visited(R(ptr));
-		ptr = ptr->next;
-	}
-	room->visited = 0;
+	if (!(n_ = (size_t *)malloc(sizeof(size_t))))
+		panic(MALLOC_ERR);
+	*n_ = n;
+	ft_enqueue(q, n_);
 }
 
-unsigned	ft_lstlen(t_list *l)
+size_t		dequeue_num(t_queue *q)
 {
-	unsigned	i;
-	t_list		*tmp;
+	void		*ptr;
+	size_t		n;
 
-	i = 0;
-	tmp = l;
-	while (tmp)
-	{
-		i++;
-		tmp = tmp->next;
-	}
-	return (i);
-}
-
-t_list		*ft_lstnew_nocpy(void *content, size_t content_size)
-{
-	t_list			*new;
-
-	NULL_CHECK(!(new = (t_list *)malloc(sizeof(t_list))));
-	if (content == NULL)
-	{
-		new->content = NULL;
-		new->content_size = 0;
-	}
-	else
-	{
-		new->content = content;
-		new->content_size = content_size;
-	}
-	new->next = NULL;
-	return (new);
+	ptr = ft_dequeue(q);
+	n = ((size_t *)ptr)[0];
+	free(ptr);
+	return (n);
 }

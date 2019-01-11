@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/05 19:21:52 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/10 20:33:44 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/11 02:38:45 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ t_room		*make_room(char *name, int x, int y, char start_end)
 {
 	t_room		*new;
 
-	new = (t_room *)malloc(sizeof(t_room));
+	if (!(new = (t_room *)malloc(sizeof(t_room))))
+		panic(MALLOC_ERR);
 	new->full = 0;
 	new->visited = 0;
 	new->start_end = start_end;

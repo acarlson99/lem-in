@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/31 14:03:45 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/10 20:27:43 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/11 02:53:22 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,16 +54,14 @@ struct		s_room
 	int			x;
 	int			y;
 	char		*name;
-	t_list		*conns;
 };
 
 struct		s_lem
 {
-	unsigned	num_rooms;
+	size_t		num_rooms;
 	unsigned	num_ants;
 	t_list		*lines;
 	t_room		**rooms;
-//	t_list		*rooms;
 	t_room		*start;
 	t_room		*end;
 	int			**conns;
@@ -81,14 +79,18 @@ void		free_str_tab(char ***tab);
 void		print_input(t_lem *info);
 void		check_struct(t_lem *info);
 t_list		*ft_lstnew_nocpy(void *content, size_t content_size);
-unsigned	ft_lstlen(t_list *l);
 void		reset_visited(t_room *room);
 void		solve(t_lem *info);
 
 void		create_rooms(t_lem *info);
 void		create_conns(t_lem *info, t_list *ptr);
+int			is_start_end(char *line);
+void		enqueue_num(t_queue *q, size_t n);
+size_t		dequeue_num(t_queue *q);
 
 void		print_rooms(t_lem *info);	// TODO: remove
 void		print_conns(t_lem *info);	// TODO: remove
+
+int			is_path(int **graph, size_t s, size_t t, size_t size);
 
 #endif
