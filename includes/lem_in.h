@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/31 14:03:45 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/10 15:23:18 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/10 19:41:56 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ struct		s_room
 	int			x;
 	int			y;
 	char		*name;
-	t_list		*conns;
 };
 
 struct		s_lem
@@ -62,9 +61,10 @@ struct		s_lem
 	unsigned	num_rooms;
 	unsigned	num_ants;
 	t_list		*lines;
-	t_list		*rooms;
+	t_room		**rooms;
 	t_room		*start;
 	t_room		*end;
+	int			**conns;
 };
 
 t_room		*make_room(char *name, int x, int y, char start_end);
