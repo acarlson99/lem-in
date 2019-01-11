@@ -6,7 +6,7 @@
 #    By: acarlson <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/15 14:08:57 by acarlson          #+#    #+#              #
-#    Updated: 2019/01/09 16:42:40 by acarlson         ###   ########.fr        #
+#    Updated: 2019/01/11 00:40:33 by acarlson         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -15,7 +15,6 @@ CTAGS = /usr/bin/env ctags
 NORM = /usr/bin/env norminette
 CFLAGS = -Wall -Wextra -Werror
 DFLAGS = -Wall -Wextra -g
-LLDBFLAGS = $(DFLAGS) -DLLDB
 SRCS = srcs/
 OBJDIR = .obj/
 INCLUDES = -I includes/ -I libft/includes/
@@ -104,5 +103,9 @@ k: dclean fclean
 
 lldb:
 	make -C libft/
-	$(CC) $(LLDBFLAGS) $(INCLUDES) $(LIBS) $(addprefix $(SRCS), $(CFILES)) -o $(DNAME)
+	$(CC) $(DFLAGS) -DLLDB $(INCLUDES) $(LIBS) $(addprefix $(SRCS), $(CFILES)) -o $(DNAME)
 	/usr/bin/env lldb -s other_tests/test_lldb
+
+leaks:
+	make -C libft/
+	$(CC) $(DFLAGS) -DLEAKS $(INCLUDES) $(LIBS) $(addprefix $(SRCS), $(CFILES)) -o $(DNAME)

@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 18:59:54 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/11 00:19:36 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/11 00:37:55 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,26 +112,28 @@ void		add_room(t_lem *info, char *str, size_t rm_index, char start_end)
 	char		**split;
 
 	split = ft_strsplit(str, ' ');
-	if (!split[0] || !split[1] || !split[2] || split[3])
-		panic(ROOM_ERR);
+	DO_IF(!split[0] || !split[1] || !split[2] || split[3], panic(ROOM_ERR));
 	if (start_end == END)
 	{
 		if (info->rooms[info->num_rooms - 1])
 			panic(END_ERR);
-		info->rooms[info->num_rooms - 1] = make_room(split[0], ft_atoi(split[1]), ft_atoi(split[2]), start_end);
+		info->rooms[info->num_rooms - 1] = make_room(split[0],\
+							ft_atoi(split[1]), ft_atoi(split[2]), start_end);
 	}
 	else if (start_end == START)
 	{
 		if (info->rooms[0])
 			panic(START_ERR);
-		info->rooms[0] = make_room(split[0], ft_atoi(split[1]), ft_atoi(split[2]), start_end);
+		info->rooms[0] = make_room(split[0], ft_atoi(split[1]),\
+									ft_atoi(split[2]), start_end);
 	}
 	else
 	{
-		if (info->rooms[rm_index])
-			panic(ROOM_ERR);
-		info->rooms[rm_index] = make_room(split[0], ft_atoi(split[1]), ft_atoi(split[2]), start_end);
+		DO_IF(info->rooms[rm_index], panic(ROOM_ERR));
+		info->rooms[rm_index] = make_room(split[0], ft_atoi(split[1]),\
+										ft_atoi(split[2]), start_end);
 	}
+	free_str_tab(&split);
 }
 
 void		create_conns(t_lem *info, t_list *ptr)
@@ -147,8 +149,8 @@ void		create_rooms(t_lem *info)
 	char		start_end;
 	size_t		rm_index;
 
-	if (!(info->rooms = (t_room **)ft_memalloc((info->num_rooms + 1) * sizeof(t_room *))))
-		panic(MALLOC_ERR);
+	DO_IF(!(info->rooms = (t_room **)ft_memalloc((info->num_rooms + 1)	\
+									* sizeof(t_room *))), panic(MALLOC_ERR));
 	start_end = 0;
 	ptr = info->lines;
 	rm_index = 1;
