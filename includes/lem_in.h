@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/31 14:03:45 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/10 19:41:56 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/10 20:27:43 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ struct		s_room
 	int			x;
 	int			y;
 	char		*name;
+	t_list		*conns;
 };
 
 struct		s_lem
@@ -62,6 +63,7 @@ struct		s_lem
 	unsigned	num_ants;
 	t_list		*lines;
 	t_room		**rooms;
+//	t_list		*rooms;
 	t_room		*start;
 	t_room		*end;
 	int			**conns;
@@ -82,6 +84,9 @@ t_list		*ft_lstnew_nocpy(void *content, size_t content_size);
 unsigned	ft_lstlen(t_list *l);
 void		reset_visited(t_room *room);
 void		solve(t_lem *info);
+
+void		create_rooms(t_lem *info);
+void		create_conns(t_lem *info, t_list *ptr);
 
 void		print_rooms(t_lem *info);	// TODO: remove
 void		print_conns(t_lem *info);	// TODO: remove

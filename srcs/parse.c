@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/05 19:51:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/10 14:40:41 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/10 20:52:00 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void		read_first_line(t_lem *info)
 	free(line);
 }
 
-void		read_rooms_conns(t_lem *info)
+void		read_lines(t_lem *info)
 {
 	t_list		**ptr;
 	int			room_or_conn;
@@ -47,6 +47,8 @@ void		read_rooms_conns(t_lem *info)
 			room_or_conn = 1;
 		if (room_or_conn)
 			validate_conn(line);
+		else if (*line != '#')
+			info->num_rooms++;
 		(!strcmp(line, "##start") ? start++ : 0);
 		(!strcmp(line, "##end") ? end++ : 0);
 		if (start > 1 || end > 1)
@@ -60,8 +62,9 @@ void		read_rooms_conns(t_lem *info)
 void		parse_input(t_lem *info)
 {
 	read_first_line(info);
-	read_rooms_conns(info);
-	add_to_struct(info);
-	check_struct(info);
-	reset_visited(info->start);
+	read_lines(info);
+//	add_to_struct(info);
+	create_rooms(info);
+//	check_struct(info);	// TODO: fix this
+//	reset_visited(info->start);
 }

@@ -1,8 +1,8 @@
 [ ] lines_to_rooms
 [ ] parse
 [ ] print_struct
-[ ] solve
-[ ] struct
-[ ] util
+[x] solve
+[x] struct
+[x] util
 [ ] validate
 [x] main

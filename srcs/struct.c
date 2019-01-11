@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/05 19:21:52 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/10 19:42:18 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/10 20:33:44 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ t_room		*make_room(char *name, int x, int y, char start_end)
 	new->x = x;
 	new->y = y;
 	new->name = ft_strdup(name);
-	new->conns = NULL;
 	return (new);
 }
 

@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 18:46:20 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/09 17:40:47 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/10 20:51:38 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int			path_to_end(t_room *start)
 	return (0);
 }
 
-void		check_struct(t_lem *info)
+void		check_struct(t_lem *info)	// TODO: this
 {
 	t_list	*p1;
 	t_list	*p2;
