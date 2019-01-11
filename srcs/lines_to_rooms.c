@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 18:59:54 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/11 01:19:16 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/11 01:28:35 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ void		malloc_conns(t_lem *info)	// TODO: this may be mallocing more than we need
 									* sizeof(int *)))), panic(MALLOC_ERR));
 	while (n < info->num_rooms)
 	{
-		if (!(info->conns[n] = (int *)ft_memalloc((info->num_rooms + 1)\
+		if (!(info->conns[n] = (int *)ft_memalloc((info->num_rooms)\
 											* sizeof(int))))
 			panic(MALLOC_ERR);
 		n++;
@@ -153,40 +153,44 @@ void		malloc_conns(t_lem *info)	// TODO: this may be mallocing more than we need
 	info->conns[n] = NULL;
 }
 
-void		create_conns(t_lem *info, t_list *ptr)
+void		add_conn(t_lem *info, char **split)
 {
-	char		**split;
 	unsigned	n;
 	unsigned	x;
 	unsigned	y;
+
+	n = 0;
+	x = 0;
+	y = 0;
+	while (n < info->num_rooms)
+	{
+		if (!ft_strcmp(info->rooms[n]->name, split[0]))
+		{
+			DO_IF(y, panic(CONN_ERR));
+			y = n;
+		}
+		if (!ft_strcmp(info->rooms[n]->name, split[1]))
+		{
+			DO_IF(x, panic(CONN_ERR));
+			x = n;
+		}
+		n++;
+	}
+	info->conns[x][y] = 1;
+	info->conns[y][x] = 1;
+}
+
+void		create_conns(t_lem *info, t_list *ptr)
+{
+	char		**split;
 
 	malloc_conns(info);
 	if (!ptr)
 		panic(CONN_ERR);
 	while (ptr)
 	{
-		n = 0;
-		x = 0;
-		y = 0;
-		split = ft_strsplit((char *)ptr->content, '-');
-		while (n < info->num_rooms)
-		{
-			if (!ft_strcmp(info->rooms[n]->name, split[0]))
-			{
-				if (y)
-					panic(CONN_ERR);
-				y = n;
-			}
-			if (!ft_strcmp(info->rooms[n]->name, split[1]))
-			{
-				if (x)
-					panic(CONN_ERR);
-				x = n;
-			}
-			n++;
-		}
-		info->conns[x][y] = 1;
-		info->conns[y][x] = 1;
+		split = ft_strsplit(ptr->content, '-');
+		add_conn(info, split);
 		free_str_tab(&split);
 		ptr = ptr->next;
 	}
