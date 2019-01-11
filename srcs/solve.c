@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/09 16:40:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/10 20:48:43 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/10 23:51:41 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,4 @@ void		dumb_free(void *ptr, size_t size)
 void		solve(t_lem *info)	// TODO: implement
 {
 	(void)info;
-/* 	unsigned	n; */
-/* 	t_list		*ants; */
-
-/* 	n = 1; */
-/* 	ants = NULL; */
-/* 	while (1) */
-/* 	{ */
-/* 		if (n <= info->num_ants) */
-/* 			ft_lstadd_tail(&ants, ft_lstnew((void *)&((t_ant){.num=n++,\ */
-/* 								.room=info->start}), sizeof(t_ant))); */
-/* 		else */
-/* 			break ; */
-/* 	} */
-/* 	ft_lstdel(&ants, dumb_free); */
 }

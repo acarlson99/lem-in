@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 18:59:54 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/10 20:46:38 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/11 00:19:36 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ int			is_start_end(char *line)
 /* 	} */
 /* } */
 
-void		add_room(t_lem *info, char *str, size_t rm_index, char start_end)	// TODO: see if this works
+void		add_room(t_lem *info, char *str, size_t rm_index, char start_end)
 {
 	char		**split;
 
@@ -116,25 +116,25 @@ void		add_room(t_lem *info, char *str, size_t rm_index, char start_end)	// TODO:
 		panic(ROOM_ERR);
 	if (start_end == END)
 	{
-//		if (info->rooms[info->num_rooms - 1])	// TODO: make 100% sure this works properly
-//			panic(END_ERR);
+		if (info->rooms[info->num_rooms - 1])
+			panic(END_ERR);
 		info->rooms[info->num_rooms - 1] = make_room(split[0], ft_atoi(split[1]), ft_atoi(split[2]), start_end);
 	}
 	else if (start_end == START)
 	{
-//		if (info->rooms[0])
-//			panic(START_ERR);
+		if (info->rooms[0])
+			panic(START_ERR);
 		info->rooms[0] = make_room(split[0], ft_atoi(split[1]), ft_atoi(split[2]), start_end);
 	}
 	else
 	{
-//		if (info->rooms[rm_index])
-//			panic(ROOM_ERR);
+		if (info->rooms[rm_index])
+			panic(ROOM_ERR);
 		info->rooms[rm_index] = make_room(split[0], ft_atoi(split[1]), ft_atoi(split[2]), start_end);
 	}
 }
 
-void		create_conns(t_lem *info, t_list *ptr)	// TODO: implement
+void		create_conns(t_lem *info, t_list *ptr)
 {
 	(void)info;
 	(void)ptr;
@@ -160,13 +160,11 @@ void		create_rooms(t_lem *info)
 		if (n)
 			continue ;
 		if (validate_room(ptr->content))
-		{
-			info->rooms[info->num_rooms] = NULL;
-			return (create_conns(info, ptr));
-		}
+			if ((info->rooms[info->num_rooms] = NULL) || 1)
+				return (create_conns(info, ptr));
 		add_room(info, (char *)ptr->content, rm_index, start_end);
-		if (!start_end)
-			rm_index++;
+		(!start_end ? rm_index++ : 0);
+		start_end = 0;
 		ptr = ptr->next;
 	}
 }

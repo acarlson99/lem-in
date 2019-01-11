@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/05 19:51:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/10 20:52:00 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/10 23:47:23 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,7 @@ void		read_lines(t_lem *info)
 			info->num_rooms++;
 		(!strcmp(line, "##start") ? start++ : 0);
 		(!strcmp(line, "##end") ? end++ : 0);
-		if (start > 1 || end > 1)
-			panic(ROOM_ERR);
+		DO_IF(start > 1 || end > 1, panic(ROOM_ERR));
 		ft_lstadd_tail(ptr, ft_lstnew(line, ft_strlen(line) + 1));
 		free(line);
 	}
@@ -65,6 +64,7 @@ void		parse_input(t_lem *info)
 	read_lines(info);
 //	add_to_struct(info);
 	create_rooms(info);
+	print_rooms(info);
 //	check_struct(info);	// TODO: fix this
 //	reset_visited(info->start);
 }

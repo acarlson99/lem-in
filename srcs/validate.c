@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 18:46:20 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/10 20:51:38 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/10 23:27:35 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,29 +77,29 @@ int			path_to_end(t_room *start)
 	return (0);
 }
 
-void		check_struct(t_lem *info)	// TODO: this
-{
-	t_list	*p1;
-	t_list	*p2;
+/* void		check_struct(t_lem *info)	// TODO: this */
+/* { */
+/* 	t_list	*p1; */
+/* 	t_list	*p2; */
 
-	if (!info)
-		panic(PARS_ERR);
-	if (!info->num_rooms || !info->num_ants)
-		panic(PARS_ERR);
-	if (!info->lines || !info->rooms || !info->start || !info->end)
-		panic(PARS_ERR);
-	p1 = info->rooms;
-	while (p1)
-	{
-		p2 = p1->next;
-		while (p2)
-		{
-			if (!ft_strcmp(R(p1)->name, R(p2)->name))
-				panic(ROOM_ERR);
-			p2 = p2->next;
-		}
-		p1 = p1->next;
-	}
-	if (!path_to_end(info->start))
-		panic(NOPATH_ERR);
-}
+/* 	if (!info) */
+/* 		panic(PARS_ERR); */
+/* 	if (!info->num_rooms || !info->num_ants) */
+/* 		panic(PARS_ERR); */
+/* 	if (!info->lines || !info->rooms || !info->start || !info->end) */
+/* 		panic(PARS_ERR); */
+/* 	p1 = info->rooms; */
+/* 	while (p1) */
+/* 	{ */
+/* 		p2 = p1->next; */
+/* 		while (p2) */
+/* 		{ */
+/* 			if (!ft_strcmp(R(p1)->name, R(p2)->name)) */
+/* 				panic(ROOM_ERR); */
+/* 			p2 = p2->next; */
+/* 		} */
+/* 		p1 = p1->next; */
+/* 	} */
+/* 	if (!path_to_end(info->start)) */
+/* 		panic(NOPATH_ERR); */
+/* } */
