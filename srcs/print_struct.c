@@ -6,7 +6,7 @@
 /*   By: callen <callen@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/08 20:28:23 by callen            #+#    #+#             */
-/*   Updated: 2019/01/10 23:36:47 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/11 01:18:40 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,20 +28,21 @@ void		print_rooms(t_lem *info)
 	}
 }
 
-/* void		print_conns(t_lem *info) */
-/* { */
-/* 	t_list	*ptr; */
-/* 	t_list	*p2; */
+void		print_conns(t_lem *info)
+{
+	size_t		x;
+	size_t		y;
 
-/* 	ptr = info->rooms; */
-/* 	while (ptr) */
-/* 	{ */
-/* 		p2 = R(ptr)->conns; */
-/* 		while (p2) */
-/* 		{ */
-/* 			ft_printf("%s-%s\n", R(ptr)->name, R(p2)->name); */
-/* 			p2 = p2->next; */
-/* 		} */
-/* 		ptr = ptr->next; */
-/* 	} */
-/* } */
+	y = 0;
+	while (y < info->num_rooms)
+	{
+		x = 0;
+		while (x < info->num_rooms)
+		{
+			ft_printf("%d ", info->conns[y][x]);
+			x++;
+		}
+		y++;
+		ft_putchar('\n');
+	}
+}

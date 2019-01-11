@@ -6,14 +6,14 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/05 19:55:50 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/11 00:39:30 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/11 00:42:02 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
 #ifdef LEAKS
-# define exit while (1); exit
+# define exit while (1); exit	// TODO: remove
 #endif
 
 void		panic(int code)	// TODO" only print "ERROR\n" to stderr
