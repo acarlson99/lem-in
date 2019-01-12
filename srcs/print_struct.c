@@ -6,7 +6,7 @@
 /*   By: callen <callen@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/08 20:28:23 by callen            #+#    #+#             */
-/*   Updated: 2019/01/11 01:18:40 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/11 14:35:54 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 // TODO: remove this file eventually.  These are not needed anywhere
 
-void		print_rooms(t_lem *info)
+void		print_rooms(t_room **rooms, size_t size)
 {
 	t_room		**ptr;
 
-	ptr = info->rooms;
-	while (ptr && *ptr)
+	ptr = rooms;
+	while (ptr && *ptr && size--)
 	{
 		ft_printf("Room %s ", (*ptr)->name);
 		ft_printf("x %2d y %2d ", (*ptr)->x, (*ptr)->y);
@@ -28,18 +28,18 @@ void		print_rooms(t_lem *info)
 	}
 }
 
-void		print_conns(t_lem *info)
+void		print_conns(int **graph, size_t size)
 {
 	size_t		x;
 	size_t		y;
 
 	y = 0;
-	while (y < info->num_rooms)
+	while (y < size)
 	{
 		x = 0;
-		while (x < info->num_rooms)
+		while (x < size)
 		{
-			ft_printf("%d ", info->conns[y][x]);
+			ft_printf("%d ", graph[y][x]);
 			x++;
 		}
 		y++;

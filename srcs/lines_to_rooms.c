@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 18:59:54 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/11 03:10:04 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/11 14:27:51 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,20 +43,22 @@ void		add_room(t_lem *info, char *str, size_t rm_index, char start_end)
 	free_str_tab(&split);
 }
 
-void		malloc_conns(t_lem *info)
+int			**malloc_conns(size_t graph_size)
 {
+	int		**new;
 	size_t	n;
 
 	n = 0;
-	DO_IF((!(info->conns = (int **)ft_memalloc((info->num_rooms + 1)\
+	DO_IF((!(new = (int **)ft_memalloc((graph_size)\
 									* sizeof(int *)))), panic(MALLOC_ERR));
-	while (n <= info->num_rooms)
+	while (n < graph_size)
 	{
-		if (!(info->conns[n] = (int *)ft_memalloc((info->num_rooms)\
+		if (!(new[n] = (int *)ft_memalloc((graph_size)\
 											* sizeof(int))))
 			panic(MALLOC_ERR);
 		n++;
 	}
+	return (new);
 }
 
 void		add_conn(t_lem *info, char **split)
@@ -90,7 +92,7 @@ void		create_conns(t_lem *info, t_list *ptr)
 {
 	char		**split;
 
-	malloc_conns(info);
+	info->conns = malloc_conns(info->num_rooms);
 	if (!ptr)
 		panic(CONN_ERR);
 	while (ptr)

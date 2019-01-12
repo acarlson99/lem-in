@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/05 19:51:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/11 02:23:16 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/11 15:35:25 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ void		parse_input(t_lem *info)
 	read_first_line(info);
 	read_lines(info);
 	create_rooms(info);
-	print_rooms(info);
-	print_conns(info);
-	if (!is_path(info->conns, 0, info->num_rooms - 1, info->num_rooms))
+//	print_rooms(info->rooms, info->num_rooms);
+//	print_conns(info->conns, info->num_rooms);
+	if (!is_path(info->conns, NULL, 0, info->num_rooms - 1, info->num_rooms))
 		panic(NOPATH_ERR);
 }
