@@ -2,7 +2,7 @@
 
 Each ant may move one room per turn
 
-Only one ant may occupy each room at a time except for start and end
+Only one ant may occupy a room at a time except for start and end
 
 Minimize the number of turns required to move all ants from start to end
 
