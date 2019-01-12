@@ -6,13 +6,16 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/09 16:40:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/11 15:48:28 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/12 15:36:56 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-int			is_path(int **graph, int *parent, size_t s, size_t t, size_t size)
+#define S (0)
+#define T (size - 1)
+
+int			is_path(int **graph, int *parent, size_t size)
 {
 	t_queue		*q;
 	size_t		u;
@@ -21,9 +24,9 @@ int			is_path(int **graph, int *parent, size_t s, size_t t, size_t size)
 	int			n;
 
 	if (!(visited = (int *)ft_memalloc(sizeof(int) * size)))
-			panic(MALLOC_ERR);
+		panic(MALLOC_ERR);
 	q = ft_queueinit();
-	enqueue_num(q, s);
+	enqueue_num(q, S);
 	while (!ft_queueisempty(q))
 	{
 		u = dequeue_num(q);
@@ -35,19 +38,18 @@ int			is_path(int **graph, int *parent, size_t s, size_t t, size_t size)
 				enqueue_num(q, v);
 				if (parent)
 					parent[v] = u;
-				// ft_printf("parent[%d] = %d\n", v, u);
 				visited[v] = 1;
 			}
 			v++;
 		}
 	}
-	n = visited[t];
+	n = visited[T];
 	free(visited);
 	free(q);
 	return (n);
 }
 
-int			fordFulkerson(t_room **rooms, int **graph, size_t s, size_t t, size_t size)
+int			fordFulkerson(t_room **rooms, int **graph, size_t size)
 {
 	int			**rgraph;
 	int			*parent;
@@ -72,42 +74,53 @@ int			fordFulkerson(t_room **rooms, int **graph, size_t s, size_t t, size_t size
 	}
 	if (!(parent = malloc(sizeof(int) * size)))
 		panic(MALLOC_ERR);
-	while (is_path(rgraph, parent, s, t, size))
+	while (is_path(rgraph, parent, size))
 	{
 		ft_printf("L1-%s\n", rooms[size - 1]->name);
 		path_flow = FT_INT_MAX;
-		v = t;
-		while (v != s)
+		v = T;
+		while (v != S)
 		{
 			u = parent[v];
 			ft_printf("L1-%s\n", rooms[parent[v]]->name);
 			path_flow = MIN(path_flow, rgraph[u][v]);
 			v = parent[v];
 		}
-		v = t;
-		while (v != s)
+		v = T;
+		while (v != S)
 		{
 			u = parent[v];
 			rgraph[u][v] -= path_flow;
 			rgraph[v][u] += path_flow;
 			v = parent[v];
 		}
-//		ft_putchar('\n');
 		max_flow += path_flow;
 	}
+	free(parent);
+	u = 0;
+	while (u < size)
+	{
+		free(rgraph[u]);
+		u++;
+	}
+	free(rgraph);
 	return (max_flow);
 }
 
+/*
+** Make list of shortest augmenting paths
+** This would be a t_list **ptr
+** Null terminating string of t_list *ptrs
+** Make list of ants
+** Send ants down paths
+**
+** for n in paths:
+**     send ant down path
+** for a in ants:
+**     move a closer to end
+*/
+
 void		solve(t_lem *info)	// TODO: implement
 {
-	fordFulkerson(info->rooms, info->conns, 0, info->num_rooms - 1, info->num_rooms);	// The max flow for test_01 is 3, but that doesn't count the number of ants per room.  Only ants per edge.  Counting rooms as full gives a max flow of 2
-//	ft_printf("Find path from %s to %s\n", info->rooms[0]->name,	\
-//				info->rooms[info->num_rooms - 1]->name);
+	fordFulkerson(info->rooms, info->conns, info->num_rooms);	// The max flow for test_01 is 3, but that doesn't count the number of ants per room.  Only ants per edge.  Counting rooms as full gives a max flow of 2
 }
-
-/*
-** 0  1  2  3  4  5  6  7  8
-** 3->6->4->0->3->0->3->0->4
-** 8->4->3->0
-** 2->5->6->1
-*/
