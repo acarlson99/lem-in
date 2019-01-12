@@ -93,8 +93,8 @@ class Room:
         self.x, self.y = coords
         self.start_end = start_end  # start = -1; end = 1; other = 0
         self.conns = {}
-        self.disp_x = self.x * 15
-        self.disp_y = self.y * 15
+        self.disp_x = self.x * 5
+        self.disp_y = self.y * 5
         self.roomsize = roomsize
         self.center = (self.disp_x + self.roomsize/ 2, self.disp_y + self.roomsize / 2)
 
