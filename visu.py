@@ -219,7 +219,7 @@ class Game:
         try:
             self.num_ants = int(lines[n])
             n += 1
-        except ValueError:
+        except:
             print_err(ANTS_ERR)
         while n < linum and room_p.match(lines[n]):
             if lines[n][0] == '#':

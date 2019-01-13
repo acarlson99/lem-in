@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 18:59:54 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/11 14:27:51 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/12 20:26:29 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,10 +97,13 @@ void		create_conns(t_lem *info, t_list *ptr)
 		panic(CONN_ERR);
 	while (ptr)
 	{
-		split = ft_strsplit(ptr->content, '-');
-		add_conn(info, split);
-		free_str_tab(&split);
-		ptr = ptr->next;
+		if (*(char *)ptr->content != '#')
+		{
+			split = ft_strsplit(ptr->content, '-');
+			add_conn(info, split);
+			free_str_tab(&split);
+			ptr = ptr->next;
+		}
 	}
 }
 

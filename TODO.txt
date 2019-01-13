@@ -1,5 +1,5 @@
-[x] lines_to_rooms
-[x] parse
+[ ] lines_to_rooms
+[ ] parse
 [x] print_struct
 [x] solve
 [x] struct
@@ -7,3 +7,4 @@
 [x] validate
 [x] main
 [ ] solve
+Make input parsing waaaaaaaay faster
