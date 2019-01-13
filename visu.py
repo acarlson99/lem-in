@@ -275,7 +275,10 @@ class Game:
         for n in split_line:
             if len(n) != 2:
                 print_err(ANTS_ERR)
-            self.antmap[n[0]].start_move(self.roommap[n[1]].center)
+            try:
+                self.antmap[n[0]].start_move(self.roommap[n[1]].center)
+            except:
+                print_err(MOVE_ERR)
 
     def quit(self):
         pygame.quit()
