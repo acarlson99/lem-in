@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/09 16:40:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/12 17:09:50 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/12 20:07:40 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,24 +134,78 @@ int			fordFulkerson(t_room **rooms, int **graph, size_t size, t_list **list)
 **     move a closer to end
 */
 
+void		add_ant(t_antq *a, t_list *start, int n)
+{
+	t_ant		*ant;
+
+	if (!(ant = (t_ant *)ft_memalloc(sizeof(t_ant))))
+		panic(MALLOC_ERR);
+	ant->num = n;
+	ant->room = start;
+	ant->next = NULL;
+	if (!a->head)
+		a->head = ant;
+	if (!a->tail)
+		a->tail = ant;
+	else
+	{
+		a->tail->next = ant;
+		a->tail = ant;
+	}
+}
+
+int			move_ants(t_antq *all_ants)
+{
+	t_ant		*ant;
+	char		a;
+
+	ant = all_ants->head;
+	a = 0;
+	while (ant)
+	{
+		if (ant->room)
+		{
+			ft_printf("%sL%d-%s", (a ? " " : ""), ant->num, ant->room->content);
+			ant->room = ant->room->next;
+			a = 1;
+		}
+		ant = ant->next;
+	}
+	return (a);
+}
+
 void		solve(t_lem *info)	// TODO: implement
 {
 	t_list		**list;
-	t_list		*ptr;
+	t_antq		*all_ants;
 	size_t		n;
+	size_t		i;
+	size_t		lstindex;
 
 	list = ft_memalloc(sizeof(t_list *) * info->num_rooms);
 	fordFulkerson(info->rooms, info->conns, info->num_rooms, list);	// The max flow for test_01 is 3, but that doesn't count the number of ants per room.  Only ants per edge.  Counting rooms as full gives a max flow of 2
+	// TODO: print all ant movements possible followed by a newline
+	if (!(all_ants = (t_antq *)ft_memalloc(sizeof(t_antq))))
+		panic(MALLOC_ERR);
 	n = 0;
-	while (list[n])
+	i = 0;
+	while (1)
 	{
-		ptr = list[n];
-		while (ptr)
+		lstindex = 0;
+		while (list[lstindex])
 		{
-			ft_printf("L%d-%s\n", n + 1, ptr->content);
-			ptr = ptr->next;
+			n++;
+			if (n <= info->num_ants)
+			{
+				if (!list[i])
+					i = 0;
+				add_ant(all_ants, list[i], n);
+				i++;
+			}
+			lstindex++;
 		}
-//		ft_putchar('\n');
-		n++;
+		if (!move_ants(all_ants))
+			exit(0);
+		ft_putchar('\n');
 	}
 }

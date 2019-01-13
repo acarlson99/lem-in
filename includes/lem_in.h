@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/31 14:03:45 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/12 15:30:24 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/12 19:45:56 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,19 @@
 typedef struct s_room	t_room;
 typedef struct s_lem	t_lem;
 typedef struct s_ant	t_ant;
+typedef struct s_antq	t_antq;
+
+struct		s_antq
+{
+	t_ant		*head;
+	t_ant		*tail;
+};
 
 struct		s_ant
 {
 	int				num;
-	t_room			*room;
+	t_list			*room;
+	t_ant			*next;
 };
 
 struct		s_room
