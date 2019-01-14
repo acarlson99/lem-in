@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/05 19:51:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/12 15:30:46 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/13 16:14:02 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,11 @@ void		read_first_line(t_lem *info)
 
 void		read_lines(t_lem *info)
 {
-	t_list		**ptr;
 	int			room_or_conn;
 	char		start;
 	char		end;
 	char		*line;
 
-	ptr = &(info->lines);
 	start = 0;
 	end = 0;
 	room_or_conn = 0;
@@ -52,8 +50,7 @@ void		read_lines(t_lem *info)
 		(!strcmp(line, "##start") ? start++ : 0);
 		(!strcmp(line, "##end") ? end++ : 0);
 		DO_IF(start > 1 || end > 1, panic(ROOM_ERR));
-		ft_lstadd_tail(ptr, ft_lstnew(line, ft_strlen(line) + 1));
-		free(line);
+		add_line(&info->lines, line);
 	}
 	DO_IF(start != 1 || end != 1, panic(ROOM_ERR));
 }

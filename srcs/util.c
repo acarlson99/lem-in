@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/06 16:24:32 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/11 03:11:40 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/13 16:15:32 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,12 @@ void		free_str_tab(char ***tab)
 	free((*tab));
 }
 
-void		print_input(t_lem *info)
+void		print_input(unsigned num_ants, t_line *ptr)
 {
-	t_list		*ptr;
-
-	ptr = info->lines;
-	ft_printf("%d\n", info->num_ants);
+	ft_printf("%u\n", num_ants);
 	while (ptr)
 	{
-		ft_printf("%s\n", (char *)ptr->content);
+		ft_printf("%s\n", (char *)ptr->line);
 		ptr = ptr->next;
 	}
 }

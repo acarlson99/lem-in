@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/05 19:55:50 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/12 20:29:10 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/13 16:15:05 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int			main(void)
 
 	init_lem(&info);
 	parse_input(info);
-	print_input(info);
+	print_input(info->num_ants, info->lines);
 	ft_putchar('\n');
 	solve(info);
 	exit(EXIT_SUCCESS);

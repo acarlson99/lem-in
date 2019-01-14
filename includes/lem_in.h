@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/31 14:03:45 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/13 15:51:21 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/13 16:16:03 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,16 +86,16 @@ t_room		*make_room(char *name, int x, int y, char start_end);
 void		free_room(t_room **room);
 void		init_lem(t_lem **info);
 void		add_to_struct(t_lem *info);
-void		parse_input(t_lem *info);
+void		print_input(unsigned num_ants, t_line *ptr);
 void		validate_conn(char *line);
 int			validate_room(char *line);
 void		panic(int code);
 void		free_str_tab(char ***tab);
-void		print_input(t_lem *info);
 void		check_struct(t_lem *info);
 t_list		*ft_lstnew_nocpy(void *content, size_t content_size);
 void		reset_visited(t_room *room);
 void		solve(t_lem *info);
+void		parse_input(t_lem *info);
 
 void		create_rooms(t_lem *info);
 void		create_conns(t_lem *info, t_line *ptr);

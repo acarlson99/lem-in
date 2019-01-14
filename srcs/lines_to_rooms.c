@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 18:59:54 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/12 20:26:29 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/13 16:19:51 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,22 +86,19 @@ void		add_conn(t_lem *info, char **split)
 	}
 	info->conns[x][y] = 1;
 	info->conns[y][x] = 1;
+	free_str_tab(&split);
 }
 
-void		create_conns(t_lem *info, t_list *ptr)
+void		create_conns(t_lem *info, t_line *ptr)
 {
-	char		**split;
-
 	info->conns = malloc_conns(info->num_rooms);
 	if (!ptr)
 		panic(CONN_ERR);
 	while (ptr)
 	{
-		if (*(char *)ptr->content != '#')
+		if (*(char *)ptr->line != '#')
 		{
-			split = ft_strsplit(ptr->content, '-');
-			add_conn(info, split);
-			free_str_tab(&split);
+			add_conn(info, ft_strsplit(ptr->line, '-'));
 			ptr = ptr->next;
 		}
 	}
@@ -109,7 +106,7 @@ void		create_conns(t_lem *info, t_list *ptr)
 
 void		create_rooms(t_lem *info)
 {
-	t_list		*ptr;
+	t_line		*ptr;
 	char		n;
 	char		start_end;
 	size_t		rm_index;
@@ -121,15 +118,15 @@ void		create_rooms(t_lem *info)
 	rm_index = 1;
 	while (ptr)
 	{
-		n = is_start_end(ptr->content);
+		n = is_start_end(ptr->line);
 		(n && n != 1 ? start_end = n : 0);
 		DO_IF(n, ptr = ptr->next);
 		if (n)
 			continue ;
-		if (validate_room(ptr->content))
+		if (validate_room(ptr->line))
 			if ((info->rooms[info->num_rooms] = NULL) || 1)
 				return (create_conns(info, ptr));
-		add_room(info, (char *)ptr->content, rm_index, start_end);
+		add_room(info, (char *)ptr->line, rm_index, start_end);
 		(!start_end ? rm_index++ : 0);
 		start_end = 0;
 		ptr = ptr->next;
