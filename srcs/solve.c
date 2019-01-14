@@ -6,11 +6,29 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/09 16:40:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/13 16:58:42 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/14 11:41:52 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
+
+void		free_(void *ptr, size_t size)
+{
+	(void)size;
+	free(ptr);
+}
+
+void		print_list(t_list *l)
+{
+	int		p = 0;
+
+	while (l) {
+		ft_printf("%s%s", p ? "-" : "", l->content);
+		p = 1;
+		l = l->next;
+	}
+	ft_putchar('\n');
+}
 
 #define S (0)
 #define T (size - 1)
@@ -97,6 +115,38 @@ int			fordFulkerson(t_room **rooms, int **graph, size_t size, t_list **list)
 			v = parent[v];
 		}
 		v = T;
+		// Start new list
+		list[index] = ptr;
+		index++;
+		t_list *p2 = ptr;
+		int flag = 0;
+		while (p2 && p2->next)
+		{
+			for (size_t i = 0; i < index - 1; i++)
+			{
+				t_list *p1 = list[i];
+				while (p1 && p1->next)
+				{
+					if (!ft_strcmp(p1->content, p2->content))
+					{
+						/* ft_printf("Freeing list "); */
+						/* print_list(list[i]); */
+						/* ft_printf("Line '%s' overlaps\n", p1->content); */
+						ft_lstdel(&list[i], free_);
+						index--;
+						list[i] = list[index];
+						list[index] = NULL;
+						flag = 1;
+						break ;
+					}
+					p1 = p1->next;
+				}
+			}
+			if (flag)
+				break ;
+			p2 = p2->next;
+		}
+		ptr = NULL;
 		while (v != S)
 		{
 			u = parent[v];
@@ -104,11 +154,8 @@ int			fordFulkerson(t_room **rooms, int **graph, size_t size, t_list **list)
 			rgraph[v][u] += path_flow;
 			v = parent[v];
 		}
-		max_flow += path_flow;
-		// Start new list
-		list[index] = ptr;
-		index++;
 		ptr = NULL;
+		max_flow += path_flow;
 	}
 	free(parent);
 	u = 0;
@@ -175,6 +222,19 @@ int			move_ants(t_antq *all_ants)
 	return (a);
 }
 
+size_t		ft_lstlen(t_list *ptr)
+{
+	size_t	i;
+
+	i = 0;
+	while (ptr)
+	{
+		ptr = ptr->next;
+		i++;
+	}
+	return (i);
+}
+
 void		solve(t_lem *info)	// TODO: implement
 {
 	t_list		**list;
@@ -185,16 +245,33 @@ void		solve(t_lem *info)	// TODO: implement
 
 	list = ft_memalloc(sizeof(t_list *) * info->num_rooms);
 	fordFulkerson(info->rooms, info->conns, info->num_rooms, list);	// The max flow for test_01 is 3, but that doesn't count the number of ants per room.  Only ants per edge.  Counting rooms as full gives a max flow of 2
+//	ft_printf("Max flow: %d\n", fordFulkerson(info->rooms, info->conns, info->num_rooms, list));
 	// TODO: print all ant movements possible followed by a newline
 	if (!(all_ants = (t_antq *)ft_memalloc(sizeof(t_antq))))
 		panic(MALLOC_ERR);
+	lstindex = 0;
+	while (list[lstindex])
+		lstindex++;
+//	ft_printf("lstlen %zu\n", lstindex);
 	n = 0;
 	i = 0;
+	size_t len_tmp = 0;
+	size_t len_min = FT_SIZE_T_MAX;
 	while (1)
 	{
 		lstindex = 0;
 		while (list[lstindex])
 		{
+			len_tmp = ft_lstlen(list[lstindex]);
+			if (len_tmp < len_min)
+				len_min = len_tmp;
+			else if (len_tmp > len_min + (info->num_ants / 10))
+			{
+				lstindex++;
+				i++;
+//				ft_printf("List %zu too thicc\n");
+				continue ;
+			}
 			n++;
 			if (n <= info->num_ants)
 			{
