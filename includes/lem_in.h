@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/31 14:03:45 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/12 19:45:56 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/13 15:51:21 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef struct s_room	t_room;
 typedef struct s_lem	t_lem;
 typedef struct s_ant	t_ant;
 typedef struct s_antq	t_antq;
+typedef struct s_line	t_line;
 
 struct		s_antq
 {
@@ -52,6 +53,12 @@ struct		s_ant
 	int				num;
 	t_list			*room;
 	t_ant			*next;
+};
+
+struct		s_line
+{
+	char			*line;
+	struct s_line	*next;
 };
 
 struct		s_room
@@ -68,7 +75,7 @@ struct		s_lem
 {
 	size_t		num_rooms;
 	unsigned	num_ants;
-	t_list		*lines;
+	t_line		*lines;
 	t_room		**rooms;
 	t_room		*start;
 	t_room		*end;
@@ -91,12 +98,13 @@ void		reset_visited(t_room *room);
 void		solve(t_lem *info);
 
 void		create_rooms(t_lem *info);
-void		create_conns(t_lem *info, t_list *ptr);
+void		create_conns(t_lem *info, t_line *ptr);
 int			is_start_end(char *line);
 void		enqueue_num(t_queue *q, size_t n);
 size_t		dequeue_num(t_queue *q);
 int			**malloc_conns(size_t graph_size);
 int			is_path(int **graph, int *parent, size_t size);
+void		add_line(t_line **list, char *line);
 
 void		print_rooms(t_room **rooms, size_t size);	// TODO: remove
 void		print_conns(int **graph, size_t size);	// TODO: remove
