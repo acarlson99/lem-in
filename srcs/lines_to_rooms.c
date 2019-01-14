@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 18:59:54 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/13 16:59:36 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/13 19:31:18 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,9 @@ int			**malloc_conns(size_t graph_size)
 	return (new);
 }
 
-void		add_conn(t_lem *info, char **split)	// TODO: norme this
+#define BREAK_IF(a) if (a) break ;
+
+void		add_conn(t_lem *info, char **split)
 {
 	size_t	n;
 	size_t	x;
@@ -83,8 +85,7 @@ void		add_conn(t_lem *info, char **split)	// TODO: norme this
 			x = n;
 		}
 		n++;
-		if (x && y)
-			break ;
+		BREAK_IF(x && y);
 	}
 	info->conns[x][y] = 1;
 	info->conns[y][x] = 1;
