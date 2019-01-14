@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 18:59:54 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/13 16:19:51 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/13 16:52:27 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,28 +61,34 @@ int			**malloc_conns(size_t graph_size)
 	return (new);
 }
 
-void		add_conn(t_lem *info, char **split)
+void		add_conn(t_lem *info, char **split)	// TODO: norme this
 {
 	size_t	n;
 	size_t	x;
 	size_t	y;
+	char	flag;
 
 	n = 0;
 	x = 0;
 	y = 0;
+	flag = 0;
 	while (n < info->num_rooms)
 	{
 		if (!ft_strcmp(info->rooms[n]->name, split[0]))
 		{
 			DO_IF(y, panic(CONN_ERR));
 			y = n;
+			flag++;
 		}
 		if (!ft_strcmp(info->rooms[n]->name, split[1]))
 		{
 			DO_IF(x, panic(CONN_ERR));
 			x = n;
+			flag++;
 		}
 		n++;
+		if (flag == 2)
+			break ;
 	}
 	info->conns[x][y] = 1;
 	info->conns[y][x] = 1;
@@ -97,10 +103,8 @@ void		create_conns(t_lem *info, t_line *ptr)
 	while (ptr)
 	{
 		if (*(char *)ptr->line != '#')
-		{
 			add_conn(info, ft_strsplit(ptr->line, '-'));
-			ptr = ptr->next;
-		}
+		ptr = ptr->next;
 	}
 }
 
