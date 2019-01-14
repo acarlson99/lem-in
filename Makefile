@@ -6,12 +6,12 @@
 #    By: acarlson <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/15 14:08:57 by acarlson          #+#    #+#              #
-#    Updated: 2019/01/13 15:21:25 by acarlson         ###   ########.fr        #
+#    Updated: 2019/01/13 16:49:44 by callen           ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
 CC = clang
-CTAGS = /usr/bin/env ctags
+CTAGS = ctags
 NORM = /usr/bin/env norminette
 CFLAGS = -Wall -Wextra -Werror
 DFLAGS = -Wall -Wextra -g
@@ -76,7 +76,7 @@ $(OBJDIR):
 	fi) "
 
 tags:
-	$(CTAGS) -t includes/*.h srcs/*.c
+	$(CTAGS) includes/*.h srcs/*.c
 
 norme:
 	$(NORM) includes/*.h srcs/*.c
