@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/09 16:40:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/15 14:55:03 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/15 15:14:01 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -266,23 +266,25 @@ void		ant_loop(t_lem *info, t_list **list,\
 	}
 }
 
-void		solve(t_lem *info)	// TODO: implement
+/*
+** The max flow for test_01 is 3, but that doesn't count the number of ants	\
+** per room.  Only ants per edge.  Counting rooms as full gives a max flow of 2
+*/
+
+void		solve(t_lem *info)
 {
 	t_list		**list;
 	t_antq		*all_ants;
-	size_t		n;
 	size_t		i;
+	size_t		len_tmp;
+	size_t		len_min;
 
 	list = ft_memalloc(sizeof(t_list *) * info->num_rooms);
-	fordFulkerson(info->rooms, info->conns, info->num_rooms, list);	// The max flow for test_01 is 3, but that doesn't count the number of ants per room.  Only ants per edge.  Counting rooms as full gives a max flow of 2
-//	ft_printf("Max flow: %d\n", fordFulkerson(info->rooms, info->conns, info->num_rooms, list));
-	// TODO: print all ant movements possible followed by a newline
+	fordFulkerson(info->rooms, info->conns, info->num_rooms, list);
 	if (!(all_ants = (t_antq *)ft_memalloc(sizeof(t_antq))))
 		panic(MALLOC_ERR);
-	n = 1;
+	len_min = FT_SIZE_T_MAX;
 	i = 0;
-	size_t len_tmp = 0;
-	size_t len_min = FT_SIZE_T_MAX;
 	while (list[i])
 	{
 		len_tmp = ft_lstlen(list[i]);
