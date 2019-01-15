@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/31 14:03:45 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/13 16:16:03 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/15 15:32:39 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,11 +102,15 @@ void		create_conns(t_lem *info, t_line *ptr);
 int			is_start_end(char *line);
 void		enqueue_num(t_queue *q, size_t n);
 size_t		dequeue_num(t_queue *q);
+void		add_ant(t_antq *a, t_list *start, int n);
 int			**malloc_conns(size_t graph_size);
 int			is_path(int **graph, int *parent, size_t size);
 void		add_line(t_line **list, char *line);
+void		free_(void *ptr, size_t size);
+size_t		ft_lstlen(t_list *ptr);
 
 void		print_rooms(t_room **rooms, size_t size);	// TODO: remove
 void		print_conns(int **graph, size_t size);	// TODO: remove
+void		print_list(t_list *l);
 
 #endif

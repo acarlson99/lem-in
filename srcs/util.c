@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/06 16:24:32 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/13 16:15:32 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/15 15:32:34 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,23 +58,21 @@ void		print_input(unsigned num_ants, t_line *ptr)
 	}
 }
 
-void		enqueue_num(t_queue *q, size_t n)
+void		free_(void *ptr, size_t size)
 {
-	size_t	*n_;
-
-	if (!(n_ = (size_t *)malloc(sizeof(size_t))))
-		panic(MALLOC_ERR);
-	*n_ = n;
-	ft_enqueue(q, n_);
+	(void)size;
+	free(ptr);
 }
 
-size_t		dequeue_num(t_queue *q)
+size_t		ft_lstlen(t_list *ptr)
 {
-	void		*ptr;
-	size_t		n;
+	size_t	i;
 
-	ptr = ft_dequeue(q);
-	n = ((size_t *)ptr)[0];
-	free(ptr);
-	return (n);
+	i = 0;
+	while (ptr)
+	{
+		ptr = ptr->next;
+		i++;
+	}
+	return (i);
 }

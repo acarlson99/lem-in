@@ -6,29 +6,11 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/09 16:40:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/15 15:14:01 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/15 15:32:28 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
-
-void		free_(void *ptr, size_t size)
-{
-	(void)size;
-	free(ptr);
-}
-
-void		print_list(t_list *l)
-{
-	int		p = 0;
-
-	while (l) {
-		ft_printf("%s%s", p ? "-" : "", l->content);
-		p = 1;
-		l = l->next;
-	}
-	ft_putchar('\n');
-}
 
 #define S (0)
 #define T (size - 1)
@@ -182,26 +164,6 @@ int			fordFulkerson(t_room **rooms, int **graph, size_t size, t_list **list)
 **     move a closer to end
 */
 
-void		add_ant(t_antq *a, t_list *start, int n)
-{
-	t_ant		*ant;
-
-	if (!(ant = (t_ant *)ft_memalloc(sizeof(t_ant))))
-		panic(MALLOC_ERR);
-	ant->num = n;
-	ant->room = start;
-	ant->next = NULL;
-	if (!a->head)
-		a->head = ant;
-	if (!a->tail)
-		a->tail = ant;
-	else
-	{
-		a->tail->next = ant;
-		a->tail = ant;
-	}
-}
-
 int			move_ants(t_antq *all_ants)
 {
 	t_ant		*ant;
@@ -220,19 +182,6 @@ int			move_ants(t_antq *all_ants)
 		ant = ant->next;
 	}
 	return (a);
-}
-
-size_t		ft_lstlen(t_list *ptr)
-{
-	size_t	i;
-
-	i = 0;
-	while (ptr)
-	{
-		ptr = ptr->next;
-		i++;
-	}
-	return (i);
 }
 
 #define CONT_IF(n) if (n) continue ;

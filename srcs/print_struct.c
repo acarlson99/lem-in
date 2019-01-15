@@ -6,7 +6,7 @@
 /*   By: callen <callen@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/08 20:28:23 by callen            #+#    #+#             */
-/*   Updated: 2019/01/13 19:32:46 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/15 15:33:32 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,18 @@ void		print_conns(int **graph, size_t size)
 		y++;
 		ft_putchar('\n');
 	}
+}
+
+void		print_list(t_list *l)
+{
+	int		p;
+
+	p = 0;
+	while (l)
+	{
+		ft_printf("%s%s", p ? "-" : "", l->content);
+		p = 1;
+		l = l->next;
+	}
+	ft_putchar('\n');
 }
