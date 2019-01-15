@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/09 16:40:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/14 11:41:52 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/15 14:05:40 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -252,35 +252,34 @@ void		solve(t_lem *info)	// TODO: implement
 	lstindex = 0;
 	while (list[lstindex])
 		lstindex++;
-//	ft_printf("lstlen %zu\n", lstindex);
-	n = 0;
+	n = 1;
 	i = 0;
 	size_t len_tmp = 0;
 	size_t len_min = FT_SIZE_T_MAX;
 	while (1)
 	{
-		lstindex = 0;
-		while (list[lstindex])
+		i = 0;
+		while (list[i])
 		{
-			len_tmp = ft_lstlen(list[lstindex]);
+			len_tmp = ft_lstlen(list[i]);
 			if (len_tmp < len_min)
 				len_min = len_tmp;
-			else if (len_tmp > len_min + (info->num_ants / 10))
+			else if (len_tmp > len_min + (info->num_ants - n))
 			{
-				lstindex++;
 				i++;
-//				ft_printf("List %zu too thicc\n");
 				continue ;
 			}
-			n++;
 			if (n <= info->num_ants)
 			{
 				if (!list[i])
+				{
 					i = 0;
+					continue ;
+				}
 				add_ant(all_ants, list[i], n);
-				i++;
+				n++;
 			}
-			lstindex++;
+			i++;
 		}
 		if (!move_ants(all_ants))
 			exit(0);
