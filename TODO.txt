@@ -1,9 +1,0 @@
-[x] lines_to_rooms
-[x] parse
-[x] print_struct
-[x] solve
-[x] struct
-[x] util
-[x] validate
-[x] main
-[ ] solve	This needs to actually do the thing optimally

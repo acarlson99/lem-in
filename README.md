@@ -8,6 +8,19 @@ Minimize the number of turns required to move all ants from start to end
 
 Developed for macOS High Sierra using clang-902.0.39.1
 
+## TODO
+
+- [x] lines\_to\_rooms
+- [x] parse
+- [x] print\_struct
+- [x] solve
+- [x] struct
+- [x] util
+- [x] validate
+- [x] main
+- [ ] solve	**This needs to actually do the thing optimally**
+- [ ] norm *This needs to be done last*
+
 ## Installation
 
 ```bash
