@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/31 14:03:45 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/15 16:55:11 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/15 16:57:52 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,10 @@
 /*
 ** START == 69 == 'E'
 ** END == -92
-** R(a): macro for typecasting t_list->content from void* to t_room*
-** adjacency list struct as array of linked lists
 */
 
 # define START		((char)69)
 # define END		((char)420)
-# define R(a)		((t_room*)a->content)
 
 # define MALLOC_ERR	(1)
 # define ROOM_ERR	(2)
