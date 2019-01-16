@@ -64,6 +64,7 @@ def print_ants(t_list_ants *lst, t_lemin *lemin):
                 if ant.index_room < lemin.pathlen:
                         if flag_print:
                                 putchar(' ')
+                        # how the fuck do we get lemin.final_path tho?
                         printf("L%d-%d\n" % (ant.name, lemin.final_path[ant.index_room]))
                         ant->index_room += 1
                         flag_print = 1

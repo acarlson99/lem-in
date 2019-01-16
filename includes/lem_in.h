@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/31 14:03:45 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/15 15:40:47 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/15 16:55:11 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,29 +82,47 @@ struct		s_lem
 	int			**conns;
 };
 
+/*
+** Struct
+*/
+
 t_room		*make_room(char *name, int x, int y, char start_end);
 void		free_room(t_room **room);
 void		init_lem(t_lem **info);
+void		check_struct(t_lem *info);
+int			**malloc_conns(size_t graph_size);
+void		create_rooms(t_lem *info);
+void		create_conns(t_lem *info, t_line *ptr);
+void		add_ant(t_antq *a, t_list *start, int n);
+void		enqueue_num(t_queue *q, size_t n);
+size_t		dequeue_num(t_queue *q);
+
+/*
+** Input && validation
+*/
+
 void		print_input(unsigned num_ants, t_line *ptr);
 void		validate_conn(char *line);
 int			validate_room(char *line);
-void		panic(int code);
-void		free_str_tab(char ***tab);
-void		check_struct(t_lem *info);
-t_list		*ft_lstnew_nocpy(void *content, size_t content_size);
-void		reset_visited(t_room *room);
-void		solve(t_lem *info);
 void		parse_input(t_lem *info);
-void		create_rooms(t_lem *info);
-void		create_conns(t_lem *info, t_line *ptr);
 int			is_start_end(char *line);
-void		enqueue_num(t_queue *q, size_t n);
-size_t		dequeue_num(t_queue *q);
-void		add_ant(t_antq *a, t_list *start, int n);
-int			**malloc_conns(size_t graph_size);
-int			is_path(int **graph, int *parent, size_t size);
 void		add_line(t_line **list, char *line);
 size_t		ft_lstlen(t_list *ptr);
+
+/*
+** Solve
+*/
+
+int			is_path(int **graph, int *parent, size_t size);
+void		solve(t_lem *info);
+
+/*
+** Other
+*/
+
+void		panic(int code);
+t_list		*ft_lstnew_nocpy(void *content, size_t content_size);
+void		free_str_tab(char ***tab);
 void		free_(void *ptr, size_t size);
 
 void		print_rooms(t_room **rooms, size_t size);	// TODO: remove

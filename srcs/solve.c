@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/09 16:40:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/15 16:04:25 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/15 16:09:59 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,6 @@ int			fordFulkerson(t_room **rooms, int **graph, size_t size, t_list **list)
 	}
 	free(rgraph);
 	return (max_flow);
-	// heh nice
 }
 
 /*
