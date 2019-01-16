@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/31 14:03:45 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/15 15:32:39 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/15 15:40:47 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,6 @@ struct		s_lem
 t_room		*make_room(char *name, int x, int y, char start_end);
 void		free_room(t_room **room);
 void		init_lem(t_lem **info);
-void		add_to_struct(t_lem *info);
 void		print_input(unsigned num_ants, t_line *ptr);
 void		validate_conn(char *line);
 int			validate_room(char *line);
@@ -96,7 +95,6 @@ t_list		*ft_lstnew_nocpy(void *content, size_t content_size);
 void		reset_visited(t_room *room);
 void		solve(t_lem *info);
 void		parse_input(t_lem *info);
-
 void		create_rooms(t_lem *info);
 void		create_conns(t_lem *info, t_line *ptr);
 int			is_start_end(char *line);
@@ -106,11 +104,11 @@ void		add_ant(t_antq *a, t_list *start, int n);
 int			**malloc_conns(size_t graph_size);
 int			is_path(int **graph, int *parent, size_t size);
 void		add_line(t_line **list, char *line);
-void		free_(void *ptr, size_t size);
 size_t		ft_lstlen(t_list *ptr);
+void		free_(void *ptr, size_t size);
 
 void		print_rooms(t_room **rooms, size_t size);	// TODO: remove
 void		print_conns(int **graph, size_t size);	// TODO: remove
-void		print_list(t_list *l);
+void		print_list(t_list *l);	// TODO: remove
 
 #endif
