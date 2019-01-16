@@ -6,7 +6,7 @@
 #    By: acarlson <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/15 14:08:57 by acarlson          #+#    #+#              #
-#    Updated: 2019/01/15 15:29:49 by acarlson         ###   ########.fr        #
+#    Updated: 2019/01/16 00:15:04 by acarlson         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -80,7 +80,8 @@ tags:
 	$(CTAGS) includes/*.h srcs/*.c
 
 norme:
-	$(NORM) includes/*.h srcs/*.c
+	@$(NORM) $(addprefix $(SRCS), $(CFILES))
+	@$(NORM) includes/
 
 etags:
 	find . -type f -iname "*.[ch]" | etags -

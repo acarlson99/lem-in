@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/09 16:40:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/15 16:09:59 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/15 22:29:56 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,7 +228,7 @@ void		solve(t_lem *info)
 	size_t		len_min;
 
 	list = ft_memalloc(sizeof(t_list *) * info->num_rooms);
-	fordFulkerson(info->rooms, info->conns, info->num_rooms, list);
+	fordFulkerson(info->rooms, info->conns, info->num_rooms, list);	// TODO: make a better function to find all paths to take
 	if (!(all_ants = (t_antq *)ft_memalloc(sizeof(t_antq))))
 		panic(MALLOC_ERR);
 	len_min = FT_SIZE_T_MAX;
