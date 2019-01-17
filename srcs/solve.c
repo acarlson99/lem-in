@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/09 16:40:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/15 22:29:56 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/16 16:20:15 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 #define S (0)
 #define T (size - 1)
+#define IN(v) (v * 2)
+#define OUT(v) (v * 2 + 1)
 
 int			is_path(int **graph, int *parent, size_t size)
 {
@@ -49,22 +51,13 @@ int			is_path(int **graph, int *parent, size_t size)
 	return (n);
 }
 
-int			fordFulkerson(t_room **rooms, int **graph, size_t size, t_list **list)
+int			**copy_graph(int **graph, size_t size)
 {
-	int			**rgraph;
-	int			*parent;
-	int			max_flow;
-	int			path_flow;
-	size_t		u;
-	size_t		v;
-	t_list		*ptr = NULL;
-	size_t		index;
-
-	index = 0;
+	size_t	u;
+	size_t	v;
+	int		**rgraph;
 
 	rgraph = malloc_conns(size);
-	max_flow = 0;
-	path_flow = 0;
 	u = 0;
 	while (u < size)
 	{
@@ -76,6 +69,24 @@ int			fordFulkerson(t_room **rooms, int **graph, size_t size, t_list **list)
 		}
 		u++;
 	}
+	return (rgraph);
+}
+
+int			fordFulkerson(t_room **rooms, int **graph, size_t size, t_list **list)
+{
+	int			**rgraph;
+	int			*parent;
+	int			max_flow;
+	int			path_flow;
+	size_t		u;
+	size_t		v;
+	t_list		*ptr = NULL;
+	size_t		index;
+
+	rgraph = copy_graph(graph, size);
+	index = 0;
+	max_flow = 0;
+	path_flow = 0;
 	if (!(parent = malloc(sizeof(int) * size)))
 		panic(MALLOC_ERR);
 	while (is_path(rgraph, parent, size))
