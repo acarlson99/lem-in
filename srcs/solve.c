@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/09 16:40:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/17 15:18:59 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/17 15:28:53 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -292,6 +292,8 @@ t_list		**find_paths(int **conns, int **rgraph, size_t size, t_room **rooms)	// 
 							}
 							p1 = p1->next;
 						}
+						if (flag)
+							break ;
 					}
 					if (flag)
 						break ;
