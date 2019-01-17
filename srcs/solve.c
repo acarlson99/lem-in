@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/09 16:40:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/16 16:20:15 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/17 12:48:44 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,8 @@ int			**copy_graph(int **graph, size_t size)
 	return (rgraph);
 }
 
-int			fordFulkerson(t_room **rooms, int **graph, size_t size, t_list **list)
+int			fordFulkerson(t_room **rooms, int **rgraph, size_t size, t_list **list)
 {
-	int			**rgraph;
 	int			*parent;
 	int			max_flow;
 	int			path_flow;
@@ -83,7 +82,6 @@ int			fordFulkerson(t_room **rooms, int **graph, size_t size, t_list **list)
 	t_list		*ptr = NULL;
 	size_t		index;
 
-	rgraph = copy_graph(graph, size);
 	index = 0;
 	max_flow = 0;
 	path_flow = 0;
@@ -151,13 +149,6 @@ int			fordFulkerson(t_room **rooms, int **graph, size_t size, t_list **list)
 		max_flow += path_flow;
 	}
 	free(parent);
-	u = 0;
-	while (u < size)
-	{
-		free(rgraph[u]);
-		u++;
-	}
-	free(rgraph);
 	return (max_flow);
 }
 
@@ -225,6 +216,46 @@ void		ant_loop(t_lem *info, t_list **list,\
 	}
 }
 
+void		print_paths(int **conns, int **rgraph, size_t size, t_room **rooms)	// Uses original graph and residual graph and finds which paths were taken
+{
+	size_t		x;
+	size_t		y;
+	size_t		v;
+	size_t		i;
+
+	y = 0;
+	while (y < size)
+	{
+		x = 0;
+		while (x < size)
+		{
+			if (conns[y][x] && !rgraph[y][x])
+			{
+				v = S;
+				while (v != T)
+				{
+					ft_printf("%s%s", v ? "-" : "", rooms[v]->name);
+					i = 0;
+					while (i < size)
+					{
+						if (!rgraph[v][i] && rgraph[i][v])
+						{
+							rgraph[i][v] = 1;
+							rgraph[v][i] = 1;
+							v = i;
+							break ;
+						}
+						i++;
+					}
+				}
+				ft_printf("-%s\n", rooms[T]->name);
+			}
+			x++;
+		}
+		y++;
+	}
+}
+
 /*
 ** The max flow for test_01 is 3, but that doesn't count the number of ants	\
 ** per room.  Only ants per edge.  Counting rooms as full gives a max flow of 2
@@ -237,12 +268,30 @@ void		solve(t_lem *info)
 	size_t		i;
 	size_t		len_tmp;
 	size_t		len_min;
+	int			**rgraph;
 
+	rgraph = copy_graph(info->conns, info->num_rooms);
 	list = ft_memalloc(sizeof(t_list *) * info->num_rooms);
-	fordFulkerson(info->rooms, info->conns, info->num_rooms, list);	// TODO: make a better function to find all paths to take
+	fordFulkerson(info->rooms, rgraph, info->num_rooms, list);	// TODO: make a better function to find all paths to take
 	if (!(all_ants = (t_antq *)ft_memalloc(sizeof(t_antq))))
 		panic(MALLOC_ERR);
 	len_min = FT_SIZE_T_MAX;
+	for (size_t a = 0; a < info->num_rooms; a++)
+	{
+		for (size_t b = 0; b < info->num_rooms; b++)
+			ft_printf("%d ", rgraph[a][b]);
+		ft_putchar('\n');
+	}
+	ft_putchar('\n');
+	for (size_t a = 0; a < info->num_rooms; a++)
+	{
+		for (size_t b = 0; b < info->num_rooms; b++)
+			ft_printf("%d ", info->conns[a][b]);
+		ft_putchar('\n');
+	}
+	ft_putchar('\n');
+	print_paths(info->conns, rgraph, info->num_rooms, info->rooms);
+	ft_putchar('\n');
 	i = 0;
 	while (list[i])
 	{
