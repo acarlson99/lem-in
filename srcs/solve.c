@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/09 16:40:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/17 14:41:51 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/17 15:18:59 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,7 +188,7 @@ int			move_ants(t_antq *all_ants)
 #define CONT_IF(n) if (n) continue ;
 
 void		ant_loop(t_lem *info, t_list **list,\
-						t_antq *all_ants, size_t len_min)
+					 t_antq *all_ants, size_t len_min)
 {
 	size_t		i;
 	size_t		len_tmp;
@@ -279,6 +279,7 @@ t_list		**find_paths(int **conns, int **rgraph, size_t size, t_room **rooms)	// 
 									l[m] = l[j - 1];
 									l[j - 1] = NULL;
 									j--;
+									break ;
 								}
 								else	// TODO: del p2 and set it to NULL
 								{
@@ -286,6 +287,7 @@ t_list		**find_paths(int **conns, int **rgraph, size_t size, t_room **rooms)	// 
 									ft_lstdel(&l[j - 1], free_);
 									l[j - 1] = NULL;
 									j--;
+									break ;
 								}
 							}
 							p1 = p1->next;
