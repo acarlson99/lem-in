@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/09 16:40:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/17 12:48:44 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/17 13:27:22 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,13 +216,18 @@ void		ant_loop(t_lem *info, t_list **list,\
 	}
 }
 
-void		print_paths(int **conns, int **rgraph, size_t size, t_room **rooms)	// Uses original graph and residual graph and finds which paths were taken
+t_list		**print_paths(int **conns, int **rgraph, size_t size, t_room **rooms)	// Uses original graph and residual graph and finds which paths were taken
 {
 	size_t		x;
 	size_t		y;
 	size_t		v;
 	size_t		i;
+	t_list		**l;
+	size_t		j;
 
+	if (!(l = ft_memalloc(size * sizeof(t_list *))))
+		panic(MALLOC_ERR);
+	j = 0;
 	y = 0;
 	while (y < size)
 	{
@@ -234,7 +239,8 @@ void		print_paths(int **conns, int **rgraph, size_t size, t_room **rooms)	// Use
 				v = S;
 				while (v != T)
 				{
-					ft_printf("%s%s", v ? "-" : "", rooms[v]->name);
+//					ft_printf("%s%s", v ? "-" : "", rooms[v]->name);
+					ft_lstadd_tail(&l[j], ft_lstnew(rooms[v]->name, ft_strlen(rooms[v]->name)));
 					i = 0;
 					while (i < size)
 					{
@@ -248,12 +254,17 @@ void		print_paths(int **conns, int **rgraph, size_t size, t_room **rooms)	// Use
 						i++;
 					}
 				}
-				ft_printf("-%s\n", rooms[T]->name);
+//				ft_printf("-%s\n", rooms[T]->name);
+				ft_lstadd_tail(&l[j], ft_lstnew(rooms[v]->name, ft_strlen(rooms[v]->name)));
+				j++;
+//				ft_printf("L1-%s\n", rooms[T]->name);
 			}
 			x++;
 		}
 		y++;
 	}
+	l[j] = NULL;
+	return (l);
 }
 
 /*
@@ -264,6 +275,7 @@ void		print_paths(int **conns, int **rgraph, size_t size, t_room **rooms)	// Use
 void		solve(t_lem *info)
 {
 	t_list		**list;
+	t_list		**l2;
 	t_antq		*all_ants;
 	size_t		i;
 	size_t		len_tmp;
@@ -276,29 +288,29 @@ void		solve(t_lem *info)
 	if (!(all_ants = (t_antq *)ft_memalloc(sizeof(t_antq))))
 		panic(MALLOC_ERR);
 	len_min = FT_SIZE_T_MAX;
-	for (size_t a = 0; a < info->num_rooms; a++)
-	{
-		for (size_t b = 0; b < info->num_rooms; b++)
-			ft_printf("%d ", rgraph[a][b]);
-		ft_putchar('\n');
-	}
-	ft_putchar('\n');
-	for (size_t a = 0; a < info->num_rooms; a++)
-	{
-		for (size_t b = 0; b < info->num_rooms; b++)
-			ft_printf("%d ", info->conns[a][b]);
-		ft_putchar('\n');
-	}
-	ft_putchar('\n');
-	print_paths(info->conns, rgraph, info->num_rooms, info->rooms);
-	ft_putchar('\n');
+	/* for (size_t a = 0; a < info->num_rooms; a++) */
+	/* { */
+	/* 	for (size_t b = 0; b < info->num_rooms; b++) */
+	/* 		ft_printf("%d ", rgraph[a][b]); */
+	/* 	ft_putchar('\n'); */
+	/* } */
+	/* ft_putchar('\n'); */
+	/* for (size_t a = 0; a < info->num_rooms; a++) */
+	/* { */
+	/* 	for (size_t b = 0; b < info->num_rooms; b++) */
+	/* 		ft_printf("%d ", info->conns[a][b]); */
+	/* 	ft_putchar('\n'); */
+	/* } */
+	/* ft_putchar('\n'); */
+	l2 = print_paths(info->conns, rgraph, info->num_rooms, info->rooms);
+//	ft_putchar('\n');
 	i = 0;
-	while (list[i])
+	while (l2[i])
 	{
-		len_tmp = ft_lstlen(list[i]);
+		len_tmp = ft_lstlen(l2[i]);
 		if (len_tmp < len_min)
 			len_min = len_tmp;
 		i++;
 	}
-	ant_loop(info, list, all_ants, len_min);
+	ant_loop(info, l2, all_ants, len_min);
 }
