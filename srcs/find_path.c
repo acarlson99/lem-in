@@ -89,20 +89,20 @@ static void	fp_donk(t_lem *info)
 
 t_list		**find_path(t_lem *info)// Uses original graph and residual graph and finds which paths were taken
 {
-	if (!(info->l1 = ft_memalloc(info->nr * sizeof(t_list *))))
+	if (!(info->l1 = ft_memalloc(info->num_rooms * sizeof(t_list *))))
 		panic(MALLOC_ERR);
 	info->j = 0;
 	info->y = 0;
-	while (info->y < info->nr)
+	while (info->y < info->num_rooms)
 	{
 		info->x = 0;
-		while (info->x < info->nr)
+		while (info->x < info->num_rooms)
 		{
 			if (info->conns[info->y][info->x] &&
 				!info->rgraph[info->y][info->x])
 			{
 				info->v = SOURCE;
-				while (info->v != info->nr - 1)
+				while (info->v != info->num_rooms - 1)
 					fp_finna(info);
 				fp_donk(info);
 			}

@@ -224,11 +224,7 @@ void		ant_loop(t_lem *info, t_list **list,\
 
 void		solve(t_lem *info)
 {
-	t_list		**list;
-	t_list		**l2;
-	t_antq		*all_ants;
 	size_t		i[3];
-	int			**rgraph;
 
 	info->rgraph = copy_graph(info->conns, info->num_rooms);
 	info->list = ft_memalloc(sizeof(t_list *) * info->num_rooms);
@@ -238,12 +234,12 @@ void		solve(t_lem *info)
 	i[2] = FT_SIZE_T_MAX;
 	info->l2 = find_path(info);
 	i[0] = 0;
-	while (l2[i[0]])
+	while (info->l2[i[0]])
 	{
-		i[1] = ft_lstlen(l2[i[0]]);
+		i[1] = ft_lstlen(info->l2[i[0]]);
 		if (i[1] < i[2])
 			i[2] = i[1];
 		i[0]++;
 	}
-	ant_loop(info, l2, all_ants, i[2]);
+	ant_loop(info, info->l2, info->all_ants, i[2]);
 }
