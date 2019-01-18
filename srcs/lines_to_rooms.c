@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 18:59:54 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/13 19:31:18 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/17 20:26:52 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,4 +132,5 @@ void		create_rooms(t_lem *info)
 		start_end = 0;
 		ptr = ptr->next;
 	}
+	panic(CONN_ERR);
 }
