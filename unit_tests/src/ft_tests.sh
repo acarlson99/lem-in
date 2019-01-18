@@ -92,6 +92,24 @@ ft_valid_maps_part_1 ()
 	printf "\n"
 }
 
+ft_valid_maps_part_2 ()
+{
+	err="NULL"
+	printf "%-50s" "$yellow""valid_maps_part_2 : ""$normal"
+	for f in lem-in_maps/valid_maps_part_2/*
+	do
+		err=$(ft_leaks $EXEC/lem-in < $f)
+		lik=$?
+		comm=$(bash -c 'diff -u <(cat '$MAPS'/valid_maps_part_2_trace/'$(basename $f)'_trace) <('$EXEC'/lem-in < '$f')')
+		if [[ $comm != "" && -e $MAPS/valid_maps_part_2_trace/$(basename $f)_alt_trace ]]; then
+			comm=$(bash -c 'diff -u <(cat '$MAPS'/valid_maps_part_2_trace/'$(basename $f)_alt_trace') <('$EXEC'/lem-in < '$f')')
+		fi
+		ft_signal $lik "$comm" $i $f
+		count=$((count + 1))
+	done
+	printf "\n"
+}
+
 ft_logs ()
 {
 	if [ ${#errors[@]} -ne 0 ]; then

@@ -44,6 +44,7 @@ ft_cmp_to_trace pipes_error
 # Process tests------Success--------------------------------------------------- #
 ft_cmp_to_trace multiple_ways
 ft_valid_maps_part_1
+ft_valid_maps_part_2
 
 # Display results------------------------------------------------------------- #
 ft_logs
