@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/09 16:40:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/17 15:28:53 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/17 16:14:41 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -242,7 +242,6 @@ t_list		**find_paths(int **conns, int **rgraph, size_t size, t_room **rooms)	// 
 				v = S;
 				while (v != T)
 				{
-//					ft_printf("%s%s", v ? "-" : "", rooms[v]->name);
 					if (v != S)
 						ft_lstadd_tail(&l[j], ft_lstnew(rooms[v]->name, ft_strlen(rooms[v]->name) + 1));
 					i = 0;
@@ -258,7 +257,6 @@ t_list		**find_paths(int **conns, int **rgraph, size_t size, t_room **rooms)	// 
 						i++;
 					}
 				}
-//				ft_printf("-%s\n", rooms[T]->name);
 				ft_lstadd_tail(&l[j], ft_lstnew(rooms[v]->name, ft_strlen(rooms[v]->name) + 1));
 				j++;
 				p2 = l[j - 1];
@@ -272,7 +270,7 @@ t_list		**find_paths(int **conns, int **rgraph, size_t size, t_room **rooms)	// 
 						{
 							if (!ft_strcmp(p1->content, p2->content))
 							{
-								if (ft_lstlen(p1) > ft_lstlen(p2))	// TODO: del p1 and move p2 to p1
+								if (ft_lstlen(p1) > ft_lstlen(p2))
 								{
 									flag = 1;
 									ft_lstdel(&l[m], free_);
@@ -281,7 +279,7 @@ t_list		**find_paths(int **conns, int **rgraph, size_t size, t_room **rooms)	// 
 									j--;
 									break ;
 								}
-								else	// TODO: del p2 and set it to NULL
+								else
 								{
 									flag = 1;
 									ft_lstdel(&l[j - 1], free_);
@@ -299,7 +297,6 @@ t_list		**find_paths(int **conns, int **rgraph, size_t size, t_room **rooms)	// 
 						break ;
 					p2 = p2->next;
 				}
-//				ft_printf("L1-%s\n", rooms[T]->name);
 			}
 			x++;
 		}
