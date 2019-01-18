@@ -6,16 +6,25 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/09 16:40:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/17 16:14:41 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/17 17:05:33 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
+#define M_ERR MALLOC_ERR
 #define S (0)
 #define T (size - 1)
 #define IN(v) (v * 2)
 #define OUT(v) (v * 2 + 1)
+
+void		path_helper(t_queue *q, int vu[2], int *parent, int *visited)
+{
+	enqueue_num(q, vu[0]);
+	if (parent)
+		parent[vu[0]] = vu[1];
+	visited[vu[0]] = 1;
+}
 
 int			is_path(int **graph, int *parent, size_t size)
 {
@@ -25,8 +34,7 @@ int			is_path(int **graph, int *parent, size_t size)
 	int			*visited;
 	int			n;
 
-	if (!(visited = (int *)ft_memalloc(sizeof(int) * size)))
-		panic(MALLOC_ERR);
+	DO_IF(!(visited = (int *)ft_memalloc(sizeof(int) * size)), panic(M_ERR));
 	q = ft_queueinit();
 	enqueue_num(q, S);
 	while (!ft_queueisempty(q))
@@ -36,12 +44,7 @@ int			is_path(int **graph, int *parent, size_t size)
 		while (v < size)
 		{
 			if (visited[v] == 0 && graph[u][v] > 0)
-			{
-				enqueue_num(q, v);
-				if (parent)
-					parent[v] = u;
-				visited[v] = 1;
-			}
+				path_helper(q, (int[2]){v, u}, parent, visited);
 			v++;
 		}
 	}
