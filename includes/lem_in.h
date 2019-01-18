@@ -22,6 +22,8 @@
 
 # define START		((char)69)
 # define END		((char)420)
+# define SOURCE		(0)
+# define SINK		(size - 1)
 
 # define MALLOC_ERR	(1)
 # define ROOM_ERR	(2)
@@ -70,13 +72,29 @@ struct		s_room
 
 struct		s_lem
 {
-	size_t		num_rooms;
 	unsigned	num_ants;
+	int			flag;
+	size_t		num_rooms;
+	size_t		nr;
+	size_t		i;
+	size_t		j;
+	size_t		k;
+	size_t		u;
+	size_t		v;
+	size_t		x;
+	size_t		y;
+	t_antq		*all_ants;
+	t_list		*p1;
+	t_list		*p2;
 	t_line		*lines;
-	t_room		**rooms;
 	t_room		*start;
 	t_room		*end;
+	t_room		**rooms;
 	int			**conns;
+	int			**rgraph;
+	t_list		**list;
+	t_list		**l1;
+	t_list		**l2;
 };
 
 /*
@@ -111,6 +129,7 @@ size_t		ft_lstlen(t_list *ptr);
 */
 
 int			is_path(int **graph, int *parent, size_t size);
+t_list		**find_path(t_lem *info);
 void		solve(t_lem *info);
 
 /*

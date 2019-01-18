@@ -13,8 +13,6 @@
 #include "lem_in.h"
 
 #define M_ERR MALLOC_ERR
-#define S (0)
-#define T (size - 1)
 #define IN(v) (v * 2)
 #define OUT(v) (v * 2 + 1)
 
@@ -36,7 +34,7 @@ int			is_path(int **graph, int *parent, size_t size)
 
 	DO_IF(!(visited = (int *)ft_memalloc(sizeof(int) * size)), panic(M_ERR));
 	q = ft_queueinit();
-	enqueue_num(q, S);
+	enqueue_num(q, SOURCE);
 	while (!ft_queueisempty(q))
 	{
 		u = dequeue_num(q);
@@ -48,7 +46,7 @@ int			is_path(int **graph, int *parent, size_t size)
 			v++;
 		}
 	}
-	n = visited[T];
+	n = visited[SINK];
 	free(visited);
 	free(q);
 	return (n);
@@ -97,8 +95,8 @@ int			fordFulkerson(t_room **rooms, int **rgraph, size_t size, t_list **list)
 //		ft_printf("%s\n", ptr->content);
 //		ft_printf("L1-%s\n", rooms[size - 1]->name);
 		path_flow = FT_INT_MAX;
-		v = T;
-		while (v != S)
+		v = SINK;
+		while (v != SOURCE)
 		{
 			u = parent[v];
 			// Push room to list
@@ -108,7 +106,7 @@ int			fordFulkerson(t_room **rooms, int **rgraph, size_t size, t_list **list)
 			path_flow = MIN(path_flow, rgraph[u][v]);
 			v = parent[v];
 		}
-		v = T;
+		v = SINK;
 		// Start new list
 		list[index] = ptr;
 		index++;
@@ -141,7 +139,7 @@ int			fordFulkerson(t_room **rooms, int **rgraph, size_t size, t_list **list)
 			p2 = p2->next;
 		}
 		ptr = NULL;
-		while (v != S)
+		while (v != SOURCE)
 		{
 			u = parent[v];
 			rgraph[u][v] -= path_flow;
@@ -191,7 +189,7 @@ int			move_ants(t_antq *all_ants)
 #define CONT_IF(n) if (n) continue ;
 
 void		ant_loop(t_lem *info, t_list **list,\
-					 t_antq *all_ants, size_t len_min)
+					t_antq *all_ants, size_t len_min)
 {
 	size_t		i;
 	size_t		len_tmp;
@@ -219,96 +217,6 @@ void		ant_loop(t_lem *info, t_list **list,\
 	}
 }
 
-t_list		**find_paths(int **conns, int **rgraph, size_t size, t_room **rooms)	// Uses original graph and residual graph and finds which paths were taken
-{
-	size_t		x;
-	size_t		y;
-	size_t		v;
-	size_t		i;
-	t_list		**l;
-	size_t		j;
-	t_list		*p1;
-	t_list		*p2;
-	int			flag;
-
-	if (!(l = ft_memalloc(size * sizeof(t_list *))))
-		panic(MALLOC_ERR);
-	j = 0;
-	y = 0;
-	while (y < size)
-	{
-		x = 0;
-		while (x < size)
-		{
-			if (conns[y][x] && !rgraph[y][x])
-			{
-				v = S;
-				while (v != T)
-				{
-					if (v != S)
-						ft_lstadd_tail(&l[j], ft_lstnew(rooms[v]->name, ft_strlen(rooms[v]->name) + 1));
-					i = 0;
-					while (i < size)
-					{
-						if (!rgraph[v][i] && rgraph[i][v])
-						{
-							rgraph[i][v] = 1;
-							rgraph[v][i] = 1;
-							v = i;
-							break ;
-						}
-						i++;
-					}
-				}
-				ft_lstadd_tail(&l[j], ft_lstnew(rooms[v]->name, ft_strlen(rooms[v]->name) + 1));
-				j++;
-				p2 = l[j - 1];
-				flag = 0;
-				while (p2 && p2->next)
-				{
-					for (size_t m = 0; m < j - 1; m++)
-					{
-						p1 = l[m];
-						while (p1 && p1->next)
-						{
-							if (!ft_strcmp(p1->content, p2->content))
-							{
-								if (ft_lstlen(p1) > ft_lstlen(p2))
-								{
-									flag = 1;
-									ft_lstdel(&l[m], free_);
-									l[m] = l[j - 1];
-									l[j - 1] = NULL;
-									j--;
-									break ;
-								}
-								else
-								{
-									flag = 1;
-									ft_lstdel(&l[j - 1], free_);
-									l[j - 1] = NULL;
-									j--;
-									break ;
-								}
-							}
-							p1 = p1->next;
-						}
-						if (flag)
-							break ;
-					}
-					if (flag)
-						break ;
-					p2 = p2->next;
-				}
-			}
-			x++;
-		}
-		y++;
-	}
-	l[j] = NULL;
-	return (l);
-}
-
 /*
 ** The max flow for test_01 is 3, but that doesn't count the number of ants	\
 ** per room.  Only ants per edge.  Counting rooms as full gives a max flow of 2
@@ -319,25 +227,23 @@ void		solve(t_lem *info)
 	t_list		**list;
 	t_list		**l2;
 	t_antq		*all_ants;
-	size_t		i;
-	size_t		len_tmp;
-	size_t		len_min;
+	size_t		i[3];
 	int			**rgraph;
 
-	rgraph = copy_graph(info->conns, info->num_rooms);
-	list = ft_memalloc(sizeof(t_list *) * info->num_rooms);
-	fordFulkerson(info->rooms, rgraph, info->num_rooms, list);	// TODO: make a better function to find all paths to take
-	if (!(all_ants = (t_antq *)ft_memalloc(sizeof(t_antq))))
+	info->rgraph = copy_graph(info->conns, info->num_rooms);
+	info->list = ft_memalloc(sizeof(t_list *) * info->num_rooms);
+	fordFulkerson(info->rooms, info->rgraph, info->num_rooms, info->list);// TODO: make a better function to find all paths to take
+	if (!(info->all_ants = (t_antq *)ft_memalloc(sizeof(t_antq))))
 		panic(MALLOC_ERR);
-	len_min = FT_SIZE_T_MAX;
-	l2 = find_paths(info->conns, rgraph, info->num_rooms, info->rooms);
-	i = 0;
-	while (l2[i])
+	i[2] = FT_SIZE_T_MAX;
+	info->l2 = find_path(info);
+	i[0] = 0;
+	while (l2[i[0]])
 	{
-		len_tmp = ft_lstlen(l2[i]);
-		if (len_tmp < len_min)
-			len_min = len_tmp;
-		i++;
+		i[1] = ft_lstlen(l2[i[0]]);
+		if (i[1] < i[2])
+			i[2] = i[1];
+		i[0]++;
 	}
-	ant_loop(info, l2, all_ants, len_min);
+	ant_loop(info, l2, all_ants, i[2]);
 }
