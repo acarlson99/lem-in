@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/09 16:40:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/19 14:43:34 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/19 14:54:17 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,6 +192,7 @@ int			move_ants(t_antq *all_ants)
 
 int			check_move(t_list **list, size_t c, unsigned ants_left, size_t *num_paths, size_t *path_len_sum, size_t len_min, size_t *lens)	// TODO: make this factor in multiple viable paths of multiple lengths.  Works when only comparing two paths.  Breaks on more than 2 paths
 {
+	(void)path_len_sum;
 	size_t i = 0;
 
 	if (lens[c] > (len_min + ants_left / (*num_paths - 1)))
