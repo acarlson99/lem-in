@@ -6,7 +6,7 @@
 /*   By: callen <callen@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/08 20:28:23 by callen            #+#    #+#             */
-/*   Updated: 2019/01/15 15:33:32 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/18 18:10:26 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ void		print_rooms(t_room **rooms, size_t size)
 	ptr = rooms;
 	while (ptr && *ptr && size--)
 	{
-		ft_printf("Room %s ", (*ptr)->name);
-		ft_printf("x %2d y %2d ", (*ptr)->x, (*ptr)->y);
-		ft_printf("start_end %3d\n", (*ptr)->start_end);
+		ft_dprintf(2, "Room %s ", (*ptr)->name);
+		ft_dprintf(2, "x %2d y %2d ", (*ptr)->x, (*ptr)->y);
+		ft_dprintf(2, "start_end %3d\n", (*ptr)->start_end);
 		ptr++;
 	}
 }
@@ -39,11 +39,11 @@ void		print_conns(int **graph, size_t size)
 		x = 0;
 		while (x < size)
 		{
-			ft_printf("%d ", graph[y][x]);
+			ft_dprintf(2, "%d ", graph[y][x]);
 			x++;
 		}
 		y++;
-		ft_putchar('\n');
+		ft_putchar_fd('\n', 2);
 	}
 }
 

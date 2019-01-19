@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/09 16:40:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/17 17:05:33 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/18 19:06:15 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,6 +195,9 @@ void		ant_loop(t_lem *info, t_list **list,\
 	size_t		len_tmp;
 	size_t		n;
 
+	size_t		len_max = 0;
+	size_t		abs_max = 0;
+
 	n = 1;
 	while (1)
 	{
@@ -202,7 +205,11 @@ void		ant_loop(t_lem *info, t_list **list,\
 		while (list[i])
 		{
 			len_tmp = ft_lstlen(list[i]);
-			CONT_IF(len_tmp > len_min + (info->num_ants - n) && ++i);
+			if (len_tmp > abs_max)
+				abs_max = len_tmp;
+			CONT_IF(len_tmp > len_min + (info->num_ants - n) && ++i);	// FIXME: This line is broken.  Exemplified by map_06.  So we have to figure out whether it would be better for the ant to go down the suggested path or a different path
+			if (len_max < len_tmp)
+				len_max = len_tmp;
 			if (n <= info->num_ants)
 			{
 				CONT_IF(!list[i] && !(i = 0));
@@ -212,7 +219,16 @@ void		ant_loop(t_lem *info, t_list **list,\
 			i++;
 		}
 		if (!move_ants(all_ants))
+		{
+			ft_dprintf(2, "longest path %zu\n", abs_max);
+			ft_dprintf(2, "len_max: longest path taken %zu\n", len_max);
+			ft_dprintf(2, "len_min %zu\n", len_min);
+			i = 0;
+			while (list[i])
+				i++;
+			ft_dprintf(2, "Number of paths: %zu\n", i);
 			exit(0);
+		}
 		ft_putchar('\n');
 	}
 }
@@ -228,7 +244,7 @@ void		solve(t_lem *info)
 
 	info->rgraph = copy_graph(info->conns, info->num_rooms);
 	info->list = ft_memalloc(sizeof(t_list *) * info->num_rooms);
-	fordFulkerson(info->rooms, info->rgraph, info->num_rooms, info->list);// TODO: make a better function to find all paths to take
+	ft_dprintf(2, "%d\n",fordFulkerson(info->rooms, info->rgraph, info->num_rooms, info->list)); // TODO: make a better function to find all paths to take
 	if (!(info->all_ants = (t_antq *)ft_memalloc(sizeof(t_antq))))
 		panic(MALLOC_ERR);
 	i[2] = FT_SIZE_T_MAX;
