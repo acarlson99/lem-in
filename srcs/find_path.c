@@ -6,16 +6,17 @@
 /*   By: callen <callen@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/17 18:53:25 by callen            #+#    #+#             */
-/*   Updated: 2019/01/17 18:53:27 by callen           ###   ########.fr       */
+/*   Updated: 2019/01/19 12:22:21 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-static int	fp_cronch(t_lem *info)
+static int	fp_cronch(t_lem *info)	// FIXME: Why the fuck is this not being called?
 {
 	if (!ft_strcmp(info->p1->content, info->p2->content))
 	{
+		ft_printf("We found one\n");
 		if (ft_lstlen(info->p1) > ft_lstlen(info->p2))
 		{
 			info->flag = 1;
@@ -87,7 +88,7 @@ static void	fp_donk(t_lem *info)
 	}
 }
 
-t_list		**find_path(t_lem *info)// Uses original graph and residual graph and finds which paths were taken
+t_list		**find_path(t_lem *info)	// TODO: dear god this should remove conflicting paths
 {
 	if (!(info->l1 = ft_memalloc(info->num_rooms * sizeof(t_list *))))
 		panic(MALLOC_ERR);

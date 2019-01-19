@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/09 16:40:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/18 23:56:23 by callen           ###   ########.fr       */
+/*   Updated: 2019/01/19 12:19:18 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,10 +188,10 @@ int			move_ants(t_antq *all_ants)
 
 #define CONT_IF(n) if (n) continue ;
 #define PLSHLP (len_tmp > len_min + (info->num_ants - n) && ++i)
-#define PLSHLPP (len_tmp + (abs_max >= 5 ? 1 : 0) > (info->num_ants - n + (abs_max >= 5 ? 0 : len_min - 2)) && ++i) // works sometimes, often requiring adjustments
+#define PLSHLPP (len_tmp + (abs_max >= 5 ? 1 : 0) > (info->num_ants - n + (abs_max >= 5 ? 0 : len_min - 2)) && ++i) // If it requires adjusting to "work," then it does not work
 
 void		ant_loop(t_lem *info, t_list **list,\
-					t_antq *all_ants, size_t len_min)
+					t_antq *all_ants, size_t len_min, size_t num_paths, size_t avg_path_len)
 {
 	size_t		i;
 	size_t		len_tmp;
@@ -240,6 +240,8 @@ void		ant_loop(t_lem *info, t_list **list,\
 ** per room.  Only ants per edge.  Counting rooms as full gives a max flow of 2
 */
 
+#include <fcntl.h>
+
 void		solve(t_lem *info)
 {
 	size_t		i[3];
@@ -252,12 +254,17 @@ void		solve(t_lem *info)
 	i[2] = FT_SIZE_T_MAX;
 	info->l2 = find_path(info);
 	i[0] = 0;
+
+	size_t avg_path_len = 0;
+
 	while (info->l2[i[0]])
 	{
 		i[1] = ft_lstlen(info->l2[i[0]]);
+		avg_path_len += i[1];
 		if (i[1] < i[2])
 			i[2] = i[1];
 		i[0]++;
 	}
-	ant_loop(info, info->l2, info->all_ants, i[2]);
+	avg_path_len /= i[0];
+	ant_loop(info, info->l2, info->all_ants, i[2], i[0], avg_path_len);
 }
