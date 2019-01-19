@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/09 16:40:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/18 19:29:25 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/18 23:56:23 by callen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,6 +187,8 @@ int			move_ants(t_antq *all_ants)
 }
 
 #define CONT_IF(n) if (n) continue ;
+#define PLSHLP (len_tmp > len_min + (info->num_ants - n) && ++i)
+#define PLSHLPP (len_tmp + (abs_max >= 5 ? 1 : 0) > (info->num_ants - n + (abs_max >= 5 ? 0 : len_min - 2)) && ++i) // works sometimes, often requiring adjustments
 
 void		ant_loop(t_lem *info, t_list **list,\
 					t_antq *all_ants, size_t len_min)
@@ -207,7 +209,7 @@ void		ant_loop(t_lem *info, t_list **list,\
 			len_tmp = ft_lstlen(list[i]);
 			if (len_tmp > abs_max)
 				abs_max = len_tmp;
-			CONT_IF(len_tmp > len_min + (info->num_ants - n) && ++i);	// FIXME: This line is broken.  Exemplified by map_06.  So we have to figure out whether it would be better for the ant to go down the suggested path or a different path AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA HOLY FUCK THIS LINE OH MY GOD FIX THIS RUN LEMIN WITH TEST MAP 06 AND FIX THE THING THAT IS FUCKED OHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGOD
+			CONT_IF(PLSHLPP);	// FIXME: This line is broken.  Exemplified by map_06.  So we have to figure out whether it would be better for the ant to go down the suggested path or a different path AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA HOLY FUCK THIS LINE OH MY GOD FIX THIS RUN LEMIN WITH TEST MAP 06 AND FIX THE THING THAT IS FUCKED OHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGOD
 			if (len_max < len_tmp)
 				len_max = len_tmp;
 			if (n <= info->num_ants)
@@ -244,7 +246,7 @@ void		solve(t_lem *info)
 
 	info->rgraph = copy_graph(info->conns, info->num_rooms);
 	info->list = ft_memalloc(sizeof(t_list *) * info->num_rooms);
-	ft_dprintf(2, "%d\n",fordFulkerson(info->rooms, info->rgraph, info->num_rooms, info->list)); // TODO: make a better function to find all paths to take
+	ft_dprintf(2, "max flow = %d\n",fordFulkerson(info->rooms, info->rgraph, info->num_rooms, info->list)); // TODO: make a better function to find all paths to take
 	if (!(info->all_ants = (t_antq *)ft_memalloc(sizeof(t_antq))))
 		panic(MALLOC_ERR);
 	i[2] = FT_SIZE_T_MAX;
