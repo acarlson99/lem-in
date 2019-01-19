@@ -63,7 +63,11 @@ Built with python3
 
 * Down: decrease ant speed
 
+* Right: move ants
+
 * 0: reset ant speed
+
+* i: toggle instant ant movement
 
 * Home, R: reset
 

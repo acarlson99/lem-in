@@ -1,13 +1,20 @@
 #!/usr/bin/env python3
 
-import sys
-import random
-import re
-import pytweening
-import contextlib
-with contextlib.redirect_stdout(None):
-    import pygame
-    from pygame.locals import *
+try:
+    import sys
+    import random
+    import re
+    import pytweening
+    import contextlib
+    with contextlib.redirect_stdout(None):
+        import pygame
+        from pygame.locals import *
+except:
+    print("Import error")
+    print("""Please make sure these libraries are correctly available:
+* pygame
+* pytweening""")
+    exit(1)
 
 FPS = 30
 
@@ -72,7 +79,12 @@ class Ant:
         self.move_list = pytweening.getLine(self.x, self.y, end_coords[0], end_coords[1])
         self.move_list.append(end_coords)
 
-    def move(self, step=1):
+    def move(self, step=1, instamove=0):
+        if instamove:
+            if self.move_list:
+                self.x, self.y = self.move_list[-1]
+                self.move_list = None
+            return 0
         if self.move_list == None:
             self.n = 0
             return 0
@@ -127,6 +139,7 @@ class Game:
         self.start = None
         self.end = None
         self.ants_moving = 0
+        self.instamove = 0
 
     def __str__(self):
         try:
@@ -158,6 +171,8 @@ class Game:
                 if self.event.key == K_0 or self.event.key == K_KP0:
                     for n in self.antmap:
                         self.antmap[n].step = 1
+                if self.event.key == K_i:
+                    self.instamove = ~self.instamove
 
     def add_conn(self, line):
         n = line.split('-')
@@ -265,7 +280,7 @@ class Game:
 
     def move_ants(self):
         for n in self.antmap:
-            self.ants_moving += self.antmap[n].move(self.antmap[n].step)
+            self.ants_moving += self.antmap[n].move(self.antmap[n].step, self.instamove)
 
     def update_ants(self):
         line = self.ant_moves[self.move_num]
@@ -318,11 +333,13 @@ def main():
     if len(sys.argv) > 1:
         if sys.argv[1] == "--help":
             print("""Navigation:
-Esc, Q : quit visualizer
-Up     : increase ant speed
-Down   : decrease ant speed
-0      : reset ant speed
-Home, R: reset""")
+Esc, Q  : quit visualizer
+Up      : increase ant speed
+Down    : decrease ant speed
+Right   : move ants
+0       : reset ant speed
+i       : toggle instant ant movement
+Home, R : reset""")
             sys.exit()
         else:
             print("illegal option: %s" % (sys.argv[1]))
