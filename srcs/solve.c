@@ -34,7 +34,7 @@ int			is_path(int **graph, int *parent, size_t size)
 
 	DO_IF(!(visited = (int *)ft_memalloc(sizeof(int) * size)), panic(M_ERR));
 	q = ft_queueinit();
-	enqueue_num(q, SOURCE);
+	enqueue_num(q, S);
 	while (!ft_queueisempty(q))
 	{
 		u = dequeue_num(q);
@@ -46,7 +46,7 @@ int			is_path(int **graph, int *parent, size_t size)
 			v++;
 		}
 	}
-	n = visited[SINK];
+	n = visited[T];
 	free(visited);
 	free(q);
 	return (n);
@@ -95,8 +95,8 @@ int			fordFulkerson(t_room **rooms, int **rgraph, size_t size, t_list **list)
 //		ft_printf("%s\n", ptr->content);
 //		ft_printf("L1-%s\n", rooms[size - 1]->name);
 		path_flow = FT_INT_MAX;
-		v = SINK;
-		while (v != SOURCE)
+		v = T;
+		while (v != S)
 		{
 			u = parent[v];
 			// Push room to list
@@ -106,7 +106,7 @@ int			fordFulkerson(t_room **rooms, int **rgraph, size_t size, t_list **list)
 			path_flow = MIN(path_flow, rgraph[u][v]);
 			v = parent[v];
 		}
-		v = SINK;
+		v = T;
 		// Start new list
 		list[index] = ptr;
 		index++;
@@ -139,7 +139,7 @@ int			fordFulkerson(t_room **rooms, int **rgraph, size_t size, t_list **list)
 			p2 = p2->next;
 		}
 		ptr = NULL;
-		while (v != SOURCE)
+		while (v != S)
 		{
 			u = parent[v];
 			rgraph[u][v] -= path_flow;

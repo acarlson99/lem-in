@@ -41,7 +41,7 @@ static int	fp_cronch(t_lem *info)
 
 static void	fp_finna(t_lem *info)
 {
-	if (info->v != SOURCE)
+	if (info->v != S)
 		ft_lstadd_tail(&info->l1[info->j], ft_lstnew(info->rooms[info->v]->name,
 		ft_strlen(info->rooms[info->v]->name) + 1));
 	info->i = 0;
@@ -101,7 +101,7 @@ t_list		**find_path(t_lem *info)// Uses original graph and residual graph and fi
 			if (info->conns[info->y][info->x] &&
 				!info->rgraph[info->y][info->x])
 			{
-				info->v = SOURCE;
+				info->v = S;
 				while (info->v != info->num_rooms - 1)
 					fp_finna(info);
 				fp_donk(info);

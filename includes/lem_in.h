@@ -22,8 +22,8 @@
 
 # define START		((char)69)
 # define END		((char)420)
-# define SOURCE		(0)
-# define SINK		(size - 1)
+# define S			(0)
+# define T			(size - 1)
 
 # define MALLOC_ERR	(1)
 # define ROOM_ERR	(2)
