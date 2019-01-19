@@ -6,7 +6,7 @@
 /*   By: callen <callen@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/17 18:53:25 by callen            #+#    #+#             */
-/*   Updated: 2019/01/19 12:36:01 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/19 13:52:56 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,8 +187,12 @@ t_list		**find_path(int **conns, int **rgraph, size_t size, t_room **rooms)	// U
 									j--;
 								}
 							}
+							if (flag)
+								break ;
 							p1 = p1->next;
 						}
+						if (flag)
+							break ;
 					}
 					if (flag)
 						break ;

@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/09 16:40:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/19 12:37:21 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/19 14:27:28 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,8 +190,21 @@ int			move_ants(t_antq *all_ants)
 #define PLSHLP (len_tmp > len_min + (info->num_ants - n) && ++i)
 #define PLSHLPP (len_tmp + (abs_max >= 5 ? 1 : 0) > (info->num_ants - n + (abs_max >= 5 ? 0 : len_min - 2)) && ++i) // If it requires adjusting to "work," then it does not work
 
+int			check_move(t_list **list, size_t c, unsigned ants_left, size_t num_paths, size_t avg_path_len, size_t len_min, size_t *lens)
+{
+	size_t i = 0;
+
+	if (lens[c] > (len_min + ants_left / (num_paths - 1)))
+		return (1);
+	return (0);
+	while (list[i])
+	{
+	}
+	return (0);
+}
+
 void		ant_loop(t_lem *info, t_list **list,\
-					t_antq *all_ants, size_t len_min, size_t num_paths, size_t avg_path_len)
+					t_antq *all_ants, size_t len_min, size_t num_paths, size_t avg_path_len, size_t *lens)
 {
 	size_t		i;
 	size_t		len_tmp;
@@ -199,17 +212,18 @@ void		ant_loop(t_lem *info, t_list **list,\
 
 	size_t		len_max = 0;
 	size_t		abs_max = 0;
+	int			flag = 0;
 
 	n = 1;
 	while (1)
 	{
 		i = 0;
-		while (list[i])
+		while (list[i] && !flag)
 		{
 			len_tmp = ft_lstlen(list[i]);
 			if (len_tmp > abs_max)
 				abs_max = len_tmp;
-			CONT_IF(PLSHLPP);	// FIXME: This line is broken.  Exemplified by map_06.  So we have to figure out whether it would be better for the ant to go down the suggested path or a different path AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA HOLY FUCK THIS LINE OH MY GOD FIX THIS RUN LEMIN WITH TEST MAP 06 AND FIX THE THING THAT IS FUCKED OHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGOD
+			CONT_IF(check_move(list, i, info->num_ants - n, num_paths, avg_path_len, len_min, lens) && i++);	// FIXME: This line is broken.  Exemplified by map_06.  So we have to figure out whether it would be better for the ant to go down the suggested path or a different path AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA HOLY FUCK THIS LINE OH MY GOD FIX THIS RUN LEMIN WITH TEST MAP 06 AND FIX THE THING THAT IS FUCKED OHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGOD
 			if (len_max < len_tmp)
 				len_max = len_tmp;
 			if (n <= info->num_ants)
@@ -218,6 +232,8 @@ void		ant_loop(t_lem *info, t_list **list,\
 				add_ant(all_ants, list[i], n);
 				n++;
 			}
+			else
+				flag = 1;
 			i++;
 		}
 		if (!move_ants(all_ants))
@@ -240,8 +256,6 @@ void		ant_loop(t_lem *info, t_list **list,\
 ** per room.  Only ants per edge.  Counting rooms as full gives a max flow of 2
 */
 
-#include <fcntl.h>
-
 void		solve(t_lem *info)
 {
 	size_t		i[3];
@@ -257,15 +271,17 @@ void		solve(t_lem *info)
 	i[0] = 0;
 
 	size_t avg_path_len = 0;
+	size_t *lens = ft_memalloc(sizeof(size_t) * info->num_rooms);
 
 	while (info->l2[i[0]])
 	{
 		i[1] = ft_lstlen(info->l2[i[0]]);
+		lens[i[0]] = i[1];
 		avg_path_len += i[1];
 		if (i[1] < i[2])
 			i[2] = i[1];
 		i[0]++;
 	}
 	avg_path_len /= i[0];
-	ant_loop(info, info->l2, info->all_ants, i[2], i[0], avg_path_len);
+	ant_loop(info, info->l2, info->all_ants, i[2], i[0], avg_path_len, lens);
 }
