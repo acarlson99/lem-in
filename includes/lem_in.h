@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/31 14:03:45 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/15 16:57:52 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/19 12:37:53 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,8 @@ size_t		ft_lstlen(t_list *ptr);
 */
 
 int			is_path(int **graph, int *parent, size_t size);
-t_list		**find_path(t_lem *info);
+// t_list		**find_path(t_lem *info);
+t_list		**find_path(int **conns, int **rgraph, size_t size, t_room **rooms);
 void		solve(t_lem *info);
 
 /*

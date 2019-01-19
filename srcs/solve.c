@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/09 16:40:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/19 12:19:18 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/19 12:37:21 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -252,7 +252,8 @@ void		solve(t_lem *info)
 	if (!(info->all_ants = (t_antq *)ft_memalloc(sizeof(t_antq))))
 		panic(MALLOC_ERR);
 	i[2] = FT_SIZE_T_MAX;
-	info->l2 = find_path(info);
+//	info->l2 = find_path(info);
+	info->l2 = find_path(info->conns, info->rgraph, info->num_rooms, info->rooms);
 	i[0] = 0;
 
 	size_t avg_path_len = 0;
