@@ -19,6 +19,10 @@ Developed for macOS High Sierra using clang-902.0.39.1
 - [x] validate
 - [x] main
 - [ ] solve	**This needs to actually do the thing optimally**
+- [ ] maybe rewrite FordFulkerson
+- [ ] maybe rewrite is_path
+- [ ] maybe rewrite find_path
+- [ ] fix update_array and ant_loop
 - [ ] norm *This needs to be done last*
 
 ## Installation
