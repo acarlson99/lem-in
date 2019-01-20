@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/15 13:27:34 by acarlson          #+#    #+#             */
-/*   Updated: 2018/11/15 14:28:12 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/19 20:06:39 by callen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,13 @@ int					pf_print_wchar_str(t_pf_info info, va_list args_list)
 		info.len_str = (size_t)PREC;
 	padding = MFW;
 	if (IS_NEG_FIELD(info.options))
-		count += ft_putnwstr_fd(str, info.prec_spec\
-								? info.precision : info.len_str, g_printf_fd);
+		count += ft_putnwstr_fd(str, info.prec_spec ? (size_t)info.precision :
+				info.len_str, g_printf_fd);
 	while (padding-- > info.len_str)
 		count += ft_putchar_fd_2(IS_ZERO(info.options) ? '0' : ' ', PF_FD);
 	if (!(IS_NEG_FIELD(info.options)))
-		count += ft_putnwstr_fd(str, info.prec_spec\
-								? info.precision : info.len_str, g_printf_fd);
+		count += ft_putnwstr_fd(str, info.prec_spec ? (size_t)info.precision :
+				info.len_str, g_printf_fd);
 	return (count);
 }
 
@@ -97,12 +97,12 @@ int					pf_print_string(t_pf_info info, va_list args_list)
 		info.len_str = (size_t)PREC;
 	padding = MFW;
 	if (IS_NEG_FIELD(info.options))
-		count += ft_putnstr_fd(str, info.prec_spec\
-								? info.precision : info.len_str, g_printf_fd);
+		count += ft_putnstr_fd(str, info.prec_spec ? (size_t)info.precision :
+				info.len_str, g_printf_fd);
 	while (padding-- > info.len_str)
 		count += ft_putchar_fd_2(IS_ZERO(info.options) ? '0' : ' ', PF_FD);
 	if (!(IS_NEG_FIELD(info.options)))
-		count += ft_putnstr_fd(str, info.prec_spec\
-								? info.precision : info.len_str, g_printf_fd);
+		count += ft_putnstr_fd(str, info.prec_spec ? (size_t)info.precision :
+				info.len_str, g_printf_fd);
 	return (count);
 }
