@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/09 16:40:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/19 21:22:47 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/19 21:36:02 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,7 +199,9 @@ void		update_array(t_list **list, size_t *lens, int *valid_arr, unsigned ants_le
 
 	while (list[i])
 	{
-		if (valid_arr[i] && lens[i] > (*path_len_sum - lens[i]) / (*num_paths - 1) + ants_left / (*num_paths - 1))
+		if (*num_paths == 1)
+			return ;
+		else if (valid_arr[i] && lens[i] > (*path_len_sum - lens[i]) / (*num_paths - 1) + ants_left / (*num_paths - 1))
 		{
 			valid_arr[i] = 0;
 			ft_dprintf(2, "Ooh fuck we killin index %zu\n", i);
