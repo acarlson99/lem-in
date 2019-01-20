@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/09 16:40:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/19 19:58:03 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/01/19 21:22:47 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,18 +190,26 @@ int			move_ants(t_antq *all_ants)
 #define PLSHLP (len_tmp > len_min + (info->num_ants - n) && ++i)
 #define PLSHLPP (len_tmp + (abs_max >= 5 ? 1 : 0) > (info->num_ants - n + (abs_max >= 5 ? 0 : len_min - 2)) && ++i) // If it requires adjusting to "work," then it does not work
 
-int			update_array(t_list **list, size_t c, unsigned ants_left, size_t *num_paths, size_t *path_len_sum, size_t len_min, size_t *lens)	// TODO: make this factor in multiple viable paths of multiple lengths.  Works when only comparing two paths.  Breaks on more than 2 paths
+void		update_array(t_list **list, size_t *lens, int *valid_arr, unsigned ants_left, size_t *num_paths, size_t *path_len_sum, size_t len_min)	// TODO: make this factor in multiple viable paths of multiple lengths.  Works when only comparing two paths.  Breaks on more than 2 paths
 {
+	(void)valid_arr;
 	(void)path_len_sum;
+	(void)len_min;
 	size_t i = 0;
 
-	if (lens[c] > (len_min + ants_left / (*num_paths - 1)))
-		return (1);
-	return (0);
 	while (list[i])
 	{
+		if (valid_arr[i] && lens[i] > (*path_len_sum - lens[i]) / (*num_paths - 1) + ants_left / (*num_paths - 1))
+		{
+			valid_arr[i] = 0;
+			ft_dprintf(2, "Ooh fuck we killin index %zu\n", i);
+			*path_len_sum = *path_len_sum - lens[i];
+			*num_paths = *num_paths - 1;
+			return (update_array(list, lens, valid_arr, ants_left, num_paths, path_len_sum, len_min));
+		}
+		i++;
 	}
-	return (0);
+	return ;
 }
 
 void		ant_loop(t_lem *info, t_list **list,\
@@ -215,6 +223,8 @@ void		ant_loop(t_lem *info, t_list **list,\
 	size_t		abs_max = 0;
 	int			flag = 0;
 	int			*valid_arr = ft_memalloc(sizeof(int) * num_paths + 1);
+	for (unsigned i = 0; i <= num_paths; i++)
+		valid_arr[i] = 1;
 
 	n = 1;
 	while (1)
@@ -222,11 +232,12 @@ void		ant_loop(t_lem *info, t_list **list,\
 		i = 0;
 		while (list[i] && !flag)
 		{
-			update_array(list, lens, valid_arr);
+			update_array(list, lens, valid_arr, info->num_ants - n + 1, &num_paths, &path_len_sum, len_min);
 			len_tmp = ft_lstlen(list[i]);
 			if (len_tmp > abs_max)
 				abs_max = len_tmp;
-			CONT_IF(valid_arr[c] && i++);	// FIXME: This line is broken.  Exemplified by map_06.  So we have to figure out whether it would be better for the ant to go down the suggested path or a different path AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA HOLY FUCK THIS LINE OH MY GOD FIX THIS RUN LEMIN WITH TEST MAP 06 AND FIX THE THING THAT IS FUCKED OHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGOD
+//			CONT_IF(PLSHLP);
+			CONT_IF(!valid_arr[i] && i++);	// FIXME: This line is broken.  Exemplified by map_06.  So we have to figure out whether it would be better for the ant to go down the suggested path or a different path AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA HOLY FUCK THIS LINE OH MY GOD FIX THIS RUN LEMIN WITH TEST MAP 06 AND FIX THE THING THAT IS FUCKED OHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGOD
 			if (len_max < len_tmp)
 				len_max = len_tmp;
 			if (n <= info->num_ants)
