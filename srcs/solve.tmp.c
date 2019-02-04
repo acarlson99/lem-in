@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/09 16:40:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/02/04 14:44:32 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/02/04 14:46:27 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,9 +207,6 @@ void		update_array(t_list **list, size_t *lens, int *valid_arr, unsigned ants_le
 			*path_len_sum = *path_len_sum - lens[i];
 			*num_paths = *num_paths - 1;
 			ft_dprintf(2, "Ooh fuck we killin index %zu of len %zu num_ants: %u paths left: %zu path_len_sum: %zu name: %s\n", i, lens[i], ants_left, *num_paths, *path_len_sum, list[i]->content);
-			ft_lstdel(&list[i], free_);
-			list[i] = NULL;
-			lens[i] = 0;
 			return (update_array(list, lens, valid_arr, ants_left, num_paths, path_len_sum, len_min));
 		}
 		else if (valid_arr[i])
@@ -232,7 +229,7 @@ void		ant_loop(t_lem *info, t_list **list,\
 	char		*tmp_path_name = NULL;
 	char		*long_path_name = NULL;
 	int			*valid_arr = ft_memalloc(sizeof(int) * num_paths + 1);
-	for (unsigned i = 0; i < num_paths; i++)
+	for (unsigned i = 0; i <= num_paths; i++)
 		valid_arr[i] = 1;
 
 	n = 1;
@@ -241,12 +238,11 @@ void		ant_loop(t_lem *info, t_list **list,\
 		i = 0;
 		while (list[i] && !flag)
 		{
+			update_array(list, lens, valid_arr, info->num_ants - n + 1, &num_paths, &path_len_sum, len_min);
 			len_tmp = ft_lstlen(list[i]);
+			tmp_path_name = list[i]->content;
 			if (len_tmp > abs_max)
 				abs_max = len_tmp;
-			update_array(list, lens, valid_arr, info->num_ants - n + 1, &num_paths, &path_len_sum, len_min);
-			if (list[i])
-				tmp_path_name = list[i]->content;
 //			CONT_IF(PLSHLP);
 			CONT_IF(!valid_arr[i] && i++);	// FIXME: This line is broken.  Exemplified by map_06.  So we have to figure out whether it would be better for the ant to go down the suggested path or a different path AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA HOLY FUCK THIS LINE OH MY GOD FIX THIS RUN LEMIN WITH TEST MAP 06 AND FIX THE THING THAT IS FUCKED OHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGOD
 			if (n <= info->num_ants)
