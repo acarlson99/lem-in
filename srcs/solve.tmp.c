@@ -192,9 +192,6 @@ int			move_ants(t_antq *all_ants)
 
 void		update_array(t_list **list, size_t *lens, int *valid_arr, unsigned ants_left, size_t *num_paths, size_t *path_len_sum, size_t len_min)	// TODO: make this factor in multiple viable paths of multiple lengths.  Works when only comparing two paths.  Breaks on more than 2 paths
 {
-	(void)valid_arr;
-	(void)path_len_sum;
-	(void)len_min;
 	size_t i = 0;
 
 	while (list[i])
@@ -203,14 +200,14 @@ void		update_array(t_list **list, size_t *lens, int *valid_arr, unsigned ants_le
 			return ;
 		else if (valid_arr[i] && lens[i] > (*path_len_sum - lens[i]) / (*num_paths - 1) + ants_left / (*num_paths - 1))
 		{
-			valid_arr[i] = 0;
 			*path_len_sum = *path_len_sum - lens[i];
 			*num_paths = *num_paths - 1;
-			ft_dprintf(2, "Ooh fuck we killin index %zu of len %zu num_ants: %u paths left: %zu path_len_sum: %zu name: %s\n", i, lens[i], ants_left, *num_paths, *path_len_sum, list[i]->content);
+			valid_arr[i] = 0;
+			ft_dprintf(2, "valid_arr[%zu]: %d len %zu num_ants: %u paths left: %zu path_len_sum: %zu name: %s\n", i, valid_arr[i], lens[i], ants_left, *num_paths, *path_len_sum, list[i]->content);
 			return (update_array(list, lens, valid_arr, ants_left, num_paths, path_len_sum, len_min));
 		}
 		else if (valid_arr[i])
-			ft_dprintf(2, "Index %zu of len %zu lives\n", i, lens[i]);
+			ft_dprintf(2, "Index %zu of len %zu lives name: %s\n", i, lens[i], list[i]->content);
 		i++;
 	}
 	return ;
@@ -226,11 +223,13 @@ void		ant_loop(t_lem *info, t_list **list,\
 	size_t		len_max = 0;
 	size_t		abs_max = 0;
 	int			flag = 0;
+	unsigned	k = 0;
+	unsigned	j = 0;
 	char		*tmp_path_name = NULL;
 	char		*long_path_name = NULL;
 	int			*valid_arr = ft_memalloc(sizeof(int) * num_paths + 1);
-	for (unsigned i = 0; i <= num_paths; i++)
-		valid_arr[i] = 1;
+	for (j = 0; j < num_paths; j++)
+		valid_arr[j] = 1;
 
 	n = 1;
 	while (1)
@@ -238,9 +237,11 @@ void		ant_loop(t_lem *info, t_list **list,\
 		i = 0;
 		while (list[i] && !flag)
 		{
+			// ft_dprintf(2, "(t_list *) list[%d] = %p\n", i, list[i]);
 			update_array(list, lens, valid_arr, info->num_ants - n + 1, &num_paths, &path_len_sum, len_min);
 			len_tmp = ft_lstlen(list[i]);
 			tmp_path_name = list[i]->content;
+			// ft_dprintf(2, "list[%zu]: len %zu name %s\n", i, len_tmp, tmp_path_name);
 			if (len_tmp > abs_max)
 				abs_max = len_tmp;
 //			CONT_IF(PLSHLP);
@@ -253,6 +254,8 @@ void		ant_loop(t_lem *info, t_list **list,\
 					len_max = len_tmp;
 					long_path_name = tmp_path_name;
 				}
+				CONT_IF(ft_lstlen(list[i]) != len_min && (k++ <= j)); //STROPSÆ
+				// ft_dprintf(2, "list[%zu]: k = %u len %zu name %s\n", i, k, len_tmp, tmp_path_name);
 				add_ant(all_ants, list[i], n);
 				n++;
 			}
