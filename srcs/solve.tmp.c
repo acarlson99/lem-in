@@ -16,6 +16,8 @@
 #define IN(v) (v * 2)
 #define OUT(v) (v * 2 + 1)
 
+size_t		g_moves;
+
 void		path_helper(t_queue *q, int vu[2], int *parent, int *visited)
 {
 	enqueue_num(q, vu[0]);
@@ -187,8 +189,10 @@ int			move_ants(t_antq *all_ants)
 }
 
 #define CONT_IF(n) if (n) continue ;
-#define PLSHLP (len_tmp > len_min + (info->num_ants - n) && ++i)
-#define PLSHLPP (len_tmp + (abs_max >= 5 ? 1 : 0) > (info->num_ants - n + (abs_max >= 5 ? 0 : len_min - 2)) && ++i) // If it requires adjusting to "work," then it does not work
+
+/*
+** Holy parameters
+*/
 
 void		update_array(t_list **list, size_t *lens, int *valid_arr, unsigned ants_left, size_t *num_paths, size_t *path_len_sum, size_t len_min)	// TODO: make this factor in multiple viable paths of multiple lengths.  Works when only comparing two paths.  Breaks on more than 2 paths
 {
@@ -203,18 +207,18 @@ void		update_array(t_list **list, size_t *lens, int *valid_arr, unsigned ants_le
 			*path_len_sum = *path_len_sum - lens[i];
 			*num_paths = *num_paths - 1;
 			valid_arr[i] = 0;
-			ft_dprintf(2, "valid_arr[%zu]: %d len %zu num_ants: %u paths left: %zu path_len_sum: %zu name: %s\n", i, valid_arr[i], lens[i], ants_left, *num_paths, *path_len_sum, list[i]->content);
+			// ft_dprintf(2, "valid_arr[%zu]: %d len %zu num_ants: %u paths left: %zu path_len_sum: %zu name: %s\n", i, valid_arr[i], lens[i], ants_left, *num_paths, *path_len_sum, list[i]->content);
 			return (update_array(list, lens, valid_arr, ants_left, num_paths, path_len_sum, len_min));
 		}
-		else if (valid_arr[i])
-			ft_dprintf(2, "Index %zu of len %zu lives name: %s\n", i, lens[i], list[i]->content);
+		else if (valid_arr[i]) {
+			// ft_dprintf(2, "Index %zu of len %zu lives name: %s\n", i, lens[i], list[i]->content);
+		}
 		i++;
 	}
 	return ;
 }
 
-void		ant_loop(t_lem *info, t_list **list,\
-					t_antq *all_ants, size_t len_min, size_t num_paths, size_t path_len_sum, size_t *lens)
+void		ant_loop(t_lem *info, t_list **list, t_antq *all_ants, size_t len_min, size_t num_paths, size_t path_len_sum, size_t *lens)
 {
 	size_t		i;
 	size_t		len_tmp;
@@ -237,15 +241,12 @@ void		ant_loop(t_lem *info, t_list **list,\
 		i = 0;
 		while (list[i] && !flag)
 		{
-			// ft_dprintf(2, "(t_list *) list[%d] = %p\n", i, list[i]);
 			update_array(list, lens, valid_arr, info->num_ants - n + 1, &num_paths, &path_len_sum, len_min);
 			len_tmp = ft_lstlen(list[i]);
 			tmp_path_name = list[i]->content;
-			// ft_dprintf(2, "list[%zu]: len %zu name %s\n", i, len_tmp, tmp_path_name);
 			if (len_tmp > abs_max)
 				abs_max = len_tmp;
-//			CONT_IF(PLSHLP);
-			CONT_IF(!valid_arr[i] && i++);	// FIXME: This line is broken.  Exemplified by map_06.  So we have to figure out whether it would be better for the ant to go down the suggested path or a different path AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA HOLY FUCK THIS LINE OH MY GOD FIX THIS RUN LEMIN WITH TEST MAP 06 AND FIX THE THING THAT IS FUCKED OHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGODOHMYGOD
+			CONT_IF(!valid_arr[i] && i++);	// FIXME: This line is broken. Exemplified by map_06. So we have to figure out whether it would be better for the ant to go down the suggested path or a different path
 			if (n <= info->num_ants)
 			{
 				CONT_IF(!list[i] && !(i = 0));
@@ -254,8 +255,7 @@ void		ant_loop(t_lem *info, t_list **list,\
 					len_max = len_tmp;
 					long_path_name = tmp_path_name;
 				}
-				CONT_IF(ft_lstlen(list[i]) != len_min && (k++ <= j)); //STROPSÆ
-				// ft_dprintf(2, "list[%zu]: k = %u len %zu name %s\n", i, k, len_tmp, tmp_path_name);
+				CONT_IF(len_tmp != len_min && (k++ <= j)); //Monkeypatch for issue mentioned above
 				add_ant(all_ants, list[i], n);
 				n++;
 			}
@@ -265,15 +265,17 @@ void		ant_loop(t_lem *info, t_list **list,\
 		}
 		if (!move_ants(all_ants))
 		{
-			ft_dprintf(2, "longest path %zu\n", abs_max);
-			ft_dprintf(2, "len_max: longest path taken %zu name %s\n", len_max, long_path_name);
-			ft_dprintf(2, "len_min %zu\n", len_min);
+			ft_dprintf(2, "%slongest path %zu%s\n",FG(GRN), abs_max, FG(DFT));
+			ft_dprintf(2, "%slen_max: longest path taken %zu name %s%s\n", FG(GRN), len_max, long_path_name, FG(DFT));
+			ft_dprintf(2, "%slen_min %zu%s\n", FG(GRN), len_min, FG(DFT));
 			i = 0;
 			while (list[i])
 				i++;
-			ft_dprintf(2, "Number of paths: %zu\n", i);
+			ft_dprintf(2, "%sNumber of paths: %zu%s\n", FG(GRN), i, FG(DFT));
+			ft_dprintf(2, "%sTotal moves: %zu%s\n", FG(GRN), g_moves, FG(DFT));
 			exit(0);
 		}
+		g_moves++;
 		ft_putchar('\n');
 	}
 }
@@ -289,7 +291,7 @@ void		solve(t_lem *info)
 
 	info->rgraph = copy_graph(info->conns, info->num_rooms);
 	info->list = ft_memalloc(sizeof(t_list *) * info->num_rooms);
-	ft_dprintf(2, "max flow = %d\n",fordFulkerson(info->rooms, info->rgraph, info->num_rooms, info->list)); // TODO: make a better function to find all paths to take
+	ft_dprintf(2, "%smax flow = %d%s\n",FG(GRN),fordFulkerson(info->rooms, info->rgraph, info->num_rooms, info->list),FG(DFT)); // TODO: make a better function to find all paths to take
 	if (!(info->all_ants = (t_antq *)ft_memalloc(sizeof(t_antq))))
 		panic(MALLOC_ERR);
 	i[2] = FT_SIZE_T_MAX;
@@ -309,5 +311,6 @@ void		solve(t_lem *info)
 			i[2] = i[1];
 		i[0]++;
 	}
+	g_moves = 0;
 	ant_loop(info, info->l2, info->all_ants, i[2], i[0], path_len_sum, lens);
 }

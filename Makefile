@@ -15,6 +15,7 @@ CTAGS = ctags
 NORM = /usr/bin/env norminette
 CFLAGS = -Wall -Wextra -Werror
 DFLAGS = -Wall -Wextra -g
+FSANFLAGS = -fsanitize=address
 SRCS = srcs/
 OBJDIR = .obj/
 INCLUDES = -I includes/ -I libft/includes/
@@ -98,7 +99,7 @@ dclean:
 
 fsan:
 	make -C libft/
-	$(CC) $(DFLAGS) $(INCLUDES) $(LIBS) $(addprefix $(SRCS), $(CFILES)) -o $(DNAME) -fsanitize=address
+	$(CC) $(DFLAGS) $(INCLUDES) $(LIBS) $(addprefix $(SRCS), $(CFILES)) -o $(DNAME) $(FSANFLAGS)
 
 k: dclean fclean
 	rm -rf *.dSYM
