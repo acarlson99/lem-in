@@ -70,34 +70,34 @@
 
 # define FT_CHAR_BIT 8
 
-# define FT_UCHAR_MAX 255U
+# define FT_UCHAR_MAX 255
 # define FT_SCHAR_MAX 127
 # define FT_SCHAR_MIN (-128)
-# define FT_CHAR_MAX ((int)(FT_UCHAR_MAX / (unsigned char)2))
+# define FT_CHAR_MAX (FT_UCHAR_MAX / (unsigned char)2)
 # define FT_CHAR_MIN ((int)(char)(FT_SCHAR_MAX + 1))
 
-# define FT_USHRT_MAX ((unsigned short)(-1))
-# define FT_SHRT_MAX ((int)(FT_USHRT_MAX / (unsigned short)2))
+# define FT_USHRT_MAX ((int)(unsigned short)(-1))
+# define FT_SHRT_MAX (FT_USHRT_MAX / (unsigned short)2)
 # define FT_SHRT_MIN ((int)(short)(FT_SHRT_MAX + 1))
 
-# define FT_UINT_MAX (-1U)
-# define FT_INT_MAX ((int)(FT_UINT_MAX / 2U))
+# define FT_UINT_MAX ((unsigned int)(-1))
+# define FT_INT_MAX (FT_UINT_MAX / 2)
 # define FT_INT_MIN (FT_INT_MAX + 1)
 
-# define FT_ULONG_MAX (-1UL)
-# define FT_LONG_MAX ((long)(FT_ULONG_MAX / 2UL))
-# define FT_LONG_MIN (FT_LONG_MAX + 1L)
+# define FT_ULONG_MAX ((unsigned long)(-1))
+# define FT_LONG_MAX (FT_ULONG_MAX / 2)
+# define FT_LONG_MIN (FT_LONG_MAX + 1)
 
-# define FT_ULLONG_MAX (-1ULL)
-# define FT_LLONG_MAX ((long long)(FT_ULLONG_MAX / 2ULL))
-# define FT_LLONG_MIN (FT_LLONG_MAX + 1LL)
+# define FT_ULLONG_MAX ((unsigned long long)(-1))
+# define FT_LLONG_MAX (FT_ULLONG_MAX / 2)
+# define FT_LLONG_MIN (FT_LLONG_MAX + 1)
 
 # define FT_UINTMAX_MAX ((uintmax_t)(-1))
-# define FT_INTMAX_MAX ((intmax_t)(FT_UINTMAX_MAX / 2))
+# define FT_INTMAX_MAX (FT_UINTMAX_MAX / 2)
 # define FT_INTMAX_MIN (FT_INTMAX_MAX + 1)
 
 # define FT_SIZE_T_MAX ((size_t)(-1))
-# define FT_SSIZE_T_MAX ((ssize_t)(FT_SIZE_T_MAX / 2))
+# define FT_SSIZE_T_MAX (FT_SIZE_T_MAX / 2)
 # define FT_SSIZE_T_MIN (FT_SSIZE_T_MAX + 1)
 
 # ifdef __LP64__
