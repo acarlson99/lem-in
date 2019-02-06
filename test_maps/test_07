@@ -1,0 +1,9 @@
+3
+##start
+a 0 0
+b 50 0
+##end
+c 25 50
+a-b
+b-c
+a-c
