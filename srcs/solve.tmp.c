@@ -218,6 +218,40 @@ void		update_array(t_list **list, size_t *lens, int *valid_arr, unsigned ants_le
 	return ;
 }
 
+void		print_path_chain(t_list *path)
+{
+	t_list	*tmp;
+	int		z;
+
+	z = 0;
+	tmp = path;
+	while (tmp)
+	{
+		if (!z)
+		{
+			ft_dprintf(2, "%s", tmp->content);
+			z = 1;
+		}
+		else
+			ft_dprintf(2, " -> %s", tmp->content);
+		tmp = tmp->next;
+	}
+}
+
+void		print_candidate_path_list(t_list **path)
+{
+	size_t	i;
+
+	i = -1;
+	ft_dprintf(2, "-------- List of Paths --------\n");
+	while (path[++i])
+	{
+		ft_dprintf(2, " list[%zu] = ", i);
+		print_path_chain(path[i]);
+		ft_dprintf(2, "\n");
+	}
+}
+
 void		ant_loop(t_lem *info, t_list **list, t_antq *all_ants, size_t len_min, size_t num_paths, size_t path_len_sum, size_t *lens)
 {
 	size_t		i;
@@ -255,7 +289,8 @@ void		ant_loop(t_lem *info, t_list **list, t_antq *all_ants, size_t len_min, siz
 					len_max = len_tmp;
 					long_path_name = tmp_path_name;
 				}
-				CONT_IF(len_tmp != len_min && (k++ <= j)); //Monkeypatch for issue mentioned above
+				CONT_IF(len_tmp > len_min && (k++ % j)); //Monkeypatch for issue mentioned above
+				ft_dprintf(2, "taking path in list[%zu] (k = %u, j = %u, n = %zu)\n",i,k,j,n);
 				add_ant(all_ants, list[i], n);
 				n++;
 			}
@@ -272,6 +307,7 @@ void		ant_loop(t_lem *info, t_list **list, t_antq *all_ants, size_t len_min, siz
 			while (list[i])
 				i++;
 			ft_dprintf(2, "%sNumber of paths: %zu%s\n", FG(GRN), i, FG(DFT));
+			print_candidate_path_list(list);
 			ft_dprintf(2, "%sTotal moves: %zu%s\n", FG(GRN), g_moves, FG(DFT));
 			exit(0);
 		}
