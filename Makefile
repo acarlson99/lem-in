@@ -6,7 +6,7 @@
 #    By: acarlson <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/15 14:08:57 by acarlson          #+#    #+#              #
-#    Updated: 2019/02/04 14:47:48 by acarlson         ###   ########.fr        #
+#    Updated: 2019/02/10 13:50:21 by acarlson         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -19,7 +19,7 @@ FSANFLAGS = -fsanitize=address
 SRCS = srcs/
 OBJDIR = .obj/
 INCLUDES = -I includes/ -I libft/includes/
-FILES = main struct parse util validate lines_to_rooms print_struct solve.tmp lines\
+FILES = main struct parse util validate lines_to_rooms print_struct solve lines\
 		queue_other find_path
 CFILES = $(addsuffix .c, $(FILES))
 OFILES = $(addprefix $(OBJDIR), $(addsuffix .o, $(FILES)))
