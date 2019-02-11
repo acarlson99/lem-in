@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/09 16:40:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/02/10 16:19:58 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/02/11 14:53:32 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,6 +192,8 @@ int			move_ants(t_antq *all_ants)
 
 int			is_invalid(unsigned ants_left, size_t total_paths, size_t num_paths, size_t path_len_sum, size_t len_min, size_t cand_len)	// TODO: check if cand_len is too long
 {
+	(void)total_paths;
+	(void)len_min;
 	// for every path
 	// find the number of moves if the path is there
 	// find the number of moves if the path is absent
@@ -225,8 +227,8 @@ void		update_array(t_list **list, size_t *lens, int *valid_arr, unsigned ants_le
 	{
 		if (*num_paths == 1)
 			return ;
-		// else if (valid_arr[i] && lens[i] > (*path_len_sum - lens[i]) / (*num_paths - 1) + ants_left / (*num_paths - 1))
-		else if (valid_arr[i] && is_invalid(ants_left, total_paths, *num_paths, *path_len_sum, len_min, lens[i]))
+		// else if (valid_arr[i] && is_invalid(ants_left, total_paths, *num_paths, *path_len_sum, len_min, lens[i]))
+		else if (valid_arr[i] && lens[i] >= (*path_len_sum - lens[i]) / (*num_paths - 1) + ants_left / (*num_paths - 1))
 		{
 			*path_len_sum = *path_len_sum - lens[i];
 			lens[i] = -1;
