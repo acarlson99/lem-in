@@ -6,31 +6,32 @@
 #    By: acarlson <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/15 14:08:57 by acarlson          #+#    #+#              #
-#    Updated: 2019/02/10 13:50:21 by acarlson         ###   ########.fr        #
+#    Updated: 2019/02/10 17:56:03 by callen           ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
-CC = clang
-CTAGS = ctags
-NORM = /usr/bin/env norminette
-CFLAGS = -Wall -Wextra -Werror
-DFLAGS = -Wall -Wextra -g
-FSANFLAGS = -fsanitize=address
-SRCS = srcs/
-OBJDIR = .obj/
-INCLUDES = -I includes/ -I libft/includes/
-FILES = main struct parse util validate lines_to_rooms print_struct solve lines\
+CC := $(shell which clang)
+CTAGS := $(shell which ctags)
+CTAGSVER := $(shell $(CTAGS) --version 2>&1)
+NORM := $(shell which norminette)
+CFLAGS := -Wall -Wextra -Werror
+DFLAGS := -Wall -Wextra -g
+FSANFLAGS := -fsanitize=address
+SRCS := srcs/
+OBJDIR := .obj/
+INCLUDES := -I includes/ -I libft/includes/
+FILES := main struct parse util validate lines_to_rooms print_struct solve lines\
 		queue_other find_path
-CFILES = $(addsuffix .c, $(FILES))
-OFILES = $(addprefix $(OBJDIR), $(addsuffix .o, $(FILES)))
-LIBS = -L libft/ -lft
-DNAME = d_lem-in
-NAME = lem-in
+CFILES := $(addsuffix .c, $(FILES))
+OFILES := $(addprefix $(OBJDIR), $(addsuffix .o, $(FILES)))
+LIBS := -L libft/ -lft
+DNAME := d_lem-in
+NAME := lem-in
 
-CL_CYAN = \033[0;36m
-CL_GREEN = \033[0;32m
-CL_RED = \033[0;31m
-CL_WHITE = \033[0m
+CL_CYAN := \033[0;36m
+CL_GREEN := \033[0;32m
+CL_RED := \033[0;31m
+CL_WHITE := \033[0m
 
 .PHONY: tags etags clean debug dclean fsan lldb norme
 
@@ -78,7 +79,11 @@ $(OBJDIR):
 	fi) "
 
 tags:
-	$(CTAGS) includes/*.h srcs/*.c
+ifneq (,$(findstring Exuberant,$(CTAGSVER)))
+	find . -type f -iname "*.[ch]" | $(CTAGS) -L -
+else
+	find . -type f -iname "*.[ch]" | $(CTAGS)
+endif
 
 norme:
 	@$(NORM) $(addprefix $(SRCS), $(CFILES))
@@ -107,7 +112,7 @@ k: dclean fclean
 lldb:
 	make -C libft/
 	$(CC) $(DFLAGS) -DLLDB $(INCLUDES) $(LIBS) $(addprefix $(SRCS), $(CFILES)) -o $(DNAME)
-	/usr/bin/env lldb -s other_tests/test_lldb
+	$(shell which lldb) -s other_tests/test_lldb
 
 leaks:
 	make -C libft/
