@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/06 16:24:32 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/15 15:32:34 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/02/11 11:58:58 by callen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,19 +33,6 @@ int			is_start_end(char *line)
 			return (COMMENT);
 	}
 	return (0);
-}
-
-void		free_str_tab(char ***tab)
-{
-	int i;
-
-	i = 0;
-	while ((*tab)[i] != NULL)
-	{
-		free((*tab)[i]);
-		i++;
-	}
-	free((*tab));
 }
 
 void		print_input(unsigned num_ants, t_line *ptr)

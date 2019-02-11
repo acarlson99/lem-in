@@ -6,13 +6,12 @@
 #    By: acarlson <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/15 14:08:57 by acarlson          #+#    #+#              #
-#    Updated: 2019/02/10 17:56:03 by callen           ###   ########.fr        #
+#    Updated: 2019/02/11 11:56:50 by callen           ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
 CC := $(shell which clang)
 CTAGS := $(shell which ctags)
-CTAGSVER := $(shell $(CTAGS) --version 2>&1)
 NORM := $(shell which norminette)
 CFLAGS := -Wall -Wextra -Werror
 DFLAGS := -Wall -Wextra -g
@@ -79,11 +78,7 @@ $(OBJDIR):
 	fi) "
 
 tags:
-ifneq (,$(findstring Exuberant,$(CTAGSVER)))
-	find . -type f -iname "*.[ch]" | $(CTAGS) -L -
-else
-	find . -type f -iname "*.[ch]" | $(CTAGS)
-endif
+	$(CTAGS) $(shell find . -type f -iname "*.[ch]")
 
 norme:
 	@$(NORM) $(addprefix $(SRCS), $(CFILES))
