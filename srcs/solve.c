@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/09 16:40:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/02/10 16:08:33 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/02/10 16:19:58 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,6 +192,11 @@ int			move_ants(t_antq *all_ants)
 
 int			is_invalid(unsigned ants_left, size_t total_paths, size_t num_paths, size_t path_len_sum, size_t len_min, size_t cand_len)	// TODO: check if cand_len is too long
 {
+	// for every path
+	// find the number of moves if the path is there
+	// find the number of moves if the path is absent
+	return ((path_len_sum / num_paths / ants_left) > ((path_len_sum - cand_len) / (num_paths - 1) / ants_left));
+	// compare candidate path to average of all other paths
 	return (cand_len > (path_len_sum - cand_len) / (num_paths - 1) + ants_left / (num_paths - 1));
 }
 
