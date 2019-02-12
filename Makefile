@@ -6,7 +6,7 @@
 #    By: acarlson <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/15 14:08:57 by acarlson          #+#    #+#              #
-#    Updated: 2019/02/11 11:56:50 by callen           ###   ########.fr        #
+#    Updated: 2019/02/11 17:56:27 by callen           ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -19,8 +19,8 @@ FSANFLAGS := -fsanitize=address
 SRCS := srcs/
 OBJDIR := .obj/
 INCLUDES := -I includes/ -I libft/includes/
-FILES := main struct parse util validate lines_to_rooms print_struct solve lines\
-		queue_other find_path
+FILES := main struct parse util validate lines_to_rooms print_struct solve\
+	lines queue_other find_path
 CFILES := $(addsuffix .c, $(FILES))
 OFILES := $(addprefix $(OBJDIR), $(addsuffix .o, $(FILES)))
 LIBS := -L libft/ -lft
@@ -82,7 +82,7 @@ tags:
 
 norme:
 	@$(NORM) $(addprefix $(SRCS), $(CFILES))
-	@$(NORM) includes/
+	@$(NORM) includes/lem_in.h
 
 etags:
 	find . -type f -iname "*.[ch]" | etags -

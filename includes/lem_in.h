@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/31 14:03:45 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/19 12:37:53 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/02/11 19:05:58 by callen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ void		init_lem(t_lem **info);
 void		check_struct(t_lem *info);
 int			**malloc_conns(size_t graph_size);
 void		create_rooms(t_lem *info);
-void		create_conns(t_lem *info, t_line *ptr);
+void		create_conns(t_lem *info, t_line *ptr, int mode);
 void		add_ant(t_antq *a, t_list *start, int n);
 void		enqueue_num(t_queue *q, size_t n);
 size_t		dequeue_num(t_queue *q);
@@ -126,10 +126,10 @@ size_t		ft_lstlen(t_list *ptr);
 
 /*
 ** Solve
+**t_list		**find_path(t_lem *info);
 */
 
 int			is_path(int **graph, int *parent, size_t size);
-// t_list		**find_path(t_lem *info);
 t_list		**find_path(int **conns, int **rgraph, size_t size, t_room **rooms);
 void		solve(t_lem *info);
 
@@ -142,8 +142,10 @@ t_list		*ft_lstnew_nocpy(void *content, size_t content_size);
 void		free_str_tab(char ***tab);
 void		free_(void *ptr, size_t size);
 
-void		print_rooms(t_room **rooms, size_t size);	// TODO: remove
-void		print_conns(int **graph, size_t size);	// TODO: remove
-void		print_list(t_list *l);	// TODO: remove
+/*
+**void		print_rooms(t_room **rooms, size_t size);	// TODO: remove
+**void		print_conns(int **graph, size_t size);	// TODO: remove
+**void		print_list(t_list *l);	// TODO: remove
+*/
 
 #endif

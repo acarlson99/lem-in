@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 18:59:54 by acarlson          #+#    #+#             */
-/*   Updated: 2019/01/17 20:26:52 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/02/11 19:07:39 by callen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,16 +92,26 @@ void		add_conn(t_lem *info, char **split)
 	free_str_tab(&split);
 }
 
-void		create_conns(t_lem *info, t_line *ptr)
+void		create_conns(t_lem *info, t_line *ptr, int mode)
 {
-	info->conns = malloc_conns(info->num_rooms);
-	if (!ptr)
-		panic(CONN_ERR);
-	while (ptr)
+	if (mode)
 	{
-		if (*(char *)ptr->line != '#')
-			add_conn(info, ft_strsplit(ptr->line, '-'));
-		ptr = ptr->next;
+		info->conns = malloc_conns(info->num_rooms);
+		if (!ptr)
+			panic(CONN_ERR);
+		while (ptr)
+		{
+			if (*(char *)ptr->line != '#')
+				add_conn(info, ft_strsplit(ptr->line, '-'));
+			ptr = ptr->next;
+		}
+	}
+	else
+	{
+		info->rooms = (t_room**)ft_memalloc((info->num_rooms + 1) *
+				sizeof(t_room*));
+		if (!info->rooms)
+			panic(MALLOC_ERR);
 	}
 }
 
@@ -112,8 +122,7 @@ void		create_rooms(t_lem *info)
 	char		start_end;
 	size_t		rm_index;
 
-	DO_IF(!(info->rooms = (t_room **)ft_memalloc((info->num_rooms + 1)	\
-									* sizeof(t_room *))), panic(MALLOC_ERR));
+	create_conns(info, NULL, 0);
 	start_end = 0;
 	ptr = info->lines;
 	rm_index = 1;
@@ -126,7 +135,7 @@ void		create_rooms(t_lem *info)
 			continue ;
 		if (validate_room(ptr->line))
 			if ((info->rooms[info->num_rooms] = NULL) || 1)
-				return (create_conns(info, ptr));
+				return (create_conns(info, ptr, 1));
 		add_room(info, (char *)ptr->line, rm_index, start_end);
 		(!start_end ? rm_index++ : 0);
 		start_end = 0;

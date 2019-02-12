@@ -6,13 +6,15 @@
 /*   By: callen <callen@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/08 20:28:23 by callen            #+#    #+#             */
-/*   Updated: 2019/01/18 18:10:26 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/02/11 18:42:44 by callen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-// TODO: remove this file
+/*
+** TODO: remove this file
+*/
 
 void		print_rooms(t_room **rooms, size_t size)
 {
