@@ -75,4 +75,4 @@ Built with python3
 
 * Home, R: reset
 
-![visualizer screenshot 00](screenshots/visu00.png)
+![visualizer screenshot 00](screenshots/visu01.png)
