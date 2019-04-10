@@ -13,146 +13,92 @@
 #include "lem_in.h"
 
 #define M_ERR MALLOC_ERR
-#define IN(v) (v * 2)
-#define OUT(v) (v * 2 + 1)
 
-size_t		g_moves;
+#ifdef U
+# undef U
+#endif
+#ifdef VV
+# undef VV
+#endif
+#ifdef IDX
+# undef IDX
+#endif
+#ifdef I
+# undef I
+#endif
+#ifdef MF
+# undef MF
+#endif
+#ifdef PF
+# undef PF
+#endif
+#ifdef FL
+# undef FL
+#endif
+#ifdef P0
+# undef P0
+#endif
+#ifdef P1
+# undef P1
+#endif
+#ifdef P2
+# undef P2
+#endif
+#define U (it.u)
+#define VV (it.vv)
+#define IDX (it.idx)
+#define I (it.i)
+#define MF (f.mf)
+#define PF (f.pf)
+#define FL (f.fg)
+#define P0 (ptr.p0)
+#define P1 (ptr.p1)
+#define P2 (ptr.p2)
+#define RMPNM (rooms[parent[VV]]->name)
+#define RMLNM (rooms[size - 1]->name)
+#define RMFNM (rooms[0]->name)
+#define LORCND ft_strequ(P1->content,P2->content)
+#define LORDOA ft_lstdel(&list[I],free_);list[I]=list[--IDX];
+#define LORDOB list[IDX]=0;FL=1;break;
+#define LORDO LORDOA;LORDOB;
+#define LORB if(LORCND){LORDO}P1=P1->next;
+#define SMOL while(P1&&P1->next){LORB;}
+#define LOPL I=-1;while(++I<IDX-1){P1=list[I];SMOL;}if(FL)break;P2=P2->next;
+#define LADDCND ft_strcmp(RMPNM,RMFNM)
+#define LADD1 if(LADDCND)LADDP0(RMPNM);
+#define FLDO0 U=parent[VV];LADD1;PF=MIN(PF,rgraph[U][VV]);VV=parent[VV];
+#define LADDP0(LDX) (ft_lstadd(&P0,ft_lstnew(LDX,ft_strlen(LDX)+1)))
+#define LADD0 ft_lstadd(&P0, ft_lstnew(RMLNM, ft_strlen(RMLNM) + 1));
+#define FLPVA list[IDX++]=P0;P2=P0;FL=0;
+#define FLOOP LADDP0(RMLNM);PF=FT_INT_MAX;VV=T;while(VV!=S){FLDO0}VV=T;FLPVA;
+#define FLDO1 U=parent[VV];rgraph[U][VV]-=PF;rgraph[VV][U]+=PF;VV=parent[VV];
 
-void		path_helper(t_queue *q, int vu[2], int *parent, int *visited)
+int			fordfulkn(t_room **rooms, int **rgraph, size_t size, t_list **list)
 {
-	enqueue_num(q, vu[0]);
-	if (parent)
-		parent[vu[0]] = vu[1];
-	visited[vu[0]] = 1;
-}
-
-int			is_path(int **graph, int *parent, size_t size)
-{
-	t_queue		*q;
-	size_t		u;
-	size_t		v;
-	int			*visited;
-	int			n;
-
-	DO_IF(!(visited = (int *)ft_memalloc(sizeof(int) * size)), panic(M_ERR));
-	q = ft_queueinit();
-	enqueue_num(q, S);
-	while (!ft_queueisempty(q))
-	{
-		u = dequeue_num(q);
-		v = 0;
-		while (v < size)
-		{
-			if (visited[v] == 0 && graph[u][v] > 0)
-				path_helper(q, (int[2]){v, u}, parent, visited);
-			v++;
-		}
-	}
-	n = visited[T];
-	free(visited);
-	free(q);
-	return (n);
-}
-
-int			**copy_graph(int **graph, size_t size)
-{
-	size_t	u;
-	size_t	v;
-	int		**rgraph;
-
-	rgraph = malloc_conns(size);
-	u = 0;
-	while (u < size)
-	{
-		v = 0;
-		while (v < size)
-		{
-			rgraph[u][v] = graph[u][v];
-			v++;
-		}
-		u++;
-	}
-	return (rgraph);
-}
-
-int			fordFulkerson(t_room **rooms, int **rgraph, size_t size, t_list **list)
-{
+	t_iter		it;
 	int			*parent;
-	int			max_flow;
-	int			path_flow;
-	size_t		u;
-	size_t		v;
-	t_list		*ptr = NULL;
-	size_t		index;
+	t_flag		f;
+	t_lont		ptr;
 
-	index = 0;
-	max_flow = 0;
-	path_flow = 0;
-	if (!(parent = malloc(sizeof(int) * size)))
-		panic(MALLOC_ERR);
+	IDX = 0;
+	MF = 0;
+	DO_IF(!(parent = malloc(sizeof(int) * size)), panic(MALLOC_ERR));
 	while (is_path(rgraph, parent, size))
 	{
-		// Add 'end' to list of paths
-		ft_lstadd(&ptr, ft_lstnew(rooms[size - 1]->name, ft_strlen(rooms[size - 1]->name) + 1));
-//		ft_printf("%s\n", ptr->content);
-//		ft_printf("L1-%s\n", rooms[size - 1]->name);
-		path_flow = FT_INT_MAX;
-		v = T;
-		while (v != S)
+		FLOOP;
+		while (P2 && P2->next)
 		{
-			u = parent[v];
-			// Push room to list
-			if (ft_strcmp(rooms[parent[v]]->name, rooms[0]->name))
-				ft_lstadd(&ptr, ft_lstnew(rooms[parent[v]]->name, ft_strlen(rooms[parent[v]]->name) + 1));
-//			ft_printf("L1-%s\n", rooms[parent[v]]->name);
-			path_flow = MIN(path_flow, rgraph[u][v]);
-			v = parent[v];
+			LOPL;
 		}
-		v = T;
-		// Start new list
-		list[index] = ptr;
-		index++;
-		t_list *p2 = ptr;
-		int flag = 0;
-		while (p2 && p2->next)
+		P0 = NULL;
+		while (VV != S)
 		{
-			for (size_t i = 0; i < index - 1; i++)
-			{
-				t_list *p1 = list[i];
-				while (p1 && p1->next)
-				{
-					if (!ft_strcmp(p1->content, p2->content))
-					{
-						/* ft_printf("Freeing list "); */
-						/* print_list(list[i]); */
-						/* ft_printf("Line '%s' overlaps\n", p1->content); */
-						ft_lstdel(&list[i], free_);
-						index--;
-						list[i] = list[index];
-						list[index] = NULL;
-						flag = 1;
-						break ;
-					}
-					p1 = p1->next;
-				}
-			}
-			if (flag)
-				break ;
-			p2 = p2->next;
+			FLDO1;
 		}
-		ptr = NULL;
-		while (v != S)
-		{
-			u = parent[v];
-			rgraph[u][v] -= path_flow;
-			rgraph[v][u] += path_flow;
-			v = parent[v];
-		}
-		ptr = NULL;
-		max_flow += path_flow;
+		MF += PF;
 	}
 	free(parent);
-	return (max_flow);
+	return (MF);
 }
 
 /*
@@ -188,112 +134,72 @@ int			move_ants(t_antq *all_ants)
 	return (a);
 }
 
-#define CONT_IF(n) if (n) continue ;
-
-int			is_invalid(unsigned ants_left, size_t total_paths, size_t num_paths, size_t path_len_sum, size_t len_min, size_t cand_len)	// TODO: check if cand_len is too long
-{
-	(void)total_paths;
-	(void)len_min;
-	// for every path
-	// find the number of moves if the path is there
-	// find the number of moves if the path is absent
-	return ((path_len_sum / num_paths / ants_left) > ((path_len_sum - cand_len) / (num_paths - 1) / ants_left));
-	// compare candidate path to average of all other paths
-	return (cand_len > (path_len_sum - cand_len) / (num_paths - 1) + ants_left / (num_paths - 1));
-}
+#define CONT_IF(n) if(n)continue;
 
 /*
 ** Holy parameters
+** TODO: make this factor in multiple viable paths of multiple lengths.
+** Works when only comparing two paths.
+** Breaks on more than 2 paths
 */
 
-void		update_array(t_list **list, size_t *lens, int *valid_arr, unsigned ants_left, size_t total_paths, size_t *num_paths, size_t *path_len_sum, size_t len_min)	// TODO: make this factor in multiple viable paths of multiple lengths.  Works when only comparing two paths.  Breaks on more than 2 paths
+#define UPLST (up->list)
+#define UPNMP (*up->nump)
+#define UPPLS (*up->plensum)
+#define UPLNS (up->lens)
+#define UPVAR (up->valid_arr)
+#define UPALF (up->ants_left)
+#define BIGCD ((UPPLS - UPLNS[i]) / (UPNMP - 1) + UPALF / (UPNMP - 1))
+
+void		update_array(t_upar *up)
 {
-	size_t i = 0;
-
-	ft_dprintf(FT_STDERR_FILENO, "valid: [");
-	for (size_t m = 0; list[m]; m++)
-		ft_dprintf(FT_STDERR_FILENO, "%zu, ", valid_arr[m]);
-	ft_dprintf(FT_STDERR_FILENO, "]\n");
-	ft_dprintf(FT_STDERR_FILENO, "lens: [");
-	for (size_t m = 0; list[m]; m++)
-		ft_dprintf(FT_STDERR_FILENO, "%zu, ", lens[m]);
-	ft_dprintf(FT_STDERR_FILENO, "]\n");
-	ft_dprintf(FT_STDERR_FILENO, "total_paths: %zu\n", total_paths);
-	ft_dprintf(FT_STDERR_FILENO, "num_paths: %zu\n", *num_paths);
-	ft_dprintf(FT_STDERR_FILENO, "path_len_sum: %zu\n", *path_len_sum);
-	ft_dprintf(FT_STDERR_FILENO, "num_ants: %zu\n", ants_left);
-
-	while (list[i])
-	{
-		if (*num_paths == 1)
-			return ;
-		// else if (valid_arr[i] && is_invalid(ants_left, total_paths, *num_paths, *path_len_sum, len_min, lens[i]))
-		else if (valid_arr[i] && lens[i] >= (*path_len_sum - lens[i]) / (*num_paths - 1) + ants_left / (*num_paths - 1))
-		{
-			*path_len_sum = *path_len_sum - lens[i];
-			lens[i] = -1;
-			*num_paths = *num_paths - 1;
-			valid_arr[i] = 0;
-			ft_dprintf(2, "valid_arr[%zu]: %d len %zu num_ants: %u paths left: %zu path_len_sum: %zu name: %s\n", i, valid_arr[i], lens[i], ants_left, *num_paths, *path_len_sum, list[i]->content);
-			return (update_array(list, lens, valid_arr, ants_left, total_paths, num_paths, path_len_sum, len_min));
-		}
-		else if (valid_arr[i]) {
-			ft_dprintf(2, "Index %zu of len %zu lives name: %s\n", i, lens[i], list[i]->content);
-		}
-		i++;
-	}
-	return ;
-}
-
-void		print_path_chain(t_list *path)
-{
-	t_list	*tmp;
-	int		z;
-
-	z = 0;
-	tmp = path;
-	while (tmp)
-	{
-		if (!z)
-		{
-			ft_dprintf(2, "%s", tmp->content);
-			z = 1;
-		}
-		else
-			ft_dprintf(2, " -> %s", tmp->content);
-		tmp = tmp->next;
-	}
-}
-
-void		print_candidate_path_list(t_list **path)
-{
-	size_t	i;
+	size_t i;
 
 	i = -1;
-	ft_dprintf(2, "-------- List of Paths --------\n");
-	while (path[++i])
+	while (UPLST[++i])
 	{
-		ft_dprintf(2, " list[%zu] = ", i);
-		print_path_chain(path[i]);
-		ft_dprintf(2, "\n");
+		if (UPNMP == 1)
+			return ;
+		else if (UPVAR[i] && UPLNS[i] >= BIGCD)
+		{
+			UPPLS = UPPLS - UPLNS[i];
+			UPLNS[i] = -1;
+			UPNMP = UPNMP - 1;
+			UPVAR[i] = 0;
+			return (update_array(up));
+		}
 	}
 }
+
+#define FS01 ("%slen_max: longest path taken %zu name %s%s\n")
+#define FS02 ("%slen_min %zu%s\n")
+#define FS03 ("%sNumber of paths: %zu%s\n")
+#define FS04 ("%sTotal moves: %zu%s\n")
+#define DBGP00 ft_dprintf(2,"%slongest path %zu%s\n",FG(GRN),abs_max,FG(DFT));
+#define DBGP01 DBGP00; ft_dprintf(2,FS01,FG(GRN),len_max,lpn,FG(DFT));
+#define DBGP02 DBGP01; ft_dprintf(2,FS02,FG(GRN),len_min,FG(DFT));
+#define DBGP03 DBGP02; i=-1;while(list[++i]);
+#define DBGP04 DBGP03; ft_dprintf(2,FS03,FG(GRN),i,FG(DFT));
+#define DBGP05 DBGP04; ft_dprintf(2,FS04,FG(GRN),g_moves,FG(DFT));
+#define DBGPRNT DBGP05;
+
+size_t		g_moves;
 
 void		ant_loop(t_lem *info, t_list **list, t_antq *all_ants, size_t len_min, size_t num_paths, size_t path_len_sum, size_t *lens)
 {
 	size_t		i;
 	size_t		len_tmp;
 	size_t		n;
-
+	t_alvs		al;
 	size_t		len_max = 0;
 	size_t		abs_max = 0;
 	size_t		total_paths = num_paths;
 	int			flag = 0;
-	unsigned	k = 0;
 	unsigned	j = 0;
 	char		*tmp_path_name = NULL;
-	char		*long_path_name = NULL;
+	char		*lpn = NULL;
 	int			*valid_arr = ft_memalloc(sizeof(int) * num_paths + 1);
+	t_upar		up;
 	for (j = 0; j < num_paths; j++)
 		valid_arr[j] = 1;
 
@@ -303,7 +209,15 @@ void		ant_loop(t_lem *info, t_list **list, t_antq *all_ants, size_t len_min, siz
 		i = 0;
 		while (list[i] && !flag && n <= info->num_ants)
 		{
-			update_array(list, lens, valid_arr, info->num_ants - n + 1, total_paths, &num_paths, &path_len_sum, len_min);
+			up.list = list;
+			up.lens = lens;
+			up.valid_arr = valid_arr;
+			up.ants_left = info->num_ants - n + 1;
+			up.totalp = total_paths;
+			up.nump = &num_paths;
+			up.plensum = &path_len_sum;
+			up.lmin = len_min;
+			update_array(&up);
 			len_tmp = ft_lstlen(list[i]);
 			tmp_path_name = list[i]->content;
 			if (len_tmp > abs_max)
@@ -314,9 +228,8 @@ void		ant_loop(t_lem *info, t_list **list, t_antq *all_ants, size_t len_min, siz
 				if (len_max < len_tmp)
 				{
 					len_max = len_tmp;
-					long_path_name = tmp_path_name;
+					lpn = tmp_path_name;
 				}
-				ft_dprintf(2, "taking path in list[%zu] (k = %u, j = %u, n = %zu)\n",i,k,j,n);
 				add_ant(all_ants, list[i], n);
 				n++;
 			}
@@ -326,15 +239,7 @@ void		ant_loop(t_lem *info, t_list **list, t_antq *all_ants, size_t len_min, siz
 		}
 		if (!move_ants(all_ants))
 		{
-			ft_dprintf(2, "%slongest path %zu%s\n",FG(GRN), abs_max, FG(DFT));
-			ft_dprintf(2, "%slen_max: longest path taken %zu name %s%s\n", FG(GRN), len_max, long_path_name, FG(DFT));
-			ft_dprintf(2, "%slen_min %zu%s\n", FG(GRN), len_min, FG(DFT));
-			i = 0;
-			while (list[i])
-				i++;
-			ft_dprintf(2, "%sNumber of paths: %zu%s\n", FG(GRN), i, FG(DFT));
-			print_candidate_path_list(list);
-			ft_dprintf(2, "%sTotal moves: %zu%s\n", FG(GRN), g_moves, FG(DFT));
+			DBGPRNT;
 			exit(0);
 		}
 		g_moves++;
@@ -353,11 +258,10 @@ void		solve(t_lem *info)
 
 	info->rgraph = copy_graph(info->conns, info->num_rooms);
 	info->list = ft_memalloc(sizeof(t_list *) * info->num_rooms);
-	ft_dprintf(2, "%smax flow = %d%s\n",FG(GRN),fordFulkerson(info->rooms, info->rgraph, info->num_rooms, info->list),FG(DFT)); // TODO: make a better function to find all paths to take
+	ft_dprintf(2, "%smax flow = %d%s\n",FG(GRN),fordfulkn(info->rooms, info->rgraph, info->num_rooms, info->list),FG(DFT)); // TODO: make a better function to find all paths to take
 	if (!(info->all_ants = (t_antq *)ft_memalloc(sizeof(t_antq))))
 		panic(MALLOC_ERR);
 	i[2] = FT_SIZE_T_MAX;
-//	info->l2 = find_path(info);
 	info->l2 = find_path(info->conns, info->rgraph, info->num_rooms, info->rooms);
 	i[0] = 0;
 
