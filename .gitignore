@@ -74,3 +74,5 @@ cmake-build-*/
 *lem-in
 tags
 TAGS
+*_input
+*_output
