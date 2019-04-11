@@ -52,7 +52,7 @@ def draw_graph_nodes(G, paths, pos, col_path, draw_grey):
         n += 1
         if n == len(G.nodes):
             break
-    print("num_nodes: " + str(len(G.nodes)) + " n: " + str(n))
+    # print("num_nodes: " + str(len(G.nodes)) + " n: " + str(n))
 
 
 def draw_graph_edges(G, paths, pos, col_path, draw_grey):
@@ -78,7 +78,7 @@ def draw_graph_edges(G, paths, pos, col_path, draw_grey):
         e += 1
         if e == len(G.edges):
             break
-    print("num_edges: " + str(len(G.edges)) + " e: " + str(e))
+    # print("num_edges: " + str(len(G.edges)) + " e: " + str(e))
 
 
 class Lemon:
@@ -117,7 +117,7 @@ class Lemon:
         self.edges_colors = []
 
     def add_room(self, line, start_end):
-        if self.debug == 3:
+        if self.debug >= 3:
             print("add_room")
         if line is None or len(line) == 0:
             print_err(CONN_ERR)
@@ -136,7 +136,7 @@ class Lemon:
             self.nodes_colors.append('grey')
 
     def add_edge(self, line):
-        if self.debug == 3:
+        if self.debug >= 3:
             print("add_edge")
         if line is None or len(line) == 0:
             print_err(CONN_ERR)
@@ -163,17 +163,17 @@ class Lemon:
         start_end = 0
         lines = [line.rstrip("\n") for line in argfile]
         num_lines = len(lines)
-        if self.debug == 2:
+        if self.debug >= 2:
             print("num_lines: " + str(num_lines))
         n = 0
         for line in lines:
             if line == "":
-                if self.debug == 2:
+                if self.debug >= 2:
                     print("pass")
                 pass
             elif n == 0 and line.isdigit():
                 self.num_ants = int(line)
-                if self.debug == 2:
+                if self.debug >= 2:
                     print("num_ants: " + str(self.num_ants))
             elif line[0] == '#':
                 if line == "##start":
@@ -197,16 +197,15 @@ class Lemon:
         self.paths.append([self.start, self.end])
         for ant in tmp:
             self.paths.append(self.ants[ant][:-1])
-        if self.debug >= 1:
+        if self.debug >= 2:
+            print("paths: " + str(len(self.paths)))
+            print("antmoves: " + str(len(self.antmoves)))
+            print("lines: " + str(len(lines)))
+            print("ants: " + str(self.ants))
             print("num_edges: " + str(len(self.G.edges)) +
                   " ecolors: " + str(len(self.edges_colors)))
             print("num_nodes: " + str(len(self.G.nodes)) +
                   " ncolors: " + str(len(self.nodes_colors)))
-            print("lines: " + str(len(lines)))
-            print("antmoves: " + str(len(self.antmoves)))
-            print("paths: " + str(len(self.paths)))
-        if self.debug >= 2:
-            print("ants: " + str(self.ants))
 
     def get_flow(self):
         try:
@@ -216,14 +215,15 @@ class Lemon:
                 self.end,
             )
             flow_val = nx.maximum_flow_value(self.G, self.start, self.end)
-            if self.debug >= 1:
+            if self.debug >= 2:
                 print("max_flow: " + str(flow_val))
                 print(flow_val == R.graph['flow_value'])
         except nx.exception.NetworkXError:
             print("self.G.nodes() is None")
 
     def draw_graph(self):
-        print(nx.info(self.G))
+        if self.debug >= 2:
+            print(nx.info(self.G))
         if self.pos == "spring":
             pos = nx.spring_layout(self.G)
         elif self.pos == "circular":
@@ -294,20 +294,19 @@ def main():
         layoutold = "spring"
     loops = Lemon(name=args.file, debug=args.debug, draw_grey=args.draw_all, pos=layoutold)
     if args.file != "stdin":
-        if args.debug >= 2:
-            print("file not stdin")
+        if args.debug is not None and args.debug >= 3:
+            print("reading from file")
         try:
             f = open(loops.name)
-            print(f)
             loops.read_input(f)
             f.close()
-            loops.get_flow()
+            # loops.get_flow()
             loops.draw_graph()
         except FileNotFoundError:
             print_err(READ_ERR)
     else:
-        if args.debug >= 2:
-            print("file is stdin")
+        if args.debug is not None and args.debug >= 3:
+            print("reading from stdin")
         try:
             loops.read_input(sys.stdin)
             loops.draw_graph()
