@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
-ONE='flone'
-TEN='flten'
-THOUSAND='flthousand'
-BIG='big'
-SOUP='soup'
-TMP='/tmp/lem_tmp'
-TIME='/usr/bin/time'
+# TODO: better handling of options and arguments
+# option to append 'date +%Y-%m-%dT%H:%M:%S%z' to the output filename
+
+ONE='flone_input'
+TEN='flten_input'
+THOUSAND='flthousand_input'
+BIG='big_input'
+SOUP='soup_input'
+TMPIN='/tmp/lem_tmp_input'
+TMPOUT='/tmp/lem_tmp_output'
 
 if [ -x './generator' ]; then
 	VALID='e67102127fa3fcf80786a62bec266895'
@@ -35,74 +38,92 @@ else
 fi
 
 if [ $1 -a $1 = 'one' ]; then
-	$GEN --flow-one > $ONE
-	$TIME $BIN < $ONE > $TMP
+	$GEN --flow-one > $TMPIN
+	cp $TMPIN $ONE
+	$BIN < $TMPIN > $TMPOUT
+	cp $TMPOUT $(echo $ONE | sed 's/_input/_output/g')
 	echo '--------------------------------------------------------------------'
-	NODES=$(grep -Ec '^\w+ ' $ONE)
-	EDGES=$(grep -Ec '^\w+-' $ONE)
+	NODES=$(grep -Ec '^\w+ ' $TMPIN)
+	EDGES=$(grep -Ec '^\w+-' $TMPIN)
 	echo "Total Nodes: $NODES"
 	echo "Total Edges: $EDGES"
+	printf "Total Ants: $(head -n2 $TMPIN | sed 's/: /:\\t/g')\n"
+	printf "Number of lines from your lem-in:\t$(grep -c '^L' $TMPOUT)\n"
 	echo '--------------------------------------------------------------------'
-	printf "Total Ants: $(head -n2 $ONE | sed 's/: /:\\t/g')\n"
-	printf "Number of lines from your lem-in:\t$(grep -c '^L' $TMP)\n"
 elif [ $1 -a $1 = 'ten' ]; then
-	$GEN --flow-ten > $TEN
-	$TIME $BIN < $TEN > $TMP
+	$GEN --flow-ten > $TMPIN
+	cp $TMPIN $TEN
+	$BIN < $TMPIN > $TMPOUT
+	cp $TMPOUT $(echo $TEN | sed 's/_input/_output/g')
 	echo '--------------------------------------------------------------------'
-	NODES=$(grep -Ec '^\w+ ' $TEN)
-	EDGES=$(grep -Ec '^\w+-' $TEN)
+	NODES=$(grep -Ec '^\w+ ' $TMPIN)
+	EDGES=$(grep -Ec '^\w+-' $TMPIN)
 	echo "Total Nodes: $NODES"
 	echo "Total Edges: $EDGES"
+	printf "Total Ants: $(head -n2 $TMPIN | sed 's/: /:\\t/g')\n"
+	printf "Number of lines from your lem-in:\t$(grep -c '^L' $TMPOUT)\n"
 	echo '--------------------------------------------------------------------'
-	printf "Total Ants: $(head -n2 $TEN | sed 's/: /:\\t/g')\n"
-	printf "Number of lines from your lem-in:\t$(grep -c '^L' $TMP)\n"
 elif [ $1 -a $1 = 'thousand' ]; then
-	$GEN --flow-thousand > $THOUSAND
-	$TIME $BIN < $THOUSAND > $TMP
+	$GEN --flow-thousand > $TMPIN
+	cp $TMPIN $THOUSAND
+	$BIN < $TMPIN > $TMPOUT
+	cp $TMPOUT $(echo $THOUSAND | sed 's/_input/_output/g')
 	echo '--------------------------------------------------------------------'
-	NODES=$(grep -Ec '^\w+ ' $THOUSAND)
-	EDGES=$(grep -Ec '^\w+-' $THOUSAND)
+	NODES=$(grep -Ec '^\w+ ' $TMPIN)
+	EDGES=$(grep -Ec '^\w+-' $TMPIN)
 	echo "Total Nodes: $NODES"
 	echo "Total Edges: $EDGES"
+	printf "Total Ants: $(head -n2 $TMPIN | sed 's/: /:\\t/g')\n"
+	printf "Number of lines from your lem-in:\t$(grep -c '^L' $TMPOUT)\n"
 	echo '--------------------------------------------------------------------'
-	printf "Total Ants: $(head -n2 $THOUSAND | sed 's/: /:\\t/g')\n"
-	printf "Number of lines from your lem-in:\t$(grep -c '^L' $TMP)\n"
 elif [ $1 -a $1 = 'big' ]; then
-	$GEN --big > $BIG
-	$TIME $BIN < $BIG > $TMP
+	$GEN --big > $TMPIN
+	cp $TMPIN $BIG
+	$BIN < $TMPIN > $TMPOUT
+	cp $TMPOUT $(echo $BIG | sed 's/_input/_output/g')
 	echo '--------------------------------------------------------------------'
-	NODES=$(grep -Ec '^\w+ ' $BIG)
-	EDGES=$(grep -Ec '^\w+-' $BIG)
+	NODES=$(grep -Ec '^\w+ ' $TMPIN)
+	EDGES=$(grep -Ec '^\w+-' $TMPIN)
 	echo "Total Nodes: $NODES"
 	echo "Total Edges: $EDGES"
+	printf "Total Ants: $(head -n2 $TMPIN | sed 's/: /:\\t/g')\n"
+	printf "Number of lines from your lem-in:\t$(grep -c '^L' $TMPOUT)\n"
 	echo '--------------------------------------------------------------------'
-	printf "Total Ants: $(head -n2 $BIG | sed 's/: /:\\t/g')\n"
-	printf "Number of lines from your lem-in:\t$(grep -c '^L' $TMP)\n"
 elif [ $1 -a $1 = 'soup' ]; then
-	$GEN --big-superposition > $SOUP
-	$TIME $BIN < $SOUP > $TMP
+	$GEN --big-superposition > $TMPIN
+	cp $TMPIN $SOUP
+	$BIN < $TMPIN > $TMPOUT
+	cp $TMPOUT $(echo $SOUP | sed 's/_input/_output/g')
 	echo '--------------------------------------------------------------------'
-	NODES=$(grep -Ec '^\w+ ' $SOUP)
-	EDGES=$(grep -Ec '^\w+-' $SOUP)
+	NODES=$(grep -Ec '^\w+ ' $TMPIN)
+	EDGES=$(grep -Ec '^\w+-' $TMPIN)
 	echo "Total Nodes: $NODES"
 	echo "Total Edges: $EDGES"
+	printf "Total Ants: $(head -n2 $TMPIN | sed 's/: /:\\t/g')\n"
+	printf "Number of lines from your lem-in:\t$(grep -c '^L' $TMPOUT)\n"
 	echo '--------------------------------------------------------------------'
-	printf "$(head -n2 $SOUP | sed 's/: /:\\t/g')\n"
-	printf "Number of lines from your lem-in:\t$(grep -c '^L' $TMP)\n"
 elif [ $1 -a $1 = 'clean' ]; then
-	rm -f $ONE $TEN $THOUSAND $BIG $SOUP $TMP
+	rm -f $TMPIN $TMPOUT
+elif [ $1 -a $1 = 'fclean' ]; then
+	rm -f $ONE $TEN $THOUSAND $BIG $SOUP $TMPIN $TMPOUT
+	rm -f $(echo $ONE | sed 's/_input/_output/g')
+	rm -f $(echo $TEN | sed 's/_input/_output/g')
+	rm -f $(echo $THOUSAND | sed 's/_input/_output/g')
+	rm -f $(echo $BIG | sed 's/_input/_output/g')
+	rm -f $(echo $SOUP | sed 's/_input/_output/g')
 elif [ $1 -a $1 = 'help' ]; then
-	echo "Usage: $0 [ help | one | ten | thousand | big | soup | clean ]"
-	echo "help      show this help summary"
-	echo "one       runs the generator with --flow-one"
-	echo "ten       runs the generator with --flow-ten"
-	echo "thousand  runs the generator with --flow-thousand"
-	echo "big       runs the generator with --big"
-	echo "soup      runs the generator with --big-superposition"
-	echo "clean     removes output map files\n"
+	echo "Usage: $0 [ help | one | ten | thousand | big | soup | clean | fclean ]"
+	echo "  help      show this help summary"
+	echo "  one       runs the generator with --flow-one"
+	echo "  ten       runs the generator with --flow-ten"
+	echo "  thousand  runs the generator with --flow-thousand"
+	echo "  big       runs the generator with --big"
+	echo "  soup      runs the generator with --big-superposition"
+	echo "  clean     removes temporary files"
+	echo "  fclean    removes all output files"
 	exit 0
 else
 	echo "lem-in-test: error: invalid argument"
-	echo "Usage: $0 [ help | one | ten | thousand | big | soup | clean ]"
+	echo "Usage: $0 [ help | one | ten | thousand | big | soup | clean | fclean ]"
 	exit 1
 fi
