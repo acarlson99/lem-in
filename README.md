@@ -8,17 +8,23 @@ Minimize the number of turns required to move all ants from start to end
 
 Developed for macOS High Sierra using clang-902.0.39.1
 
-## Installation
+## lem-in
+
+### Algorithm
+
+I used an [Edmonds-Karp](https://en.wikipedia.org/wiki/Edmonds%E2%80%93Karp_algorithm) like breadth-first search and reconstructed a list of potential paths based on the residual graph
+
+### Dependencies
+
+make
+
+### Installation
 
 ```bash
 make
 ```
 
 This will create the lem-in executable
-
-## lem-in
-
-TODO: Add description of algorithm or something
 
 ### Usage
 
