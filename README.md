@@ -32,7 +32,7 @@ This will create the lem-in executable
 ./lem-in < test_map
 ```
 
-## Visualizer
+## Pygame Visualizer
 
 Built with python3
 
@@ -65,3 +65,37 @@ Built with python3
 * Home, R: reset
 
 ![visualizer screenshot 00](screenshots/visu01.png)
+
+## Matplotlib Visualizer
+
+Built with python3
+
+### Dependencies:
+
+* [NetworkX](https://networkx.github.io/)
+
+* [matplotlib](https://matplotlib.org/)
+
+### Usage:
+
+Display help:
+```bash
+./draw_graph -h
+```
+
+Read from stdin:
+```bash
+./lem-in < test_maps/gen-flow-thousand-00 | ./draw_graph.py
+```
+
+Read from an output file:
+```bash
+./lem-in < test_maps/gen_big_superposition > big-super_out
+./draw_graph.py -f big-super_out
+```
+
+Draw graph using the Kamada-Kawai layout from NetworkX:
+```bash
+./lem-in < test_maps/gen_big | ./draw_graph.py -p
+```
+![visualizer screenshot 01](screenshots/gen-flow-thousand-02.jpg)

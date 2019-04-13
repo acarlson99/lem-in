@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 try:
     import sys
-    import json
     import argparse
     import contextlib
 
@@ -9,9 +8,9 @@ try:
         import networkx as nx
         import matplotlib.pyplot as plt
 except ModuleNotFoundError:
-    print("Ensure that the required modules are installed:"
-          "*networkx"
-          "*matplotlib")
+    print("Ensure that the required modules are installed:\n"
+          "\t*networkx\n"
+          "\t*matplotlib")
     exit(1)
 
 ANTS_ERR = 1
@@ -19,6 +18,7 @@ ROOM_ERR = 2
 CONN_ERR = 3
 MOVE_ERR = 4
 READ_ERR = 5
+# Lemon.read_input will fail if number of paths is greater than len(col_path) - 3
 col_path = ['green', 'red', 'orange', 'magenta', 'cyan', 'brown', 'blue', 'black',
             '#f08c00', '#308bc0', '#f9c030', '#23f012', '#497663', '#ec5952', '#db8fb0',
             '#afc58c', '#08ea07', '#3e60f3', '#9d5d80', '#701488', '#a78923', '#d461f8',
@@ -52,7 +52,6 @@ def draw_graph_nodes(G, paths, pos, col_path, draw_grey):
         n += 1
         if n == len(G.nodes):
             break
-    # print("num_nodes: " + str(len(G.nodes)) + " n: " + str(n))
 
 
 def draw_graph_edges(G, paths, pos, col_path, draw_grey):
@@ -78,8 +77,6 @@ def draw_graph_edges(G, paths, pos, col_path, draw_grey):
         e += 1
         if e == len(G.edges):
             break
-    # print("num_edges: " + str(len(G.edges)) + " e: " + str(e))
-
 
 class Lemon:
     def __init__(self, name=None, G=None, draw_grey=None, debug=None, pos=None):
@@ -238,6 +235,8 @@ class Lemon:
             pos = nx.spectral_layout(self.G)
         else:
             pos = nx.spring_layout(self.G)
+        plt.subplots_adjust(left=0.0, bottom=0.0, right=1.0,
+                            top=1.0, wspace=0.0, hspace=0.0)
         if self.debug >= 1:
             print("Drawing graph nodes...")
         draw_graph_nodes(self.G, self.paths, pos, col_path, self.draw_grey)
@@ -266,7 +265,7 @@ def print_err(code):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Visualize the output of a lem-in binary using GraphViz and NetworkX")
+    parser = argparse.ArgumentParser(description="Visualize the output of a lem-in binary using Matplotlib and NetworkX")
     layout = parser.add_mutually_exclusive_group()
     layout.add_argument("-c", "--circular", help="Use the circular graph layout", action="store_true")
     layout.add_argument("-k", "--kamada", help="Use the Kamada-Kawai force-directed graph layout", action="store_true")
@@ -300,7 +299,6 @@ def main():
             f = open(loops.name)
             loops.read_input(f)
             f.close()
-            # loops.get_flow()
             loops.draw_graph()
         except FileNotFoundError:
             print_err(READ_ERR)
