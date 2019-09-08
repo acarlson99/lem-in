@@ -40,63 +40,7 @@ typedef struct s_lem	t_lem;
 typedef struct s_ant	t_ant;
 typedef struct s_antq	t_antq;
 typedef struct s_line	t_line;
-typedef struct s_flag	t_flag;
-typedef struct s_iter	t_iter;
-typedef struct s_listaroni	t_lont;
-typedef struct s_update_array_args	t_upar;
-typedef struct s_ant_loop_vars	t_alvs;
-struct	s_ant_loop_vars
-{
-	size_t		i;
-	size_t		len_tmp;
-	size_t		n;
-	size_t		len_max;
-	size_t		abs_max;
-	size_t		total_paths;
-	int			flag;
-	unsigned	j;
-	char		*tmp_path_name;
-	char		*long_path_name;
-	int			*valid_arr;
-};
-struct	s_update_array_args
-{
-	t_list		**list;
-	size_t		*lens;
-	int			*valid_arr;
-	unsigned	ants_left;
-	size_t		totalp;
-	size_t		*nump;
-	size_t		np;
-	size_t		*plensum;
-	size_t		lmin;
-	size_t		moves;
-};
-struct		s_listaroni
-{
-	t_list	*p0;
-	t_list	*p1;
-	t_list	*p2;
-};
-struct		s_iter
-{
-	size_t		x;
-	size_t		y;
-	size_t		v;
-	size_t		i;
-	size_t		j;
-	size_t		m;
-	size_t		idx;
-	size_t		u;
-	size_t		vv;
-};
 
-struct		s_flag
-{
-	int		mf;
-	int		pf;
-	int		fg;
-};
 struct		s_antq
 {
 	t_ant		*head;
@@ -185,16 +129,9 @@ size_t		ft_lstlen(t_list *ptr);
 **t_list		**find_path(t_lem *info);
 */
 
+int			is_path(int **graph, int *parent, size_t size);
 t_list		**find_path(int **conns, int **rgraph, size_t size, t_room **rooms);
 void		solve(t_lem *info);
-
-/*
-** Solve_utils
-*/
-
-int			is_path(int **graph, int *parent, size_t size);
-void		path_helper(t_queue *q, int vu[2], int *parent, int *visited);
-int			**copy_graph(int **graph, size_t size);
 
 /*
 ** Other

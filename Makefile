@@ -20,7 +20,7 @@ SRCS := srcs/
 OBJDIR := .obj/
 INCLUDES := -I includes/ -I libft/includes/
 FILES := main struct parse util validate lines_to_rooms print_struct solve\
-	lines queue_other find_path solve_utils
+	lines queue_other find_path
 CFILES := $(addsuffix .c, $(FILES))
 OFILES := $(addprefix $(OBJDIR), $(addsuffix .o, $(FILES)))
 LIBS := -L libft/ -lft

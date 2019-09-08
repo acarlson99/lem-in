@@ -16,79 +16,92 @@
 ** Uses original graph and residual graph and finds which paths were taken
 */
 
-#define M (it.m)
-#define I (it.i)
-#define J (it.j)
-#define V (it.v)
-#define X (it.x)
-#define Y (it.y)
-#define RNM rooms[V]->name
-#define LSTADD ft_lstadd_tail(&l[J],ft_lstnew(RNM,ft_strlen(RNM)+1));
-#define RGRP {rgraph[I][V]=1;rgraph[V][I]=1;V=I;break;}
-#define BEP LSTADD;J++;p2=l[J-1];flag=0;
-#define CND !rgraph[V][I] && rgraph[I][V]
-#define HEC if(V!=S)LSTADD;I=-1;while(++I<size)DO_ALL(CND,RGRP);
-#define LON flag=1;ft_lstdel(&l[M],free_);l[M]=l[J-1];l[--J]=0;
-#define NOL flag=1;ft_lstdel(&l[J-1],free_);l[--J]=0;
-#define IFLEN if(ft_lstlen(p1)>ft_lstlen(p2)){LON;}else{NOL;}
-#define CNTNTCMP (ft_strcmp(p1->content,p2->content))
-#define CNTNT if(!CNTNTCMP){IFLEN}if(flag)break;p1=p1->next;
-#define L0OP p1=l[M];while(p1&&p1->next){CNTNT;}if(flag)break;
-#define L00PS M=-1;while(++M<J-1){L0OP}if(flag)break;p2=p2->next;
-#define LO0P V=S;while(V!=T){HEC;}BEP;
-#define DECLARE_MY_LAD J=0;Y=-1;
-
 t_list		**find_path(int **conns, int **rgraph, size_t size, t_room **rooms)
 {
-	t_iter		it;
+	size_t		x;
+	size_t		y;
+	size_t		v;
+	size_t		i;
 	t_list		**l;
+	size_t		j;
 	t_list		*p1;
 	t_list		*p2;
 	int			flag;
 
-	DO_IF((!(l = ft_memalloc(size * sizeof(t_list *)))), panic(MALLOC_ERR));
-	DECLARE_MY_LAD;
-	while (++Y < size)
+	if (!(l = ft_memalloc(size * sizeof(t_list *))))
+		panic(MALLOC_ERR);
+	j = 0;
+	y = 0;
+	while (y < size)
 	{
-		X = -1;
-		while (++X < size)
+		x = 0;
+		while (x < size)
 		{
-			if (conns[Y][X] && !rgraph[Y][X])
+			if (conns[y][x] && !rgraph[y][x])
 			{
-				LO0P;
+				v = S;
+				while (v != T)
+				{
+					if (v != S)
+						ft_lstadd_tail(&l[j], ft_lstnew(rooms[v]->name, ft_strlen(rooms[v]->name) + 1));
+					i = 0;
+					while (i < size)
+					{
+						if (!rgraph[v][i] && rgraph[i][v])
+						{
+							rgraph[i][v] = 1;
+							rgraph[v][i] = 1;
+							v = i;
+							break ;
+						}
+						i++;
+					}
+				}
+				ft_lstadd_tail(&l[j], ft_lstnew(rooms[v]->name, ft_strlen(rooms[v]->name) + 1));
+				j++;
+				p2 = l[j - 1];
+				flag = 0;
 				while (p2 && p2->next)
 				{
-					L00PS;
+					for (size_t m = 0; m < j - 1; m++)
+					{
+						p1 = l[m];
+						while (p1 && p1->next)
+						{
+							if (!ft_strcmp(p1->content, p2->content))
+							{
+								if (ft_lstlen(p1) > ft_lstlen(p2))	// TODO: del p1 and move p2 to p1
+								{
+									flag = 1;
+									ft_lstdel(&l[m], free_);
+									l[m] = l[j - 1];
+									l[j - 1] = NULL;
+									j--;
+								}
+								else	// TODO: del p2 and set it to NULL
+								{
+									flag = 1;
+									ft_lstdel(&l[j - 1], free_);
+									l[j - 1] = NULL;
+									j--;
+								}
+							}
+							if (flag)
+								break ;
+							p1 = p1->next;
+						}
+						if (flag)
+							break ;
+					}
+					if (flag)
+						break ;
+					p2 = p2->next;
 				}
 			}
+			x++;
 		}
+		y++;
 	}
-	l[J] = NULL;
+	l[j] = NULL;
 	return (l);
 }
-
-/*
-** I'm sorry.
-*/
-
-#undef M
-#undef I
-#undef J
-#undef V
-#undef X
-#undef Y
-#undef RNM
-#undef LSTADD
-#undef RGRP
-#undef BEP
-#undef CND
-#undef HEC
-#undef LON
-#undef NOL
-#undef IFLEN
-#undef CNTNTCMP
-#undef CNTNT
-#undef L0OP
-#undef L00PS
-#undef LO0P
-#undef DECLARE_MY_LAD
