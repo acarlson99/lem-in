@@ -6,13 +6,44 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/09 16:40:56 by acarlson          #+#    #+#             */
-/*   Updated: 2019/04/10 16:52:51 by callen           ###   ########.fr       */
+/*   Updated: 2019/02/11 14:53:32 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
 #define M_ERR MALLOC_ERR
+
+#ifdef U
+# undef U
+#endif
+#ifdef VV
+# undef VV
+#endif
+#ifdef IDX
+# undef IDX
+#endif
+#ifdef I
+# undef I
+#endif
+#ifdef MF
+# undef MF
+#endif
+#ifdef PF
+# undef PF
+#endif
+#ifdef FL
+# undef FL
+#endif
+#ifdef P0
+# undef P0
+#endif
+#ifdef P1
+# undef P1
+#endif
+#ifdef P2
+# undef P2
+#endif
 #define U (it.u)
 #define VV (it.vv)
 #define IDX (it.idx)
@@ -104,6 +135,14 @@ int			move_ants(t_antq *all_ants)
 }
 
 #define CONT_IF(n) if(n)continue;
+
+/*
+** Holy parameters
+** TODO: make this factor in multiple viable paths of multiple lengths.
+** Works when only comparing two paths.
+** Breaks on more than 2 paths
+*/
+
 #define UPLST (up->list)
 #define UPNMP (*up->nump)
 #define UPPLS (*up->plensum)
@@ -132,178 +171,112 @@ void		update_array(t_upar *up)
 	}
 }
 
-#define ALST al->slv_list
-#define ALMIN al->slv_len_min
-#define ALMAX al->len_max
-#define FS00 ("%sLongest absolute path: %zu%s\n")
-#define FS01 ("%sLongest path taken: len(%zu) name(%s)%s\n")
-#define FS02 ("%sLen_min: %zu%s\n")
+#define FS01 ("%slen_max: longest path taken %zu name %s%s\n")
+#define FS02 ("%slen_min %zu%s\n")
 #define FS03 ("%sNumber of paths: %zu%s\n")
 #define FS04 ("%sTotal moves: %zu%s\n")
-#define NEWDBGP00 ft_dprintf(2,FS00,FG(GRN),al->abs_max,FG(DFT));
-#define NEWDBGP01 NEWDBGP00; ft_dprintf(2,FS01,FG(GRN),ALMAX,al->lpn,FG(DFT));
-#define NEWDBGP02 NEWDBGP01; ft_dprintf(2,FS02,FG(GRN),ALMIN,FG(DFT));
-#define NEWDBGP03 NEWDBGP02; al->i=-1;while(ALST[++al->i]);
-#define NEWDBGP04 NEWDBGP03; ft_dprintf(2,FS03,FG(GRN),al->i,FG(DFT));
-#define NEWDBGP05 NEWDBGP04; ft_dprintf(2,FS04,FG(GRN),al->moves,FG(DFT));
-#define NEWDBGPRNT NEWDBGP05;
-#define ALI00 al->num_paths=al->idx;
-#define ALI01 ALI00; al->lens=al->slv_lens;al->total_paths = al->num_paths;
-#define ALI02 ALI01; al->n=1;al->len_max=0;al->abs_max=0;al->flag=0;al->j=-1;
-#define ALI03 ALI02; al->valid_arr=ft_memalloc(sizeof(int)*al->num_paths+1);
-#define ALI04 ALI03; while(++al->j<al->num_paths){al->valid_arr[al->j]=1;}
-#define ALI05 ALI04; al->path_len_sum=al->slv_path_len_sum;
-#define ANTLINIT ALI05;
-#define ALUPI00 up.list=ALST;up.lens=al->lens;up.valid_arr=al->valid_arr;
-#define ALUPI01 ALUPI00; up.ants_left=info->num_ants-al->n+1;up.lmin=ALMIN;
-#define ALUPI02 ALUPI01; up.totalp=al->total_paths;up.nump=&al->num_paths;
-#define ALUPI03 ALUPI02; up.plensum=&al->path_len_sum;update_array(&up);
-#define ALUPI04 ALUPI03; al->len_tmp=ft_lstlen(ALST[al->i]);
-#define ALUPI05 ALUPI04; al->tpn=ALST[al->i]->content;
-#define ALUPI06 ALUPI05; if(al->len_tmp>al->abs_max){al->abs_max=al->len_tmp;}
-#define ALUPI07 ALUPI06; CONT_IF(!al->valid_arr[al->i]&&++al->i);
-#define ALUPARR ALUPI07;
-#define ALMCHK00 al->len_max=al->len_tmp;al->lpn=al->tpn;
-#define ALMCHK01 if(ALMAX<al->len_tmp){ALMCHK00;}
-#define ALMCHK02 ALMCHK01;add_ant(al->all_ants,ALST[al->i],al->n);al->n++;
-#define ALMAXCHK ALMCHK02;
+#define DBGP00 ft_dprintf(2,"%slongest path %zu%s\n",FG(GRN),abs_max,FG(DFT));
+#define DBGP01 DBGP00; ft_dprintf(2,FS01,FG(GRN),len_max,lpn,FG(DFT));
+#define DBGP02 DBGP01; ft_dprintf(2,FS02,FG(GRN),len_min,FG(DFT));
+#define DBGP03 DBGP02; i=-1;while(list[++i]);
+#define DBGP04 DBGP03; ft_dprintf(2,FS03,FG(GRN),i,FG(DFT));
+#define DBGP05 DBGP04; ft_dprintf(2,FS04,FG(GRN),g_moves,FG(DFT));
+#define DBGPRNT DBGP05;
 
-void		ant_loop(t_alvs *al, t_lem *info)
+size_t		g_moves;
+
+void		ant_loop(t_lem *info, t_list **list, t_antq *all_ants, size_t len_min, size_t num_paths, size_t path_len_sum, size_t *lens)
 {
+	size_t		i;
+	size_t		len_tmp;
+	size_t		n;
+	t_alvs		al;
+	size_t		len_max = 0;
+	size_t		abs_max = 0;
+	size_t		total_paths = num_paths;
+	int			flag = 0;
+	unsigned	j = 0;
+	char		*tmp_path_name = NULL;
+	char		*lpn = NULL;
+	int			*valid_arr = ft_memalloc(sizeof(int) * num_paths + 1);
 	t_upar		up;
+	for (j = 0; j < num_paths; j++)
+		valid_arr[j] = 1;
 
-	ANTLINIT;
+	n = 1;
 	while (1)
 	{
-		al->i = 0;
-		while (ALST[al->i] && !al->flag && al->n <= info->num_ants)
+		i = 0;
+		while (list[i] && !flag && n <= info->num_ants)
 		{
-			ALUPARR;
-			if (al->n <= info->num_ants)
+			up.list = list;
+			up.lens = lens;
+			up.valid_arr = valid_arr;
+			up.ants_left = info->num_ants - n + 1;
+			up.totalp = total_paths;
+			up.nump = &num_paths;
+			up.plensum = &path_len_sum;
+			up.lmin = len_min;
+			update_array(&up);
+			len_tmp = ft_lstlen(list[i]);
+			tmp_path_name = list[i]->content;
+			if (len_tmp > abs_max)
+				abs_max = len_tmp;
+			CONT_IF(!valid_arr[i] && ++i);	// FIXME: This line is broken. Exemplified by map_06. So we have to figure out whether it would be better for the ant to go down the suggested path or a different path
+			if (n <= info->num_ants)
 			{
-				ALMAXCHK;
+				if (len_max < len_tmp)
+				{
+					len_max = len_tmp;
+					lpn = tmp_path_name;
+				}
+				add_ant(all_ants, list[i], n);
+				n++;
 			}
 			else
-				al->flag = 1;
-			al->i++;
+				flag = 1;
+			i++;
 		}
-		if (!move_ants(al->all_ants))
+		if (!move_ants(all_ants))
 		{
-			NEWDBGPRNT;
+			DBGPRNT;
 			exit(0);
 		}
-		al->moves++;
+		g_moves++;
 		ft_putchar('\n');
 	}
 }
 
-#define ALBI00 albo.slv_list=info->l2;albo.all_ants=info->all_ants;
-#define ALBI01 ALBI00; albo.slv_len_min=FT_SIZE_T_MAX;albo.idx=0;
-#define ALBI02 ALBI01; albo.path_len_sum=0;
-#define ALBINIT ALBI02;
+/*
+** The max flow for test_01 is 3, but that doesn't count the number of ants	\
+** per room.  Only ants per edge.  Counting rooms as full gives a max flow of 2
+*/
 
 void		solve(t_lem *info)
 {
-	int			max_flow;
-	t_alvs		albo;
+	size_t		i[3];
 
 	info->rgraph = copy_graph(info->conns, info->num_rooms);
 	info->list = ft_memalloc(sizeof(t_list *) * info->num_rooms);
-	max_flow = fordfulkn(info->rooms, info->rgraph, info->num_rooms,
-		info->list);
-	ft_dprintf(2, "%sMax flow: %d%s\n", FG(GRN), max_flow, FG(DFT));
+	ft_dprintf(2, "%smax flow = %d%s\n",FG(GRN),fordfulkn(info->rooms, info->rgraph, info->num_rooms, info->list),FG(DFT)); // TODO: make a better function to find all paths to take
 	if (!(info->all_ants = (t_antq *)ft_memalloc(sizeof(t_antq))))
 		panic(MALLOC_ERR);
-	info->l2 = find_path(info->conns, info->rgraph, info->num_rooms,
-		info->rooms);
-	ALBINIT;
-	albo.slv_lens = ft_memalloc(sizeof(size_t) * info->num_rooms);
-	while (albo.slv_list[albo.idx])
-	{
-		albo.slv_len_tmp = ft_lstlen(albo.slv_list[albo.idx]);
-		albo.slv_lens[albo.idx] = albo.slv_len_tmp;
-		albo.slv_path_len_sum += albo.slv_len_tmp;
-		if (albo.slv_len_tmp < albo.slv_len_min)
-			albo.slv_len_min = albo.slv_len_tmp;
-		albo.idx++;
-	}
-	albo.moves = 0;
-	ant_loop(&albo, info);
-}
+	i[2] = FT_SIZE_T_MAX;
+	info->l2 = find_path(info->conns, info->rgraph, info->num_rooms, info->rooms);
+	i[0] = 0;
 
-#undef M_ERR
-#undef U
-#undef VV
-#undef IDX
-#undef I
-#undef MF
-#undef PF
-#undef FL
-#undef P0
-#undef P1
-#undef P2
-#undef RMPNM
-#undef RMLNM
-#undef RMFNM
-#undef LORCND
-#undef LORDOA
-#undef LORDOB
-#undef LORDO
-#undef LORB
-#undef SMOL
-#undef LOPL
-#undef LADDCND
-#undef LADD1
-#undef FLDO0
-#undef LADDP0
-#undef LADD0
-#undef FLPVA
-#undef FLOOP
-#undef FLDO1
-#undef CONT_IF
-#undef UPLST
-#undef UPNMP
-#undef UPPLS
-#undef UPLNS
-#undef UPVAR
-#undef UPALF
-#undef BIGCD
-#undef ALST
-#undef ALMIN
-#undef ALMAX
-#undef FS00
-#undef FS01
-#undef FS02
-#undef FS03
-#undef FS04
-#undef NEWDBGP00
-#undef NEWDBGP01
-#undef NEWDBGP02
-#undef NEWDBGP03
-#undef NEWDBGP04
-#undef NEWDBGP05
-#undef NEWDBGPRNT
-#undef ALI00
-#undef ALI01
-#undef ALI02
-#undef ALI03
-#undef ALI04
-#undef ALI05
-#undef ANTLINIT
-#undef ALUPI00
-#undef ALUPI01
-#undef ALUPI02
-#undef ALUPI03
-#undef ALUPI04
-#undef ALUPI05
-#undef ALUPI06
-#undef ALUPI07
-#undef ALUPARR
-#undef ALMCHK00
-#undef ALMCHK01
-#undef ALMCHK02
-#undef ALMAXCHK
-#undef ALBI00
-#undef ALBI01
-#undef ALBI02
-#undef ALBINIT
+	size_t path_len_sum = 0;
+	size_t *lens = ft_memalloc(sizeof(size_t) * info->num_rooms);
+
+	while (info->l2[i[0]])
+	{
+		i[1] = ft_lstlen(info->l2[i[0]]);
+		lens[i[0]] = i[1];
+		path_len_sum += i[1];
+		if (i[1] < i[2])
+			i[2] = i[1];
+		i[0]++;
+	}
+	g_moves = 0;
+	ant_loop(info, info->l2, info->all_ants, i[2], i[0], path_len_sum, lens);
+}

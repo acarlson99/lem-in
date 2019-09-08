@@ -45,46 +45,32 @@ typedef struct s_iter	t_iter;
 typedef struct s_listaroni	t_lont;
 typedef struct s_update_array_args	t_upar;
 typedef struct s_ant_loop_vars	t_alvs;
-struct		s_ant_loop_vars
+struct	s_ant_loop_vars
 {
-	t_list		**slv_list;
-	t_list		*slv_all_ants;
-	size_t		*slv_lens;
-	size_t		idx;
-	size_t		slv_len_tmp;
-	size_t		slv_len_min;
-	size_t		slv_path_len_sum;
-	size_t		moves;
-	t_lem		*info;
-	t_list		**list;
-	t_antq		*all_ants;
-	size_t		len_min;
-	size_t		num_paths;
-	size_t		path_len_sum;
-	size_t		*lens;
 	size_t		i;
 	size_t		len_tmp;
 	size_t		n;
 	size_t		len_max;
 	size_t		abs_max;
 	size_t		total_paths;
-	char		*tpn;
-	char		*lpn;
-	int			*valid_arr;
 	int			flag;
 	unsigned	j;
+	char		*tmp_path_name;
+	char		*long_path_name;
+	int			*valid_arr;
 };
-struct		s_update_array_args
+struct	s_update_array_args
 {
 	t_list		**list;
 	size_t		*lens;
 	int			*valid_arr;
-	size_t		*nump;
-	size_t		*plensum;
-	size_t		totalp;
-	size_t		np;
-	size_t		lmin;
 	unsigned	ants_left;
+	size_t		totalp;
+	size_t		*nump;
+	size_t		np;
+	size_t		*plensum;
+	size_t		lmin;
+	size_t		moves;
 };
 struct		s_listaroni
 {
@@ -119,9 +105,9 @@ struct		s_antq
 
 struct		s_ant
 {
+	int				num;
 	t_list			*room;
 	t_ant			*next;
-	int				num;
 };
 
 struct		s_line
@@ -132,16 +118,27 @@ struct		s_line
 
 struct		s_room
 {
-	char		*name;
+	char		full;
+	char		start_end;
 	unsigned	visited;
 	int			x;
 	int			y;
-	char		full;
-	char		start_end;
+	char		*name;
 };
 
 struct		s_lem
 {
+	unsigned	num_ants;
+	int			flag;
+	size_t		num_rooms;
+	size_t		nr;
+	size_t		i;
+	size_t		j;
+	size_t		k;
+	size_t		u;
+	size_t		v;
+	size_t		x;
+	size_t		y;
 	t_antq		*all_ants;
 	t_list		*p1;
 	t_list		*p2;
@@ -154,18 +151,6 @@ struct		s_lem
 	t_list		**list;
 	t_list		**l1;
 	t_list		**l2;
-	size_t		num_rooms;
-	size_t		nr;
-	size_t		i;
-	size_t		j;
-	size_t		k;
-	size_t		u;
-	size_t		v;
-	size_t		x;
-	size_t		y;
-	unsigned	num_ants;
-	int			flag;
-
 };
 
 /*
