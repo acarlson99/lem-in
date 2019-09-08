@@ -19,9 +19,7 @@
 ** START == 69 == 'E'
 ** END == -92
 */
-# ifndef DEBUG_BUILD
-#  define DEBUG_BUILD 0
-# endif
+
 # define START		((char)69)
 # define END		((char)420)
 # define S			(0)
@@ -75,7 +73,6 @@ struct		s_ant_loop_vars
 	int			*valid_arr;
 	int			flag;
 	unsigned	j;
-	int			max_flow;
 };
 struct		s_update_array_args
 {
