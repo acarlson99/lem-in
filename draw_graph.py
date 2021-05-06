@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
-try:
-    import sys
-    import json
-    import argparse
-    import contextlib
+import argparse
+import contextlib
+import sys
+from time import time
 
+try:
     with contextlib.redirect_stdout(None):
-        import networkx as nx
         import matplotlib.pyplot as plt
+        import networkx as nx
+        from networkx.algorithms.flow import (boykov_kolmogorov, dinitz,
+                                              edmonds_karp, max_flow_min_cost,
+                                              preflow_push,
+                                              shortest_augmenting_path)
 except ModuleNotFoundError:
-    print("Ensure that the required modules are installed:"
-          "*networkx"
-          "*matplotlib")
+    print("""Ensure that the required modules are installed:
+        *networkx
+        *matplotlib""")
     exit(1)
 
 ANTS_ERR = 1
@@ -24,61 +28,6 @@ col_path = ['green', 'red', 'orange', 'magenta', 'cyan', 'brown', 'blue', 'black
             '#afc58c', '#08ea07', '#3e60f3', '#9d5d80', '#701488', '#a78923', '#d461f8',
             '#0628c4', '#2f8bdc', '#1abf73', '#04edc1', '#dffe5d', '#fbfbad', '#b26258',
             '#d2881e', '#95d6ae', 'grey']
-
-
-def draw_graph_nodes(G, paths, pos, col_path, draw_grey):
-    n = 0
-    flag = False
-    for node in G.nodes:
-        if node == paths[0][0]:
-            nx.draw_networkx_nodes(G, pos, nodelist=[node],
-                                   node_color=col_path[0], node_size=20)
-        elif node == paths[0][1]:
-            nx.draw_networkx_nodes(G, pos, nodelist=[node],
-                                   node_color=col_path[1], node_size=20)
-        for i in range(1, len(paths)):
-            if node in paths[i]:
-                nx.draw_networkx_nodes(G, pos, nodelist=[node],
-                                       node_color=col_path[i+1], node_size=20)
-                flag = False
-                break
-            else:
-                flag = True
-        if flag and draw_grey:
-            nx.draw_networkx_nodes(G, pos, nodelist=[node],
-                                   node_color=col_path[-1],
-                                   node_size=2, alpha=0.1)
-        flag = False
-        n += 1
-        if n == len(G.nodes):
-            break
-    # print("num_nodes: " + str(len(G.nodes)) + " n: " + str(n))
-
-
-def draw_graph_edges(G, paths, pos, col_path, draw_grey):
-    e = 0
-    flag = False
-    for edge in G.edges:
-        for i in range(1, len(paths)):
-            if (
-                    (edge[0] in paths[i] and edge[1] in paths[i])
-                    or (edge[0] in paths[0] and edge[1] in paths[i])
-                    or (edge[0] in paths[i] and edge[1] in paths[0])
-            ):
-                nx.draw_networkx_edges(G, pos, edgelist=[edge],
-                                       edge_color=col_path[i+1])
-                flag = False
-                break
-            else:
-                flag = True
-        if flag and draw_grey:
-            nx.draw_networkx_edges(G, pos, edgelist=[edge],
-                                   edge_color=col_path[-1], alpha=0.1)
-        flag = False
-        e += 1
-        if e == len(G.edges):
-            break
-    # print("num_edges: " + str(len(G.edges)) + " e: " + str(e))
 
 
 class Lemon:
@@ -144,6 +93,59 @@ class Lemon:
         n = line.split('-')
         self.G.add_edge(n[0], n[1], capacity=1, weight=1)
         self.edges_colors.append("grey")
+
+    def draw_graph_nodes(self, G, paths, pos, col_path, draw_grey):
+        n = 0
+        flag = False
+        for node in G.nodes:
+            if node == paths[0][0]:
+                nx.draw_networkx_nodes(G, pos, nodelist=[node],
+                                    node_color=col_path[0], node_size=20)
+            elif node == paths[0][1]:
+                nx.draw_networkx_nodes(G, pos, nodelist=[node],
+                                    node_color=col_path[1], node_size=20)
+            for i in range(1, len(paths)):
+                if node in paths[i]:
+                    nx.draw_networkx_nodes(G, pos, nodelist=[node],
+                                        node_color=col_path[i+1], node_size=20)
+                    flag = False
+                    break
+                else:
+                    flag = True
+            if flag and draw_grey:
+                nx.draw_networkx_nodes(G, pos, nodelist=[node],
+                                    node_color=col_path[-1],
+                                    node_size=2, alpha=0.1)
+            flag = False
+            n += 1
+            if n == len(G.nodes):
+                break
+        # print("num_nodes: " + str(len(G.nodes)) + " n: " + str(n))
+
+    def draw_graph_edges(self, G, paths, pos, col_path, draw_grey):
+        e = 0
+        flag = False
+        for edge in G.edges:
+            for i in range(1, len(paths)):
+                if (
+                        (edge[0] in paths[i] and edge[1] in paths[i])
+                        or (edge[0] in paths[0] and edge[1] in paths[i])
+                        or (edge[0] in paths[i] and edge[1] in paths[0])
+                ):
+                    nx.draw_networkx_edges(G, pos, edgelist=[edge],
+                                        edge_color=col_path[i+1])
+                    flag = False
+                    break
+                else:
+                    flag = True
+            if flag and draw_grey:
+                nx.draw_networkx_edges(G, pos, edgelist=[edge],
+                                    edge_color=col_path[-1], alpha=0.1)
+            flag = False
+            e += 1
+            if e == len(G.edges):
+                break
+        # print("num_edges: " + str(len(G.edges)) + " e: " + str(e))
 
     def add_ant(self, line):
         if self.debug == 3:
@@ -216,7 +218,7 @@ class Lemon:
             )
             flow_val = nx.maximum_flow_value(self.G, self.start, self.end)
             if self.debug >= 2:
-                print("max_flow: " + str(flow_val))
+                print(f"max_flow: {flow_val}")
                 print(flow_val == R.graph['flow_value'])
         except nx.exception.NetworkXError:
             print("self.G.nodes() is None")
@@ -240,15 +242,60 @@ class Lemon:
             pos = nx.spring_layout(self.G)
         if self.debug >= 1:
             print("Drawing graph nodes...")
-        draw_graph_nodes(self.G, self.paths, pos, col_path, self.draw_grey)
+        self.draw_graph_nodes(self.G, self.paths, pos, col_path, self.draw_grey)
         if self.debug >= 1:
             print("Drawing graph edges...")
-        draw_graph_edges(self.G, self.paths, pos, col_path, self.draw_grey)
+        self.draw_graph_edges(self.G, self.paths, pos, col_path, self.draw_grey)
         # nx.draw_networkx_labels(self.G, pos)
         plt.axis('off')
         if self.debug >= 1:
             print("Displaying graph")
         plt.show()
+
+    def test_max_flow(self):
+        params = (self.G, self.start, self.end)
+        t = time()
+        max_flow, max_flowD = nx.maximum_flow(*params)
+        max_flow_t = time() - t
+        t = time()
+        max_flow_value = nx.maximum_flow_value(*params)
+        max_flow_value_t = time() - t
+        t = time()
+        mf_ekG = edmonds_karp(*params)
+        mf_ek_t = time() - t
+        mf_ek = mf_ekG.graph['flow_value']
+        t = time()
+        mf_sapG = shortest_augmenting_path(*params)
+        mf_sap_t = time() - t
+        mf_sap = mf_sapG.graph['flow_value']
+        t = time()
+        mf_pfpG = preflow_push(*params)
+        mf_pfp_t = time() - t
+        mf_pfp = mf_pfpG.graph['flow_value']
+        t = time()
+        mf_dG = dinitz(*params)
+        mf_d_t = time() - t
+        mf_d = mf_dG.graph['flow_value']
+        t = time()
+        mf_bkG = boykov_kolmogorov(*params)
+        mf_bk_t = time() - t
+        mf_bk = mf_bkG.graph['flow_value']
+        t = time()
+        mf_mcD = max_flow_min_cost(*params)
+        mf_mc_t = time() - t
+        mf_mc = nx.cost_of_flow(self.G, mf_mcD)
+        print(
+            f"""stats: start:{self.start}, end:{self.end}, moves:{self.max_moves}, ants:{self.num_ants}
+            {'maximum_flow':24s}:{max_flow}, elapsed:{max_flow_t}
+            {'maximum_flow_value':24s}:{max_flow_value}, elapsed:{max_flow_value_t}
+            {'edmonds_karp':24s}:{mf_ek}, elapsed:{mf_ek_t}
+            {'shortest_augmenting_path':24s}:{mf_sap}, elapsed:{mf_sap_t}
+            {'preflow_push':24s}:{mf_pfp}, elapsed:{mf_pfp_t}
+            {'dinitz':24s}:{mf_d}, elapsed:{mf_d_t}
+            {'boykov_kolmogorov':24s}:{mf_bk}, elapsed:{mf_bk_t}
+            {'max_flow_min_cost':24s}:{mf_mc}, elapsed:{mf_mc_t}
+            """
+        )
 
 
 def print_err(code):
@@ -276,6 +323,7 @@ def main():
     layout.add_argument("-p", "--spring", help="Use the spring force-directed graph layout", action="store_true")
     parser.add_argument("-f", "--file", type=str, help="Redirected stdout contents from a lem-in binary (defaults to stdin)", default="stdin")
     parser.add_argument("-a", "--draw-all", help="Draw unused nodes and edges", action="store_true")
+    parser.add_argument("-n", "--no-draw", help="Do not draw anything", action="store_true")
     parser.add_argument("-d", "--debug", help="Increase debug output level", action="count")
     args = parser.parse_args()
     if args.spectral:
@@ -300,8 +348,9 @@ def main():
             f = open(loops.name)
             loops.read_input(f)
             f.close()
-            # loops.get_flow()
-            loops.draw_graph()
+            loops.get_flow()
+            if not args.no_draw:
+                loops.draw_graph()
         except FileNotFoundError:
             print_err(READ_ERR)
     else:
@@ -309,9 +358,12 @@ def main():
             print("reading from stdin")
         try:
             loops.read_input(sys.stdin)
-            loops.draw_graph()
+            if not args.no_draw():
+                loops.draw_graph()
         except FileNotFoundError:
             print_err(READ_ERR)
+    loops.test_max_flow()
+    # nx.write_gml(loops.G, './greph.gml')
 
 
 if __name__ == '__main__':
